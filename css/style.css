@@ -31,14 +31,14 @@ a { color: inherit; }
 .nav-links a { color: #e7e7e7; font-size: 13px; text-decoration: none; padding: 10px 0; border-bottom: 2px solid transparent; }
 .nav-links a:hover, .nav-links a[aria-current="page"] { color: #fff; border-bottom-color: var(--orange); }
 .menu-toggle { display: none; background: transparent; color: #fff; border: 1px solid #626262; border-radius: 6px; padding: 9px 12px; font: inherit; }
-.hero { background: linear-gradient(115deg, #191919 0%, #252525 72%, #303030 100%); color: #fff; border-bottom: 4px solid var(--orange); overflow: hidden; }
+.hero { background: linear-gradient(115deg, hwb(0 0% 100%) 0%, #010101 72%, #090000 100%); color: #fff; border-bottom: 4px solid var(--orange); overflow: hidden; }
 .hero-grid { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(280px, .75fr); align-items: center; gap: 76px; padding-top: 76px; padding-bottom: 76px; }
 .eyebrow { color: var(--orange); font-size: 11px; font-weight: 800; letter-spacing: 1.7px; margin: 0 0 12px; }
 .hero h1 { margin: 0; font-size: clamp(40px, 5vw, 64px); line-height: 1.08; letter-spacing: -2.5px; }
 .hero h1 span { color: var(--orange); }
 .hero-lede { color: #d3d3d3; max-width: 610px; margin: 22px 0 25px; font-size: 16px; }
 .button-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
-.button { display: inline-flex; justify-content: center; align-items: center; gap: 10px; min-height: 46px; padding: 12px 18px; background: var(--orange); color: #fff; border: 1px solid var(--orange); border-radius: 5px; text-decoration: none; font-weight: 700; font-size: 13px; transition: background .15s ease, transform .15s ease; }
+.button { display: inline-flex; justify-content: center; align-items: center; gap: 10px; min-height: 46px; padding: 12px 18px; background: var(--orange); color: #ffffff; border: 1px solid var(--orange); border-radius: 5px; text-decoration: none; font-weight: 700; font-size: 13px; transition: background .15s ease, transform .15s ease; }
 .button:hover { background: var(--orange-dark); border-color: var(--orange-dark); transform: translateY(-1px); }
 .button-outline { background: transparent; border-color: #777; color: #fff; }
 .button-outline:hover { background: #343434; border-color: #aaa; }
@@ -51,7 +51,7 @@ a { color: inherit; }
 .role-label { color: var(--muted); font-size: 13px; margin: 0 0 16px; }
 .contact-copy { font-size: 13px; color: #555; margin: 14px 0; }
 .contact-email { display: block; font-size: 13px; font-weight: 700; color: var(--text); text-decoration-color: var(--orange); text-underline-offset: 4px; overflow-wrap: anywhere; margin-bottom: 20px; }
-.button-light { color: #fff; width: 100%; }
+.button-light { color: #ffffff; width: 100%; }
 .section { padding-top: 68px; padding-bottom: 72px; }
 .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 30px; margin-bottom: 28px; }
 .section-heading h2, .bottom-contact h2, .updates-strip h2 { margin: 0; font-size: clamp(26px, 3vw, 34px); letter-spacing: -1px; line-height: 1.2; }
@@ -80,7 +80,7 @@ a { color: inherit; }
 .copyright { text-align: right; }
 
 /* Shared page layouts */
-.page-hero { background: #202020; color: #fff; border-bottom: 4px solid var(--orange); padding: 55px 0 52px; }
+.page-hero { background: #090909; color: #fff; border-bottom: 4px solid var(--orange); padding: 55px 0 52px; }
 .page-hero h1 { font-size: clamp(36px, 4vw, 48px); line-height: 1.12; letter-spacing: -1.8px; margin: 0 0 14px; }
 .page-hero p:not(.eyebrow) { color: #d1d1d1; max-width: 700px; margin: 0; font-size: 14px; }
 .notice { background: #fff5f0; border-left: 4px solid var(--orange); padding: 16px 18px; margin-bottom: 32px; font-size: 13px; color: #444; }
@@ -97,7 +97,7 @@ a { color: inherit; }
 .guide-card h2, .update-card h2 { font-size: 19px; margin: 0 0 10px; letter-spacing: -.4px; }
 .guide-card ul { margin: 0 0 14px; padding-left: 19px; color: #555; font-size: 13px; }
 .guide-card li { margin: 5px 0; }
-.cta-panel { margin-top: 28px; background: #202020; color: #fff; border-left: 4px solid var(--orange); border-radius: 6px; padding: 26px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.cta-panel { margin-top: 28px; background: #0a0101; color: #fff; border-left: 4px solid var(--orange); border-radius: 6px; padding: 26px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
 .cta-panel h2 { margin: 0; font-size: 23px; }
 .cta-panel p:not(.eyebrow) { color: #ccc; font-size: 13px; margin: 8px 0 0; }
 .appointment-layout { display: grid; grid-template-columns: 1.3fr .7fr; gap: 54px; align-items: start; }
@@ -134,7 +134,7 @@ a { color: inherit; }
   .menu-toggle { display: inline-flex; align-items: center; gap: 8px; }
   .nav-links { display: none; width: 100%; flex-direction: column; align-items: stretch; gap: 0; padding: 4px 0 8px; }
   .nav-links.is-open { display: flex; }
-  .nav-links a { padding: 12px 2px; border-bottom: 1px solid #363636; }
+  .nav-links a { padding: 12px 2px; border-bottom: 1px solid #0c0000; }
   .hero-grid { grid-template-columns: 1fr; padding-top: 48px; padding-bottom: 45px; gap: 32px; }
   .hero h1 { font-size: 43px; }
   .hero-contact { max-width: 480px; }
@@ -161,7 +161,7 @@ a { color: inherit; }
 .site-brand-text { color: #f1f1f1; font-size: 13px; font-weight: 500; letter-spacing: 1.5px; white-space: nowrap; }
 .site-brand-text strong { color: #f1f1f1; }
 .hero-text { color: #d3d3d3; max-width: 610px; margin: 22px 0 25px; font-size: 16px; }
-.contact-card { padding: 28px; background: #fff; color: var(--text); border-radius: 8px; border-top: 4px solid var(--orange); box-shadow: 0 20px 60px #0003; }
+.contact-card { padding: 28px; background: #fff; color: var(--text); border-radius: 8px; border-top: 4px solid var(--orange); box-shadow: 0 20px 60px rgba(14, 0, 0, 0.2); }
 .contact-card h2 { font-size: 24px; line-height: 1.2; margin: 0 0 4px; }
 .icon-box { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 8px; background: var(--pale); color: var(--orange); font-size: 16px; font-weight: 800; margin-bottom: 20px; }
 .email { display: block; font-size: 13px; font-weight: 700; color: var(--text); text-decoration-color: var(--orange); text-underline-offset: 4px; overflow-wrap: anywhere; margin-bottom: 20px; }
