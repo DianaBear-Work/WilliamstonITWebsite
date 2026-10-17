@@ -1,0 +1,281 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Williamston IT | Vertiv</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/main.js" defer></script>
+
+  <style>
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 16px;
+      text-decoration: none;
+    }
+
+    .vertiv-logo {
+      display: block;
+      width: 125px;
+      height: auto;
+      object-fit: contain;
+    }
+
+    .brand-divider {
+      height: 32px;
+      width: 1px;
+      background: #e1dbd5;
+      flex-shrink: 0;
+    }
+
+    .site-brand-text {
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 1.5px;
+      white-space: nowrap;
+    }
+
+    .site-brand-text strong {
+      color: #f1f1f1;
+    }
+
+    .footer-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .footer-logo {
+      display: block;
+      width: 100px;
+      height: auto;
+      object-fit: contain;
+    }
+
+    @media (max-width: 480px) {
+      .brand {
+        gap: 8px;
+      }
+
+      .vertiv-logo {
+        width: 90px;
+      }
+
+      .site-brand-text {
+        font-size: 10px;
+        letter-spacing: 1px;
+      }
+
+      .brand-divider {
+        height: 25px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+
+    <a class="brand" href="index.html">
+      <img
+        src="assets/vertivLogo.png"
+        alt="Vertiv"
+        class="vertiv-logo"
+      >
+      <span class="brand-divider"></span>
+      <span class="site-brand-text">
+        Pelzer 2 <strong>Information Technology</strong>
+      </span>
+    </a>
+
+    <button class="menu-toggle" aria-expanded="false">
+      ☰ Menu
+    </button>
+
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="pages/resources.html">IT Resources</a>
+      <a href="pages/Troubleshooting.html">Troubleshooting</a>
+      <a href="pages/appointments.html">Appointments</a>
+      <a href="pages/updates.html">Updates</a>
+    </nav>
+
+  </div>
+</header>
+
+<main>
+
+  <section class="hero">
+    <div class="container hero-grid">
+
+      <div>
+        <p class="eyebrow">WILLIAMSTON, SOUTH CAROLINA</p>
+
+        <h1>Pelzer 2 webpage<br><span>IT support Website.</span></h1>
+
+        <p class="hero-text">
+          Find IT resources, troubleshoot common technology issues,
+          schedule support, and stay up to date with Williamston IT.
+        </p>
+
+        <div class="button-row">
+          <a class="button" href="https://vertiv.service-now.com/esc?id=ec_dashboard">
+            Submit an IT Ticket →
+          </a>
+
+          <a class="button button-outline" href="https://bookings.cloud.microsoft/book/WilliamstonITCalendar@vertivco.onmicrosoft.com/?ismsaljsauthenabled=true">
+            Schedule Support
+          </a>
+        </div>
+      </div>
+
+      <div class="contact-card">
+        <div class="icon-box">IT</div>
+
+        <!-- <p class="eyebrow">P2 IT Analyst</p> -->
+
+        <h2>Diana Barakat</h2>
+
+        <p class="eyebrow">P2 IT Analyst</p>
+        <!-- <p class="muted">IT Analyst | Williamston</p> -->
+
+        <p>
+          Need help with your laptop, account, applications,
+          or workplace technology?
+        </p>
+
+        <a class="email" href="mailto:diana.barakat@vertivco.com">
+          diana.barakat@vertivco.com
+        </a>
+
+        <a class="button full-width"
+           href="mailto:diana.barakat@vertivco.com">
+          Email Diana →
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="container section">
+
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">START HERE</p>
+        <h2>How can IT help?</h2>
+      </div>
+
+      <p>Quick access to support, tools, and information.</p>
+    </div>
+
+    <div class="card-grid">
+
+      <a class="feature-card" href="https://vertiv.service-now.com/esc?id=ec_dashboard">
+        <div class="icon-box">↗</div>
+        <h3>Submit a Ticket</h3>
+        <p>Request assistance and keep your issue documented.</p>
+        <span class="card-link">Open ServiceNow →</span>
+      </a>
+
+
+       <a class="feature-card" href="https://vertiv.service-now.com/esc?id=sc_cat_item&sys_id=9fab39e2d7532100a9ad1e173e24d484">
+        <div class="icon-box">↗</div>
+        <h3>Submit an Incident</h3>
+        <p>Request assistance and keep your issue documented.</p>
+        <span class="card-link">Open ServiceNow →</span>
+      </a>
+
+      <a class="feature-card" href="pages/resources.html">
+        <div class="icon-box">▤</div>
+        <h3>IT Resources</h3>
+        <p>Access company tools, applications, and useful links.</p>
+        <span class="card-link">Browse resources →</span>
+      </a>
+
+      <!-- <a class="feature-card" href="pages/troubleshooting.html">
+        <div class="icon-box">⌘</div>
+        <h3>Troubleshooting</h3>
+        <p>Review basic troubleshooting steps for common issues.</p>
+        <span class="card-link">View guides →</span>
+      </a> -->
+
+      <a class="feature-card" href="https://bookings.cloud.microsoft/book/WilliamstonITCalendar@vertivco.onmicrosoft.com/">
+        <div class="icon-box">◷</div>
+        <h3>Schedule Support</h3>
+        <p>Find a time to connect with the onsite IT Analyst. APPOINTMENTS REQUIRE TICKETS!! Please provide ticket number in description!</p>
+        <span class="card-link">Book a time →</span>
+      </a>
+
+    </div>
+  </section>
+
+  <section class="updates-banner">
+    <div class="container banner-inner">
+
+      <div>
+        <p class="eyebrow">STAY INFORMED</p>
+        <h2>IT news and reminders</h2>
+        <p>
+          Check for announcements, training reminders,
+          and technology updates.
+        </p>
+      </div>
+
+      <a class="button button-outline" href="pages/updates.html">
+        View Updates
+      </a>
+
+    </div>
+  </section>
+
+  <section class="container bottom-contact">
+    <div>
+      <p class="eyebrow">WILLIAMSTON IT</p>
+      <h2>Have a question?</h2>
+      <p>
+        Submit a ticket for tracked IT support!
+      </p>
+    </div>
+
+    <a class="button" href="mailto:diana.barakat@vertivco.com">
+      Contact IT
+    </a>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+
+    <div>
+      <a class="footer-brand" href="index.html">
+        <img
+          src="assets/vertiv-logo-white.svg"
+          alt="Vertiv"
+          class="footer-logo"
+        >
+        <span>WILLIAMSTON IT Analyst</span>
+      </a>
+
+      <p>Local technology support and resources.</p>
+    </div>
+
+    <div>
+      <strong>Diana Barakat | IT Analyst</strong><br>
+
+      <a href="mailto:diana.barakat@vertivco.com">
+        diana.barakat@vertivco.com
+      </a>
+    </div>
+
+  </div>
+</footer>
+
+</body>
+</html>

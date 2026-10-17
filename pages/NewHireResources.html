@@ -1,0 +1,272 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Hire Resources | Williamston IT</title>
+
+  <link rel="stylesheet" href="../css/style.css">
+  <script src="../js/main.js" defer></script>
+
+  <style>
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 16px;
+      text-decoration: none;
+    }
+
+    .vertiv-logo {
+      display: block;
+      width: 125px;
+      height: auto;
+      object-fit: contain;
+    }
+
+    .brand-divider {
+      height: 32px;
+      width: 1px;
+      background: #e1dbd5;
+      flex-shrink: 0;
+    }
+
+    .site-brand-text {
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 1.5px;
+      white-space: nowrap;
+    }
+
+    .site-brand-text strong {
+      color: #f1f1f1;
+    }
+
+    .footer-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .footer-logo {
+      display: block;
+      width: 100px;
+      height: auto;
+      object-fit: contain;
+    }
+
+    .resource-intro {
+      max-width: 760px;
+      margin-bottom: 32px;
+    }
+
+    .resource-note {
+      margin-top: 32px;
+      padding: 24px;
+      border-left: 4px solid #FE5B1B;
+      background: #f5f5f5;
+      border-radius: 4px;
+    }
+
+    .resource-note h3 {
+      margin-top: 0;
+    }
+
+    .resource-note p {
+      margin-bottom: 0;
+    }
+
+    @media (max-width: 480px) {
+      .brand {
+        gap: 8px;
+      }
+
+      .vertiv-logo {
+        width: 90px;
+      }
+
+      .site-brand-text {
+        font-size: 10px;
+        letter-spacing: 1px;
+      }
+
+      .brand-divider {
+        height: 25px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+
+    <a class="brand" href="../index.html">
+      <img
+        src="../assets/vertivLogo.png"
+        alt="Vertiv"
+        class="vertiv-logo"
+      >
+
+      <span class="brand-divider"></span>
+
+      <span class="site-brand-text">
+        Pelzer 2 <strong>Information Technology</strong>
+      </span>
+    </a>
+
+    <button class="menu-toggle" aria-expanded="false">
+      ☰ Menu
+    </button>
+
+    <nav class="nav-links">
+      <a href="../index.html">Home</a>
+      <a href="resources.html">IT Resources</a>
+      <a href="Troubleshooting.html">Troubleshooting</a>
+      <a href="appointments.html">Appointments</a>
+      <a href="updates.html">Updates</a>
+    </nav>
+
+  </div>
+</header>
+
+<main>
+
+  <section class="hero">
+    <div class="container">
+      <p class="eyebrow">WELCOME TO VERTIV</p>
+
+      <h1>New Hire <span>Resources.</span></h1>
+
+      <p class="hero-text">
+        Welcome to the Williamston team! Use these guides to get
+        connected and set up the technology you need to get started.
+      </p>
+
+      <div class="button-row">
+        <a class="button" href="#setup-guides">
+          View Setup Guides →
+        </a>
+
+        <a class="button button-outline"
+           href="../index.html">
+          Return Home
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="container section" id="setup-guides">
+
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">GET CONNECTED</p>
+        <h2>New Hire Setup Guides</h2>
+      </div>
+
+      <p>Choose a guide below to review the setup process.</p>
+    </div>
+
+    <div class="card-grid">
+
+      <!-- CELL PHONE SETUP -->
+      <article class="feature-card">
+        <div class="icon-box">☎</div>
+
+        <h3>Okta Setup</h3>
+
+        <p>
+          Learn how to set up your Okta account and configure multi-factor authentication (MFA) for secure access to company resources.
+        </p>
+
+        <!-- Replace the href below with your actual document URL. -->
+        <a class="card-link"
+           href="guides/Required - OKTA Verify Setup 02.25.25.pdf">
+          Open Okta Setup Guide →
+        </a>
+      </article>
+
+      <!-- GUEST WI-FI ACCESS -->
+      <article class="feature-card">
+        <div class="icon-box">⌁</div>
+
+        <h3>Guest Wi-Fi Access</h3>
+
+        <p>
+          Learn how to connect a personal device or visitor device
+          to the available guest wireless network.
+        </p>
+
+        <!-- Replace the href below with your actual document URL. -->
+        <a class="card-link"
+           href="guides/Guest Wifi Access.pdf">
+          Open Guest Wi-Fi Guide →
+        </a>
+      </article>
+
+      <!-- VPN CONNECTION -->
+      <article class="feature-card">
+        <div class="icon-box">⇄</div>
+
+        <h3>Connecting to VPN</h3>
+
+        <p>
+          Learn how to connect to the company VPN when remote access
+          to internal Vertiv resources is required.
+        </p>
+
+        <!-- Replace the href below with your actual document URL. -->
+        <a class="card-link"
+           href="guides/Vertiv Public KB - How to Connect and Disconnect to VPN (with OKTA Verify as MFA) - Service Portal Vertiv.pdf">
+          Open VPN Guide →
+        </a>
+      </article>
+
+    </div>
+
+    <div class="resource-note">
+      <h3>Need additional assistance?</h3>
+
+      <p>
+        If you have trouble following a setup guide or accessing
+        a required resource, submit an IT ticket so your issue can
+        be documented and tracked.
+      </p>
+
+      <div class="button-row">
+        <a class="button"
+           href="https://vertiv.service-now.com/esc?id=ec_dashboard">
+          Submit an IT Ticket →
+        </a>
+      </div>
+    </div>
+
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+
+    <div>
+      <a class="footer-brand" href="../index.html">
+        <img
+          src="../assets/vertiv-logo-white.svg"
+          alt="Vertiv"
+          class="footer-logo"
+        >
+
+        <span>WILLIAMSTON IT Analyst</span>
+      </a>
+
+      <p>Local technology support and resources.</p>
+    </div>
+
+  </div>
+</footer>
+
+</body>
+</html>
