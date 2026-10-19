@@ -1,890 +1,117 @@
-```html
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#000000">
+  <meta name="theme-color" content="#171717">
+  <meta name="description" content="Pelzer 2 IT support portal for Vertiv employees. Access IT resources, troubleshooting, appointments, and updates.">
 
-  <title>Williamston IT | Vertiv</title>
-  <meta name="description" content="Your local Vertiv IT support hub for resources, troubleshooting, cybersecurity, appointments, and updates.">
+  <title>Pelzer 2 IT | Vertiv</title>
 
   <link rel="stylesheet" href="css/style.css">
+  <script src="js/main.js" defer></script>
 
   <style>
-    :root {
-      --vertiv-orange: #FE5B1B;
-      --vertiv-orange-dark: #e94d12;
-      --vertiv-dark: #000000;
-      --vertiv-gray: #f3f3f3;
-      --vertiv-text: #252525;
-      --vertiv-white: #ffffff;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      margin: 0;
-      color: var(--vertiv-text);
-      background: #fff;
-      font-family: Inter, Arial, Helvetica, sans-serif;
-      line-height: 1.6;
-    }
-
-    a {
-      color: inherit;
-    }
-
-    img {
-      max-width: 100%;
-    }
-
-    .page-container {
-      width: min(1200px, 92%);
-      margin-inline: auto;
-    }
-
-    /* HEADER */
-
-    .site-header {
-      background: #000;
-      color: #fff;
-      border-bottom: 4px solid var(--vertiv-orange);
-      position: relative;
-      z-index: 10;
-    }
-
-    .header-inner {
-      width: min(1200px, 92%);
-      min-height: 82px;
-      margin: auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 24px;
-    }
-
     .brand {
-      display: flex;
+      display: inline-flex;
       align-items: center;
-      gap: 15px;
-      flex-shrink: 0;
+      gap: 16px;
       text-decoration: none;
     }
 
-    .brand img {
+    .vertiv-logo {
       display: block;
-      width: 135px;
-      max-height: 58px;
+      width: 125px;
+      height: auto;
+      max-height: 55px;
       object-fit: contain;
     }
 
-    .brand-label {
-      border-left: 1px solid #555;
-      padding-left: 15px;
-      font-size: 13px;
-      font-weight: 700;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-    }
-
-    .main-nav {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      flex-wrap: wrap;
-      gap: 18px;
-    }
-
-    .main-nav a {
-      color: #fff;
-      text-decoration: none;
-      font-size: 13px;
-      font-weight: 600;
-      padding: 8px 0;
-      border-bottom: 2px solid transparent;
-    }
-
-    .main-nav a:hover,
-    .main-nav a:focus-visible {
-      color: #fff;
-      border-bottom-color: var(--vertiv-orange);
-    }
-
-    /* TOP HERO CAROUSEL */
-
-    .hero-carousel {
-      position: relative;
-      width: 100%;
-      overflow: hidden;
-      background: #202020;
-      color: #fff;
-      isolation: isolate;
-      border-bottom: 4px solid var(--vertiv-orange);
-    }
-
-    .carousel-track {
-      position: relative;
-      min-height: 490px;
-    }
-
-    .hero-slide {
-      position: absolute;
-      inset: 0;
-      min-height: 490px;
-      display: flex;
-      align-items: center;
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-      transition: opacity .55s ease, visibility .55s ease;
-      background: #202020;
-      overflow: hidden;
-    }
-
-    .hero-slide.active {
-      opacity: 1;
-      visibility: visible;
-      pointer-events: auto;
-      z-index: 1;
-    }
-
-    /* IMAGE LAYER: behind overlay and text */
-
-    .hero-slide img.slide-image {
-      position: absolute;
-      inset: 0;
-      display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center;
-      z-index: 0;
-    }
-
-    /* DARK OVERLAY: above image */
-
-    .hero-slide::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(
-        90deg,
-        rgba(0, 0, 0, .88) 0%,
-        rgba(0, 0, 0, .69) 48%,
-        rgba(0, 0, 0, .22) 100%
-      );
-      z-index: 1;
-      pointer-events: none;
-    }
-
-    /* TEXT: above image and overlay */
-
-    .hero-content {
-      position: relative;
-      z-index: 2;
-      width: min(1200px, 92%);
-      margin: 0 auto;
-      padding: 65px 75px 85px;
-    }
-
-    .hero-eyebrow {
-      display: inline-block;
-      margin: 0 0 15px;
-      color: #ff9a65;
-      font-size: 13px;
-      font-weight: 800;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-    }
-
-    .hero-content h1 {
-      max-width: 680px;
-      margin: 0 0 20px;
-      color: #fff;
-      font-size: clamp(34px, 5vw, 58px);
-      font-weight: 800;
-      line-height: 1.12;
-      letter-spacing: -1px;
-    }
-
-    .hero-content p:not(.hero-eyebrow) {
-      max-width: 570px;
-      margin: 0 0 28px;
-      color: #f0f0f0;
-      font-size: 18px;
-      line-height: 1.7;
-    }
-
-    .hero-button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 48px;
-      padding: 12px 24px;
-      border: 2px solid var(--vertiv-orange);
-      border-radius: 4px;
-      background: var(--vertiv-orange);
-      color: #fff;
-      font-size: 14px;
-      font-weight: 700;
-      text-decoration: none;
-      transition: background .2s ease, border-color .2s ease;
-    }
-
-    .hero-button:hover,
-    .hero-button:focus-visible {
-      border-color: var(--vertiv-orange-dark);
-      background: var(--vertiv-orange-dark);
-    }
-
-    .carousel-arrow {
-      position: absolute;
-      top: 50%;
-      z-index: 5;
-      display: grid;
-      width: 46px;
-      height: 62px;
-      place-items: center;
-      transform: translateY(-50%);
-      border: 1px solid rgba(255, 255, 255, .45);
-      border-radius: 4px;
-      background: rgba(0, 0, 0, .48);
-      color: #fff;
-      cursor: pointer;
-      font-size: 30px;
-      line-height: 1;
-    }
-
-    .carousel-arrow:hover,
-    .carousel-arrow:focus-visible {
-      background: var(--vertiv-orange);
-    }
-
-    .carousel-arrow.prev {
-      left: 18px;
-    }
-
-    .carousel-arrow.next {
-      right: 18px;
-    }
-
-    .carousel-dots {
-      position: absolute;
-      right: 0;
-      bottom: 22px;
-      left: 0;
-      z-index: 6;
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-    }
-
-    .carousel-dot {
-      width: 11px;
-      height: 11px;
-      padding: 0;
-      border: 1px solid #fff;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, .45);
-      cursor: pointer;
-    }
-
-    .carousel-dot.active {
-      background: var(--vertiv-orange);
-      border-color: var(--vertiv-orange);
-      transform: scale(1.15);
-    }
-
-    /* AMAZON-STYLE HORIZONTAL CAROUSEL */
-
-    .featured-section {
-      padding: 35px 0 45px;
-      background: #f3f3f3;
-    }
-
-    .featured-shell {
-      width: min(1200px, 92%);
-      margin: 0 auto;
-      padding: 25px;
-      background: #fff;
-      border: 1px solid #e0e0e0;
-      border-radius: 5px;
-    }
-
-    .featured-heading {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 15px;
-      margin-bottom: 20px;
-    }
-
-    .featured-heading h2 {
-      margin: 0;
-      color: #171717;
-      font-size: 25px;
-      line-height: 1.3;
-    }
-
-    .featured-heading p {
-      margin: 5px 0 0;
-      color: #666;
-      font-size: 14px;
-    }
-
-    .featured-accent {
-      width: 48px;
-      height: 4px;
-      margin-bottom: 10px;
-      background: var(--vertiv-orange);
-    }
-
-    .featured-controls {
-      display: flex;
-      gap: 8px;
+    .brand-divider {
+      height: 32px;
+      width: 1px;
+      background: #d5dbe1;
       flex-shrink: 0;
     }
 
-    .featured-arrow {
-      display: grid;
-      width: 42px;
-      height: 42px;
-      place-items: center;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      background: #fff;
-      color: #171717;
-      font-size: 24px;
-      cursor: pointer;
-    }
-
-    .featured-arrow:hover,
-    .featured-arrow:focus-visible {
-      border-color: var(--vertiv-orange);
-      color: var(--vertiv-orange-dark);
-    }
-
-    .featured-track {
-      display: flex;
-      gap: 18px;
-      overflow-x: auto;
-      padding: 3px 2px 18px;
-      scroll-behavior: smooth;
-      scroll-snap-type: x mandatory;
-      scrollbar-width: thin;
-      scrollbar-color: var(--vertiv-orange) #eee;
-    }
-
-    .featured-card {
-      flex: 0 0 calc(33.333% - 12px);
-      min-width: 245px;
-      overflow: hidden;
-      border: 1px solid #e1e1e1;
-      border-radius: 5px;
-      background: #fff;
-      scroll-snap-align: start;
-      transition: box-shadow .2s ease, transform .2s ease;
-    }
-
-    .featured-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 7px 20px rgba(0, 0, 0, .1);
-    }
-
-    .featured-card img {
-      display: block;
-      width: 100%;
-      height: 185px;
-      object-fit: cover;
-      background: #eee;
-    }
-
-    .featured-card-body {
-      display: flex;
-      min-height: 210px;
-      flex-direction: column;
-      align-items: flex-start;
-      padding: 19px;
-    }
-
-    .featured-tag {
-      display: inline-block;
-      margin-bottom: 10px;
-      padding: 4px 8px;
-      background: #fff0e9;
-      color: var(--vertiv-orange-dark);
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: .7px;
-      text-transform: uppercase;
-    }
-
-    .featured-card h3 {
-      margin: 0 0 9px;
-      color: #222;
-      font-size: 19px;
-      line-height: 1.35;
-    }
-
-    .featured-card p {
-      flex: 1;
-      margin: 0 0 17px;
-      color: #606060;
-      font-size: 14px;
-      line-height: 1.6;
-    }
-
-    .featured-card a {
-      color: var(--vertiv-orange-dark);
-      font-size: 14px;
-      font-weight: 800;
-      text-decoration: none;
-    }
-
-    .featured-card a:hover {
-      text-decoration: underline;
-    }
-
-    .featured-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      padding-top: 12px;
-      border-top: 1px solid #eee;
-      color: #777;
-      font-size: 12px;
-    }
-
-    /* INTRODUCTION */
-
-    .intro-section {
-      padding: 55px 0 30px;
-      text-align: center;
-    }
-
-    .section-eyebrow {
-      margin: 0 0 8px;
-      color: var(--vertiv-orange-dark);
+    .site-brand-text {
       font-size: 13px;
-      font-weight: 800;
+      font-weight: 500;
       letter-spacing: 1.5px;
-      text-transform: uppercase;
+      white-space: nowrap;
     }
 
-    .intro-section h2,
-    .section-heading h2 {
-      margin: 0 0 14px;
-      color: #202020;
-      font-size: clamp(27px, 3vw, 36px);
-      line-height: 1.2;
+    .site-brand-text strong {
+      color: #f1f1f1;
     }
 
-    .intro-copy {
-      max-width: 760px;
-      margin: 0 auto;
-      color: #5b5b5b;
-      font-size: 17px;
-    }
-
-    /* QUICK LINKS */
-
-    .quick-links {
-      padding: 25px 0 65px;
-    }
-
-    .section-heading {
-      margin-bottom: 28px;
-      text-align: center;
-    }
-
-    .section-heading p {
-      margin: 0;
-      color: #666;
-    }
-
-    .resource-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 22px;
-    }
-
-    .resource-card {
-      display: flex;
-      flex-direction: column;
-      min-height: 245px;
-      padding: 27px;
-      border: 1px solid #e1e1e1;
-      border-top: 4px solid var(--vertiv-orange);
-      border-radius: 6px;
-      background: #fff;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, .045);
-      transition: transform .2s ease, box-shadow .2s ease;
-    }
-
-    .resource-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 9px 22px rgba(0, 0, 0, .09);
-    }
-
-    .resource-icon {
-      display: grid;
-      width: 52px;
-      height: 52px;
-      margin-bottom: 17px;
-      place-items: center;
-      border-radius: 8px;
-      background: #fff0e9;
-      color: var(--vertiv-orange-dark);
-      font-size: 25px;
+    .footer-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
       font-weight: 700;
     }
 
-    .resource-card h3 {
-      margin: 0 0 9px;
-      color: #222;
-      font-size: 20px;
+    .footer-logo {
+      display: block;
+      width: 100px;
+      height: auto;
+      max-height: 45px;
+      object-fit: contain;
     }
 
-    .resource-card p {
-      flex: 1;
-      margin: 0 0 18px;
-      color: #606060;
-      font-size: 14px;
-    }
-
-    .card-link {
-      color: var(--vertiv-orange-dark);
-      font-size: 14px;
-      font-weight: 800;
-      text-decoration: none;
-    }
-
-    .card-link:hover {
-      text-decoration: underline;
-    }
-
-    /* UPDATES BANNER */
-
-    .updates-banner {
-      padding: 42px 0;
-      background: #f3f3f3;
-      border-top: 1px solid #dedede;
-      border-bottom: 1px solid #dedede;
-    }
-
-    .updates-inner {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 25px;
-    }
-
-    .updates-inner h2 {
-      margin: 0 0 8px;
-      font-size: 27px;
-    }
-
-    .updates-inner p:not(.section-eyebrow) {
-      margin: 0;
-      color: #555;
-    }
-
-    .updates-button {
+    /* Vertiv orange updates button */
+    .updates-banner a.updates-orange-button,
+    .updates-banner a.updates-orange-button:visited {
       display: inline-flex;
-      flex-shrink: 0;
       align-items: center;
       justify-content: center;
-      padding: 13px 22px;
-      border-radius: 4px;
-      background: var(--vertiv-orange);
-      color: #fff;
-      font-size: 14px;
-      font-weight: 700;
-      text-decoration: none;
-    }
-
-    .updates-button:hover {
-      background: var(--vertiv-orange-dark);
-    }
-
-    /* CONTACT */
-
-    .contact-section {
-      padding: 65px 0;
-    }
-
-    .contact-card {
-      display: grid;
-      grid-template-columns: 1fr 1.3fr;
-      align-items: center;
-      gap: 30px;
-      padding: 35px;
-      border: 1px solid #e0e0e0;
-      border-radius: 8px;
-      background: #fff;
-      box-shadow: 0 5px 18px rgba(0, 0, 0, .05);
-    }
-
-    .contact-card h2 {
-      margin: 0 0 10px;
-      font-size: 28px;
-    }
-
-    .contact-card p {
-      margin: 0;
-      color: #5c5c5c;
-    }
-
-    .contact-details {
-      padding-left: 30px;
-      border-left: 1px solid #e0e0e0;
-    }
-
-    .contact-details p {
-      margin: 7px 0;
-    }
-
-    .contact-details a {
-      color: var(--vertiv-orange-dark);
-      font-weight: 700;
-      text-decoration: none;
-      overflow-wrap: anywhere;
-    }
-
-    .contact-details a:hover {
-      text-decoration: underline;
-    }
-
-    /* FOOTER */
-
-    .site-footer {
-      padding: 27px 0;
-      background: #000;
-      color: #ddd;
-      border-top: 3px solid var(--vertiv-orange);
-    }
-
-    .footer-inner {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 18px;
-    }
-
-    .footer-inner p {
-      margin: 0;
+      padding: 12px 24px;
+      min-height: 45px;
+      box-sizing: border-box;
+      background: #FE5B1B !important;
+      color: #ffffff !important;
+      border: 1px solid #FE5B1B !important;
+      border-radius: 5px;
+      text-decoration: none !important;
       font-size: 13px;
+      font-weight: 700;
+      white-space: nowrap;
+      transition: background-color 0.2s ease;
     }
 
-    .footer-links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 18px;
+    .updates-banner a.updates-orange-button:hover,
+    .updates-banner a.updates-orange-button:focus-visible {
+      background: #e94d12 !important;
+      border-color: #e94d12 !important;
+      color: #ffffff !important;
     }
 
-    .footer-links a {
-      color: #ddd;
-      font-size: 13px;
-      text-decoration: none;
-    }
-
-    .footer-links a:hover {
-      color: #ff9a65;
-    }
-
-    /* TABLET */
-
-    @media (max-width: 850px) {
-      .header-inner {
-        padding: 15px 0;
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .main-nav {
-        justify-content: flex-start;
-        gap: 12px 18px;
-      }
-
-      .carousel-track,
-      .hero-slide {
-        min-height: 440px;
-      }
-
-      .hero-content {
-        padding: 55px 65px 75px;
-      }
-
-      .resource-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      .contact-card {
-        grid-template-columns: 1fr;
-      }
-
-      .contact-details {
-        padding: 20px 0 0;
-        border-top: 1px solid #e0e0e0;
-        border-left: 0;
-      }
-
-      .featured-card {
-        flex-basis: calc(50% - 9px);
-      }
-    }
-
-    /* MOBILE */
-
-    @media (max-width: 560px) {
+    @media (max-width: 480px) {
       .brand {
-        gap: 10px;
+        gap: 8px;
       }
 
-      .brand img {
-        width: 110px;
+      .vertiv-logo {
+        width: 90px;
+        max-height: 42px;
       }
 
-      .brand-label {
-        padding-left: 10px;
-        font-size: 11px;
+      .site-brand-text {
+        font-size: 10px;
+        letter-spacing: 1px;
+        white-space: normal;
       }
 
-      .main-nav {
-        gap: 8px 14px;
+      .brand-divider {
+        height: 25px;
       }
 
-      .main-nav a {
-        font-size: 12px;
-      }
-
-      .carousel-track,
-      .hero-slide {
-        min-height: 460px;
-      }
-
-      .hero-slide::before {
-        background: rgba(0, 0, 0, .72);
-      }
-
-      .hero-content {
-        padding: 45px 25px 75px;
-      }
-
-      .hero-content h1 {
-        font-size: 36px;
-      }
-
-      .hero-content p:not(.hero-eyebrow) {
-        font-size: 16px;
-      }
-
-      .carousel-arrow {
-        top: auto;
-        bottom: 13px;
-        width: 38px;
-        height: 38px;
-        transform: none;
-        font-size: 24px;
-      }
-
-      .carousel-arrow.prev {
-        left: 16px;
-      }
-
-      .carousel-arrow.next {
-        right: 16px;
-      }
-
-      .carousel-dots {
-        bottom: 26px;
-      }
-
-      .featured-section {
-        padding: 25px 0 30px;
-      }
-
-      .featured-shell {
-        width: calc(100% - 24px);
-        padding: 18px;
-      }
-
-      .featured-heading {
-        align-items: flex-start;
-      }
-
-      .featured-heading h2 {
-        font-size: 21px;
-      }
-
-      .featured-heading p {
-        max-width: 250px;
-      }
-
-      .featured-controls {
-        gap: 5px;
-      }
-
-      .featured-card {
-        flex: 0 0 82%;
-        min-width: 230px;
-      }
-
-      .featured-card img {
-        height: 175px;
-      }
-
-      .featured-card-body {
-        min-height: 190px;
-        padding: 16px;
-      }
-
-      .featured-arrow {
-        width: 36px;
-        height: 38px;
-      }
-
-      .resource-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .updates-inner {
+      .updates-banner .banner-inner {
         align-items: flex-start;
         flex-direction: column;
-      }
-
-      .contact-card {
-        padding: 24px;
-      }
-
-      .footer-inner {
-        align-items: flex-start;
-        flex-direction: column;
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      html {
-        scroll-behavior: auto;
-      }
-
-      *,
-      *::before,
-      *::after {
-        animation-duration: .01ms !important;
-        transition-duration: .01ms !important;
-      }
-
-      .featured-track {
-        scroll-behavior: auto;
       }
     }
   </style>
@@ -892,494 +119,312 @@
 
 <body>
 
-  <!-- HEADER -->
-  <header class="site-header">
-    <div class="header-inner">
-      <a class="brand" href="index.html" aria-label="Vertiv IT home">
-        <img src="documents/vertivWhiteLogo.jpg" alt="Vertiv logo">
-        <span class="brand-label">Local IT Support</span>
+<!-- HEADER -->
+<header class="site-header">
+  <div class="container header-inner">
+
+    <a class="brand" href="index.html" aria-label="Pelzer 2 IT Home">
+      <img
+        src="documents/vertivWhiteLogo.jpg"
+        alt="Vertiv"
+        class="vertiv-logo"
+      >
+
+      <span class="brand-divider" aria-hidden="true"></span>
+
+      <span class="site-brand-text">
+        PELZER 2 <strong>INFORMATION TECHNOLOGY</strong>
+      </span>
+    </a>
+
+    <button
+      class="menu-toggle"
+      aria-expanded="false"
+      aria-label="Toggle navigation menu"
+      type="button"
+    >
+      ☰ Menu
+    </button>
+
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="index.html" aria-current="page">Home</a>
+      <a href="pages/resources.html">IT Resources</a>
+      <a href="pages/troubleshooting.html">Troubleshooting</a>
+      <a href="pages/appointments.html">Appointments</a>
+      <a href="pages/updates.html">Updates</a>
+      <a href="pages/Cybersecurity.html">Cybersecurity</a>
+    </nav>
+
+  </div>
+</header>
+
+<main>
+
+  <!-- HERO SECTION -->
+  <section class="hero">
+    <div class="container hero-grid">
+
+      <div>
+        <p class="eyebrow">PELZER 2 · SOUTH CAROLINA</p>
+
+        <h1>
+          Your local IT support.
+          <br>
+          <span>All in one place.</span>
+        </h1>
+
+        <p class="hero-text">
+          Find IT resources, troubleshoot common technology issues,
+          schedule support, and stay up to date with Pelzer 2 IT.
+        </p>
+
+        <div class="button-row">
+
+          <a
+            class="button"
+            href="https://vertiv.service-now.com/esc?id=ec_dashboard"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Submit an IT Ticket →
+          </a>
+
+          <a
+            class="button button-outline"
+            href="https://bookings.cloud.microsoft/book/WilliamstonITCalendar@vertivco.onmicrosoft.com/?ismsaljsauthenabled=true"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Schedule Support
+          </a>
+
+        </div>
+      </div>
+
+      <!-- IT CONTACT CARD -->
+      <div class="contact-card">
+
+        <div class="icon-box" aria-hidden="true">IT</div>
+
+        <h2>Diana Barakat</h2>
+
+        <p class="eyebrow">PELZER 2 IT ANALYST</p>
+
+        <p>
+          Need help with your laptop, account, applications,
+          or workplace technology? Start with an IT ticket
+          so your request can be tracked.
+        </p>
+
+        <a
+          class="email"
+          href="mailto:diana.barakat@vertivco.com"
+        >
+          diana.barakat@vertivco.com
+        </a>
+
+        <a
+          class="button full-width"
+          href="mailto:diana.barakat@vertivco.com"
+        >
+          Email IT →
+        </a>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- QUICK LINKS -->
+  <section class="container section">
+
+    <div class="section-heading">
+
+      <div>
+        <p class="eyebrow">START HERE</p>
+        <h2>How can IT help?</h2>
+      </div>
+
+      <p>Quick access to support, tools, and information.</p>
+
+    </div>
+
+    <div class="card-grid">
+
+      <!-- SERVICE PORTAL -->
+      <a
+        class="feature-card"
+        href="https://vertiv.service-now.com/esc?id=ec_dashboard"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <div class="icon-box" aria-hidden="true">↗</div>
+        <h3>IT Service Portal</h3>
+        <p>
+          Access IT services, submit requests, and track your support needs.
+        </p>
+        <span class="card-link">Open ServiceNow →</span>
       </a>
 
-      <nav class="main-nav" aria-label="Main navigation">
-        <a href="index.html" aria-current="page">Home</a>
-        <a href="resources.html">IT Resources</a>
-        <a href="troubleshooting.html">Troubleshooting</a>
-        <a href="appointments.html">Appointments</a>
-        <a href="updates.html">IT Updates</a>
-        <a href="cybersecurity.html">Cybersecurity</a>
-      </nav>
+      <!-- INCIDENTS -->
+      <a
+        class="feature-card"
+        href="https://vertiv.service-now.com/esc?id=sc_cat_item&amp;sys_id=9fab39e2d7532100a9ad1e173e24d484"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <div class="icon-box" aria-hidden="true">!</div>
+        <h3>Submit an Incident</h3>
+        <p>
+          Report a technology issue that is affecting your work.
+        </p>
+        <span class="card-link">Report an incident →</span>
+      </a>
+
+      <!-- RESOURCES -->
+      <a
+        class="feature-card"
+        href="pages/resources.html"
+      >
+        <div class="icon-box" aria-hidden="true">▤</div>
+        <h3>IT Resources</h3>
+        <p>
+          Find company tools, applications, and frequently used links.
+        </p>
+        <span class="card-link">Browse resources →</span>
+      </a>
+
+      <!-- APPOINTMENTS -->
+      <a
+        class="feature-card"
+        href="https://bookings.cloud.microsoft/book/WilliamstonITCalendar@vertivco.onmicrosoft.com/"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <div class="icon-box" aria-hidden="true">◷</div>
+        <h3>Schedule Support</h3>
+        <p>
+          Book a time to connect with the onsite IT Analyst.
+        </p>
+        <span class="card-link">Book an appointment →</span>
+      </a>
+
+      <!-- TROUBLESHOOTING -->
+      <a
+        class="feature-card"
+        href="pages/troubleshooting.html"
+      >
+        <div class="icon-box" aria-hidden="true">⌘</div>
+        <h3>Troubleshooting Guides</h3>
+        <p>
+          Review steps for common login, account, and technology issues.
+        </p>
+        <span class="card-link">View guides →</span>
+      </a>
+
+      <!-- CYBERSECURITY -->
+      <a
+        class="feature-card"
+        href="pages/Cybersecurity.html"
+      >
+        <div class="icon-box" aria-hidden="true">🔒</div>
+        <h3>Cybersecurity</h3>
+        <p>
+          A dedicated space for future cybersecurity resources and awareness.
+        </p>
+        <span class="card-link">Explore cybersecurity →</span>
+      </a>
+
     </div>
-  </header>
+  </section>
 
-  <main>
+  <!-- UPDATES BANNER -->
+  <section class="updates-banner">
+    <div class="container banner-inner">
 
-    <!-- TOP ROTATING HERO BANNER -->
-    <section class="hero-carousel" id="heroCarousel" aria-label="Featured IT information">
-      <div class="carousel-track">
+      <div>
+        <p class="eyebrow">STAY INFORMED</p>
 
-        <article class="hero-slide active" aria-hidden="false">
-          <img
-            class="slide-image"
-            src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=2000&q=85"
-            alt=""
-            fetchpriority="high"
-          >
-          <div class="hero-content">
-            <p class="hero-eyebrow">Vertiv · Pelzer 2 · South Carolina</p>
-            <h1>Your Local IT Support. All in One Place.</h1>
-            <p>
-              Find helpful resources, troubleshooting steps, IT updates,
-              and appointment scheduling designed to support your day-to-day work.
-            </p>
-            <a class="hero-button" href="resources.html">Explore IT Resources</a>
-          </div>
-        </article>
+        <h2>IT news and reminders</h2>
 
-        <article class="hero-slide" aria-hidden="true">
-          <img
-            class="slide-image"
-            src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=2000&q=85"
-            alt=""
-            loading="lazy"
-          >
-          <div class="hero-content">
-            <p class="hero-eyebrow">Quick Help · Better Productivity</p>
-            <h1>Resolve Common IT Issues Faster.</h1>
-            <p>
-              Access troubleshooting guides for computer, account,
-              connectivity, and Microsoft 365 issues.
-            </p>
-            <a class="hero-button" href="troubleshooting.html">View Troubleshooting</a>
-          </div>
-        </article>
-
-        <article class="hero-slide" aria-hidden="true">
-          <img
-            class="slide-image"
-            src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=2000&q=85"
-            alt=""
-            loading="lazy"
-          >
-          <div class="hero-content">
-            <p class="hero-eyebrow">Stay Secure · Stay Informed</p>
-            <h1>Cybersecurity Starts With You.</h1>
-            <p>
-              Learn about account security, phishing awareness, password
-              safety, and protecting Vertiv information.
-            </p>
-            <a class="hero-button" href="cybersecurity.html">Explore Cybersecurity</a>
-          </div>
-        </article>
-
-        <article class="hero-slide" aria-hidden="true">
-          <img
-            class="slide-image"
-            src="https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=2000&q=85"
-            alt=""
-            loading="lazy"
-          >
-          <div class="hero-content">
-            <p class="hero-eyebrow">IT Support · Schedule a Time</p>
-            <h1>Need Help? Let's Find a Time.</h1>
-            <p>
-              Use the IT appointment calendar to request a time to discuss
-              an issue, ask a question, or get help with a technology task.
-            </p>
-            <a
-              class="hero-button"
-              href="https://bookings.cloud.microsoft/book/WilliamstonITCalendar%40vertivco.onmicrosoft.com/?ismsaljsauthenabled=true"
-              target="_blank"
-              rel="noopener noreferrer"
-            >Schedule an IT Appointment</a>
-          </div>
-        </article>
-
-        <!-- CUSTOM HERO SLIDE: UPLOAD YOUR IMAGE TO THE IMAGES FOLDER -->
-        <article class="hero-slide" aria-hidden="true">
-          <img
-            class="slide-image"
-            src="images/your-hero-picture.jpg"
-            alt=""
-            loading="lazy"
-          >
-          <div class="hero-content">
-            <p class="hero-eyebrow">Pelzer 2 · IT Announcements</p>
-            <h1>Add Your Own Featured Announcement.</h1>
-            <p>
-              Highlight a new IT project, an important reminder,
-              a site announcement, or another update for employees.
-            </p>
-            <a class="hero-button" href="updates.html">View IT Updates</a>
-          </div>
-        </article>
-
-      </div>
-
-      <button class="carousel-arrow prev" type="button" aria-label="Previous banner">&#10094;</button>
-      <button class="carousel-arrow next" type="button" aria-label="Next banner">&#10095;</button>
-
-      <div class="carousel-dots" aria-label="Choose a banner">
-        <button class="carousel-dot active" type="button" aria-label="Show banner 1" aria-current="true"></button>
-        <button class="carousel-dot" type="button" aria-label="Show banner 2"></button>
-        <button class="carousel-dot" type="button" aria-label="Show banner 3"></button>
-        <button class="carousel-dot" type="button" aria-label="Show banner 4"></button>
-        <button class="carousel-dot" type="button" aria-label="Show banner 5"></button>
-      </div>
-    </section>
-
-    <!-- AMAZON-STYLE HORIZONTAL FEATURE CAROUSEL -->
-    <section class="featured-section" aria-label="Featured IT resources">
-      <div class="featured-shell">
-
-        <div class="featured-heading">
-          <div>
-            <div class="featured-accent"></div>
-            <h2>Featured from Williamston IT</h2>
-            <p>Helpful resources, reminders, and updates for your workday.</p>
-          </div>
-
-          <div class="featured-controls">
-            <button class="featured-arrow" type="button" id="featuredPrev" aria-label="Previous resources">&#8249;</button>
-            <button class="featured-arrow" type="button" id="featuredNext" aria-label="Next resources">&#8250;</button>
-          </div>
-        </div>
-
-        <div class="featured-track" id="featuredTrack">
-
-          <!-- Replace this placeholder with your own uploaded image -->
-          <article class="featured-card">
-            <img
-              src="images/your-picture.jpg"
-              alt="Williamston IT featured announcement"
-              loading="lazy"
-            >
-            <div class="featured-card-body">
-              <span class="featured-tag">Featured Announcement</span>
-              <h3>Your IT Update Starts Here</h3>
-              <p>
-                Share a new IT project, an important reminder, a technology
-                improvement, or a helpful tip for Vertiv employees.
-              </p>
-              <a href="updates.html">Read IT Updates &rarr;</a>
-            </div>
-          </article>
-
-          <article class="featured-card">
-            <div class="featured-card-body">
-              <span class="featured-tag">IT Support</span>
-              <h3>Need Technical Assistance?</h3>
-              <p>
-                Submit an IT incident or service request through ServiceNow
-                so your request can be tracked.
-              </p>
-              <a href="https://vertiv.service-now.com/esc?id=ec_dashboard"
-                 target="_blank" rel="noopener noreferrer">
-                Open ServiceNow &rarr;
-              </a>
-            </div>
-          </article>
-
-          <article class="featured-card">
-            <div class="featured-card-body">
-              <span class="featured-tag">Security Reminder</span>
-              <h3>Think Before You Click</h3>
-              <p>
-                Be cautious with unexpected emails, suspicious links,
-                and requests for passwords or verification codes.
-              </p>
-              <a href="cybersecurity.html">Explore Cybersecurity &rarr;</a>
-            </div>
-          </article>
-
-          <article class="featured-card">
-            <div class="featured-card-body">
-              <span class="featured-tag">Schedule Support</span>
-              <h3>Book an IT Appointment</h3>
-              <p>
-                Request a time to discuss a technology issue,
-                ask a question, or get help with an IT task.
-              </p>
-              <a
-                href="https://bookings.cloud.microsoft/book/WilliamstonITCalendar%40vertivco.onmicrosoft.com/?ismsaljsauthenabled=true"
-                target="_blank" rel="noopener noreferrer">
-                Schedule an Appointment &rarr;
-              </a>
-            </div>
-          </article>
-
-        </div>
-
-        <div class="featured-footer">
-          <span>Williamston IT · Vertiv</span>
-          <span>Scroll to explore more &rarr;</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- INTRODUCTION -->
-    <section class="intro-section">
-      <div class="page-container">
-        <p class="section-eyebrow">Welcome to Your IT Hub</p>
-        <h2>Technology Support Made Easier</h2>
-        <p class="intro-copy">
-          This website brings essential IT information together in one place,
-          helping Pelzer 2 employees find resources, learn troubleshooting
-          steps, stay informed, and connect with local IT support.
+        <p>
+          Check for announcements, cybersecurity training reminders,
+          planned technology changes, and updates for Pelzer 2.
         </p>
       </div>
-    </section>
 
-    <!-- QUICK LINKS -->
-    <section class="quick-links" id="quickLinks">
-      <div class="page-container">
-        <div class="section-heading">
-          <p class="section-eyebrow">Explore the Site</p>
-          <h2>How Can IT Help You?</h2>
-          <p>Choose a resource below to get started.</p>
-        </div>
+      <a
+        class="updates-orange-button"
+        href="pages/updates.html"
+      >
+        View Updates →
+      </a>
 
-        <div class="resource-grid">
-
-          <article class="resource-card">
-            <div class="resource-icon" aria-hidden="true">↗</div>
-            <h3>ServiceNow</h3>
-            <p>Submit and track IT requests or incidents through the Vertiv ServiceNow portal.</p>
-            <a class="card-link" href="https://vertiv.service-now.com/esc?id=ec_dashboard" target="_blank" rel="noopener noreferrer">Open ServiceNow &rarr;</a>
-          </article>
-
-          <article class="resource-card">
-            <div class="resource-icon" aria-hidden="true">▤</div>
-            <h3>IT Resources</h3>
-            <p>Find helpful links, common procedures, guides, and tools for everyday IT tasks.</p>
-            <a class="card-link" href="resources.html">Explore Resources &rarr;</a>
-          </article>
-
-          <article class="resource-card">
-            <div class="resource-icon" aria-hidden="true">⚙</div>
-            <h3>Troubleshooting</h3>
-            <p>Review practical steps for common computer, account, connectivity, and software problems.</p>
-            <a class="card-link" href="troubleshooting.html">Get Troubleshooting Help &rarr;</a>
-          </article>
-
-          <article class="resource-card">
-            <div class="resource-icon" aria-hidden="true">▦</div>
-            <h3>IT Appointments</h3>
-            <p>Request an appointment to discuss an IT issue or get help with a technology task.</p>
-            <a class="card-link" href="https://bookings.cloud.microsoft/book/WilliamstonITCalendar%40vertivco.onmicrosoft.com/?ismsaljsauthenabled=true" target="_blank" rel="noopener noreferrer">Open Appointment Calendar &rarr;</a>
-          </article>
-
-          <article class="resource-card">
-            <div class="resource-icon" aria-hidden="true">◉</div>
-            <h3>Cybersecurity</h3>
-            <p>Review cybersecurity awareness tips and learn how to protect your accounts and information.</p>
-            <a class="card-link" href="cybersecurity.html">Explore Cybersecurity &rarr;</a>
-          </article>
-
-          <article class="resource-card">
-            <div class="resource-icon" aria-hidden="true">◷</div>
-            <h3>IT Updates</h3>
-            <p>Find site IT announcements, useful reminders, and technology updates.</p>
-            <a class="card-link" href="updates.html">View IT Updates &rarr;</a>
-          </article>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- IT UPDATES BANNER -->
-    <section class="updates-banner">
-      <div class="page-container updates-inner">
-        <div>
-          <p class="section-eyebrow">Stay Informed</p>
-          <h2>What's Happening in IT?</h2>
-          <p>Visit the IT updates page for announcements, reminders, and helpful information.</p>
-        </div>
-        <a class="updates-button" href="updates.html">View Latest Updates &rarr;</a>
-      </div>
-    </section>
-
-    <!-- CONTACT -->
-    <section class="contact-section" id="contact">
-      <div class="page-container">
-        <div class="contact-card">
-          <div>
-            <p class="section-eyebrow">Local IT Support</p>
-            <h2>Need Assistance?</h2>
-            <p>
-              Submit a ServiceNow ticket so your request can be tracked
-              and addressed. For scheduling, use the IT appointment calendar.
-            </p>
-          </div>
-
-          <div class="contact-details">
-            <p><strong>IT Analyst:</strong> Diana Barakat</p>
-            <p><strong>Location:</strong> Pelzer 2 · South Carolina</p>
-            <p><strong>Email:</strong> <a href="mailto:diana.barakat@vertivco.com">diana.barakat@vertivco.com</a></p>
-            <p>
-              <strong>IT Requests:</strong>
-              <a href="https://vertiv.service-now.com/esc?id=ec_dashboard" target="_blank" rel="noopener noreferrer">Open ServiceNow</a>
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- FOOTER -->
-  <footer class="site-footer">
-    <div class="page-container footer-inner">
-      <p>&copy; <span id="currentYear"></span> Vertiv · Pelzer 2 IT</p>
-      <nav class="footer-links" aria-label="Footer navigation">
-        <a href="resources.html">IT Resources</a>
-        <a href="troubleshooting.html">Troubleshooting</a>
-        <a href="appointments.html">Appointments</a>
-        <a href="cybersecurity.html">Cybersecurity</a>
-      </nav>
     </div>
-  </footer>
+  </section>
 
-  <!-- CAROUSEL JAVASCRIPT -->
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
+  <!-- CONTACT SECTION -->
+  <section class="container bottom-contact">
 
-      /* TOP HERO CAROUSEL */
+    <div>
+      <p class="eyebrow">PELZER 2 IT SUPPORT</p>
 
-      const carousel = document.getElementById("heroCarousel");
+      <h2>Have a question?</h2>
 
-      if (carousel) {
-        const slides = Array.from(carousel.querySelectorAll(".hero-slide"));
-        const dots = Array.from(carousel.querySelectorAll(".carousel-dot"));
-        const previousButton = carousel.querySelector(".carousel-arrow.prev");
-        const nextButton = carousel.querySelector(".carousel-arrow.next");
-        const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+      <p>
+        Submit a ticket for tracked IT support, or contact
+        the onsite IT Analyst if you need additional guidance.
+      </p>
+    </div>
 
-        let currentIndex = 0;
-        let rotationTimer = null;
-        const rotationDelay = 6000;
+    <a
+      class="button"
+      href="https://vertiv.service-now.com/esc?id=ec_dashboard"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      Get IT Support →
+    </a>
 
-        function showSlide(index) {
-          currentIndex = (index + slides.length) % slides.length;
+  </section>
 
-          slides.forEach(function (slide, i) {
-            const isActive = i === currentIndex;
-            slide.classList.toggle("active", isActive);
-            slide.setAttribute("aria-hidden", String(!isActive));
-          });
+</main>
 
-          dots.forEach(function (dot, i) {
-            const isActive = i === currentIndex;
-            dot.classList.toggle("active", isActive);
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="container footer-inner">
 
-            if (isActive) {
-              dot.setAttribute("aria-current", "true");
-            } else {
-              dot.removeAttribute("aria-current");
-            }
-          });
-        }
+    <div>
 
-        function stopRotation() {
-          if (rotationTimer !== null) {
-            window.clearInterval(rotationTimer);
-            rotationTimer = null;
-          }
-        }
+      <a class="footer-brand" href="index.html">
 
-        function startRotation() {
-          stopRotation();
+        <img
+          src="documents/vertivWhiteLogo.jpg"
+          alt="Vertiv"
+          class="footer-logo"
+        >
 
-          if (reducedMotion.matches || slides.length < 2) return;
+        <span>PELZER 2 IT</span>
 
-          rotationTimer = window.setInterval(function () {
-            showSlide(currentIndex + 1);
-          }, rotationDelay);
-        }
+      </a>
 
-        function moveSlide(step) {
-          showSlide(currentIndex + step);
-          startRotation();
-        }
+      <p>Local technology support and resources.</p>
 
-        if (previousButton) {
-          previousButton.addEventListener("click", function () {
-            moveSlide(-1);
-          });
-        }
+    </div>
 
-        if (nextButton) {
-          nextButton.addEventListener("click", function () {
-            moveSlide(1);
-          });
-        }
+    <div>
 
-        dots.forEach(function (dot, i) {
-          dot.addEventListener("click", function () {
-            showSlide(i);
-            startRotation();
-          });
-        });
+      <strong>Diana Barakat | IT Analyst</strong>
+      <br>
 
-        carousel.addEventListener("mouseenter", stopRotation);
-        carousel.addEventListener("mouseleave", startRotation);
-        carousel.addEventListener("focusin", stopRotation);
+      <a href="mailto:diana.barakat@vertivco.com">
+        diana.barakat@vertivco.com
+      </a>
 
-        carousel.addEventListener("focusout", function (event) {
-          if (!carousel.contains(event.relatedTarget)) {
-            startRotation();
-          }
-        });
+    </div>
 
-        if (typeof reducedMotion.addEventListener === "function") {
-          reducedMotion.addEventListener("change", startRotation);
-        }
-
-        showSlide(0);
-        startRotation();
-      }
-
-      /* AMAZON-STYLE HORIZONTAL CAROUSEL */
-
-      const featuredTrack = document.getElementById("featuredTrack");
-      const featuredPrev = document.getElementById("featuredPrev");
-      const featuredNext = document.getElementById("featuredNext");
-
-      if (featuredTrack && featuredPrev && featuredNext) {
-        function scrollFeatured(direction) {
-          const firstCard = featuredTrack.querySelector(".featured-card");
-          if (!firstCard) return;
-
-          const cardWidth = firstCard.getBoundingClientRect().width;
-          const styles = window.getComputedStyle(featuredTrack);
-          const gap = parseFloat(styles.columnGap) || 18;
-
-          featuredTrack.scrollBy({
-            left: direction * (cardWidth + gap),
-            behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
-              ? "auto"
-              : "smooth"
-          });
-        }
-
-        featuredPrev.addEventListener("click", function () {
-          scrollFeatured(-1);
-        });
-
-        featuredNext.addEventListener("click", function () {
-          scrollFeatured(1);
-        });
-      }
-
-      /* FOOTER YEAR */
-
-      const yearElement = document.getElementById("currentYear");
-
-      if (yearElement) {
-        yearElement.textContent = new Date().getFullYear();
-      }
-
-    });
-  </script>
+  </div>
+</footer>
 
 </body>
 </html>
