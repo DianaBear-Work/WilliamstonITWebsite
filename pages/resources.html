@@ -1,84 +1,394 @@
-<!doctype html>
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#171717">
+
   <title>IT Resources | Williamston IT</title>
-  <link rel="stylesheet" href="../css/style.css"><script src="../js/main.js" defer></script>
+
+  <link rel="stylesheet" href="../css/style.css">
+  <script src="../js/main.js" defer></script>
+
+  <style>
+    /* HEADER LOGO */
+
+    .site-header .brand {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      text-decoration: none;
+    }
+
+    .site-header .vertiv-logo {
+      display: block;
+      width: 160px;
+      height: auto;
+      max-height: 80px;
+      object-fit: contain;
+      flex-shrink: 0;
+    }
+
+    .site-header .brand-divider {
+      display: block;
+      width: 1px;
+      height: 42px;
+      background: #777;
+      flex-shrink: 0;
+    }
+
+    .site-header .site-name {
+      white-space: nowrap;
+    }
+
+    /* FOOTER LOGO */
+
+    .footer-brand {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      text-decoration: none;
+    }
+
+    .footer-logo {
+      display: block;
+      width: 125px;
+      max-width: 100%;
+      max-height: 65px;
+      height: auto;
+      object-fit: contain;
+      object-position: left center;
+    }
+
+    @media (max-width: 600px) {
+      .site-header .brand {
+        gap: 10px;
+      }
+
+      .site-header .vertiv-logo {
+        width: 110px;
+        max-height: 55px;
+      }
+
+      .site-header .brand-divider {
+        height: 32px;
+      }
+
+      .site-header .site-name {
+        font-size: 12px;
+      }
+
+      .footer-logo {
+        width: 110px;
+      }
+    }
+  </style>
 </head>
-
-
-
-
-
-
 
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
-  <header class="site-header"><div class="container header-inner">
-    <a class="brand" href="../index.html" aria-label="Williamston IT home"><span class="vertiv-wordmark">Vertiv<span class="brand-dot">.</span></span><span class="brand-divider"></span><span class="site-name">WILLIAMSTON <strong>IT</strong></span></a>
-    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">Menu <span aria-hidden="true">☰</span></button>
-    <nav id="primary-nav" class="nav-links" aria-label="Main navigation">
-    <a href="../index.html">Home</a><a href="resources.html">IT Resources</a>
-    <a href="troubleshooting.html">Troubleshooting</a>
-    <a href="appointments.html">Appointments</a><a href="updates.html">Updates</a>
-    <a href="Cybersecurity.html">Cybersecurity</a>
-  </nav>
-  </div></header>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="container header-inner">
+
+      <a class="brand" href="../index.html" aria-label="Williamston IT home">
+        <img
+          class="vertiv-logo"
+          src="../documents/vertivWhiteLogo.jpg"
+          alt="Vertiv"
+        >
+
+        <span class="brand-divider" aria-hidden="true"></span>
+
+        <span class="site-name">
+          WILLIAMSTON <strong>IT</strong>
+        </span>
+      </a>
+
+      <button
+        class="menu-toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="primary-nav"
+      >
+        Menu <span aria-hidden="true">☰</span>
+      </button>
+
+      <nav id="primary-nav" class="nav-links" aria-label="Main navigation">
+        <a href="../index.html">Home</a>
+        <a href="resources.html" aria-current="page">IT Resources</a>
+        <a href="troubleshooting.html">Troubleshooting</a>
+        <a href="appointments.html">Appointments</a>
+        <a href="updates.html">Updates</a>
+        <a href="Cybersecurity.html">Cybersecurity</a>
+      </nav>
+
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
   <main id="main">
-    <section class="page-hero"><div class="container"><p class="eyebrow">TOOLS AND SHORTCUTS</p><h1>IT Resources</h1><p>Quick links to frequently used tools and systems.</p></div></section>
-    <section class="section container">
-      <div class="notice"><strong>Website setup note:</strong> Links marked “Add link” are placeholders. Replace the matching <code>href="LINK_TO_..."</code> value in this page with the real URL.</div>
-     
-     
-<!--      
-      links to tickets -->
-      
-        <h2 class="section-title">Support and account access</h2>
-        <div class="resource-grid">
-          <article class="resource-card"><span class="card-symbol">↗</span><h3>ServiceNow</h3><p>Submit an incident or service request and track its status.</p><a class="text-link" href="https://vertiv.service-now.com/esc?id=sc_cat_item&sys_id=9fab39e2d7532100a9ad1e173e24d484">Open ServiceNow ticket →</a></article>
-          <article class="resource-card"><span class="card-symbol">▦</span><h3>Account Lockout</h3><p>Request to have your account unlocked.</p><a class="text-link" href="https://vertiv.service-now.com/esc?id=sc_cat_item&sys_id=9fab39e2d7532100a9ad1e173e24d484">Open Incident ticket →</a></article>
-          <!-- <article class="resource-card"><span class="card-symbol">◎</span><h3>Okta</h3><p>Submit a ticket to request Okta access.</p><a class="text-link" href="">Open Okta ticket→</a></article> -->
-          <article class="resource-card"><span class="card-symbol">✉</span><h3>Microsoft 365</h3><p>Request a ticket to request Microsoft 365 License.</p><a class="text-link" href="https://vertiv.service-now.com/esc?id=sc_cat_item&sys_id=ad20ca24fb2cfe101655ff977befdc2d">Open Microsoft 365 ticket →</a></article>
-          <article class="resource-card"><span class="card-symbol">▦</span><h3>Oracle Fusion</h3><p>Request Oracle Fusion application and privileges.</p><a class="text-link" href="https://vertiv.service-now.com/esc?id=sc_cat_item&sys_id=c436c72fdbe79b44b1af38ff9d9619d0">Open Oracle Fusion ticket →</a></article>
-          <article class="resource-card"><span class="card-symbol">▦</span><h3>Request Laptop Accessories</h3><p>Request laptop accessories and peripherals.</p><a class="text-link" href="https://vertiv.service-now.com/esc?id=sc_cat_item&sys_id=089b54c1db89d300b1af38ff9d961909">Open Laptop Accessories ticket →</a></article>
-          <article class="resource-card"><span class="card-symbol">▦</span><h3>Request Laptop</h3><p>Request a new laptop or replacement.</p><a class="text-link" href="https://vertiv.service-now.com/esc?id=sc_cat_item&sys_id=4e774a921b3642106c9db802dd4bcb8d">Laptop request ticket →</a></article>
-          <article class="resource-card"><span class="card-symbol">▦</span><h3>Request User Account Access</h3><p>Enable or Disable User account.</p><a class="text-link" href="https://vertiv.service-now.com/esc?id=sc_cat_item&sys_id=c436c72fdbe79b44b1af38ff9d9619d0">Open Oracle Fusion ticket →</a></article>
-          <article class="resource-card"><span class="card-symbol">▦</span><h3>Request Printer Installation</h3><p>Request printer installation and configuration.</p><a class="text-link" href="https://vertiv.service-now.com/esc?id=sc_cat_item&sys_id=34807d8ddb2b7600f5973c8f9d96198b">Open Printer Installation ticket →</a></article>
-        </div>
 
-
-
-
-
-
-
-
-
-     
-     <!-- Links to frequently visited websites -->
-     
-      <h2 class="section-title">Website Links</h2>
-      <div class="resource-grid">
-        <article class="resource-card"><span class="card-symbol">↗</span><h3>ServiceNow</h3><p>Submit an incident or service request and track its status.</p><a class="text-link" href="LINK_TO_SERVICENOW">Open ServiceNow →</a></article>
-        <article class="resource-card"><span class="card-symbol">◎</span><h3>Okta</h3><p>Access the approved sign-in portal and review account-access guidance.</p><a class="text-link" href="https://vertivco.okta.com">Open Okta→</a></article>
-        <article class="resource-card"><span class="card-symbol">✉</span><h3>Microsoft 365</h3><p>Access approved Microsoft 365 apps and services.</p><a class="text-link" href="LINK_TO_MICROSOFT365">Open Microsoft 365 →</a></article>
-        <article class="resource-card"><span class="card-symbol">▦</span><h3>Oracle Fusion</h3><p>Open Oracle Fusion and related business applications.</p><a class="text-link" href="LINK_TO_ORACLE_FUSION">Open Oracle Fusion →</a></article>
-      </div>
-
-
-
-
-
-
-      <h2 class="section-title section-title-spaced">Guides and documentation</h2>
-      <div class="resource-grid">
-        <article class="resource-card"><h3>New-hire IT setup</h3><p>Setup instructions and onboarding information for new employees.</p><a class="text-link" href="new-hire-resources.html">Open onboarding guide→</a></article>
-        <article class="resource-card"><h3>IT knowledge base</h3><p>Approved documentation, how-to guides, and common fixes.</p><a class="text-link" href="ITDocumentation.html">Open documentation →</a></article>
-        <article class="resource-card"><h3>Cybersecurity training</h3><p>Access the assigned annual cybersecurity training.</p><a class="text-link" href="LINK_TO_SECURITY_TRAINING">Open training →</a></article>
-        <article class="resource-card"><h3>Request an application</h3><p>Use the approved process to request access to business applications.</p><a class="text-link" href="LINK_TO_ACCESS_REQUEST">Request access →</a></article>
+    <section class="page-hero">
+      <div class="container">
+        <p class="eyebrow">TOOLS AND SHORTCUTS</p>
+        <h1>IT Resources</h1>
+        <p>Quick links to frequently used tools and systems.</p>
       </div>
     </section>
+
+    <section class="section container">
+
+      <div class="notice">
+        <strong>Website setup note:</strong>
+        Links marked as placeholders must be replaced with the correct URL
+        before the website is published.
+      </div>
+
+      <!-- SUPPORT AND ACCOUNT ACCESS -->
+
+      <h2 class="section-title">Support and Account Access</h2>
+
+      <div class="resource-grid">
+
+        <article class="resource-card">
+          <span class="card-symbol">↗</span>
+          <h3>ServiceNow</h3>
+          <p>Submit an incident or service request and track its status.</p>
+          <a
+            class="text-link"
+            href="https://vertiv.service-now.com/esc?id=sc_cat_item&amp;sys_id=9fab39e2d7532100a9ad1e173e24d484"
+            target="_blank"
+            rel="noopener noreferrer"
+          >Open ServiceNow Ticket →</a>
+        </article>
+
+        <article class="resource-card">
+          <span class="card-symbol">▦</span>
+          <h3>Account Lockout</h3>
+          <p>Request assistance if your account is locked or you cannot sign in.</p>
+          <a
+            class="text-link"
+            href="https://vertiv.service-now.com/esc?id=sc_cat_item&amp;sys_id=9fab39e2d7532100a9ad1e173e24d484"
+            target="_blank"
+            rel="noopener noreferrer"
+          >Open Incident Ticket →</a>
+        </article>
+
+        <article class="resource-card">
+          <span class="card-symbol">✉</span>
+          <h3>Microsoft 365 License</h3>
+          <p>Request a Microsoft 365 license or related assistance.</p>
+          <a
+            class="text-link"
+            href="https://vertiv.service-now.com/esc?id=sc_cat_item&amp;sys_id=ad20ca24fb2cfe101655ff977befdc2d"
+            target="_blank"
+            rel="noopener noreferrer"
+          >Open Microsoft 365 Ticket →</a>
+        </article>
+
+        <article class="resource-card">
+          <span class="card-symbol">▦</span>
+          <h3>Oracle Fusion</h3>
+          <p>Request Oracle Fusion application access or additional privileges.</p>
+          <a
+            class="text-link"
+            href="https://vertiv.service-now.com/esc?id=sc_cat_item&amp;sys_id=c436c72fdbe79b44b1af38ff9d9619d0"
+            target="_blank"
+            rel="noopener noreferrer"
+          >Open Oracle Fusion Ticket →</a>
+        </article>
+
+        <article class="resource-card">
+          <span class="card-symbol">▦</span>
+          <h3>Laptop Accessories</h3>
+          <p>Request laptop accessories, peripherals, and related equipment.</p>
+          <a
+            class="text-link"
+            href="https://vertiv.service-now.com/esc?id=sc_cat_item&amp;sys_id=089b54c1db89d300b1af38ff9d961909"
+            target="_blank"
+            rel="noopener noreferrer"
+          >Open Accessories Ticket →</a>
+        </article>
+
+        <article class="resource-card">
+          <span class="card-symbol">▦</span>
+          <h3>Request a Laptop</h3>
+          <p>Request a new laptop or a replacement device.</p>
+          <a
+            class="text-link"
+            href="https://vertiv.service-now.com/esc?id=sc_cat_item&amp;sys_id=4e774a921b3642106c9db802dd4bcb8d"
+            target="_blank"
+            rel="noopener noreferrer"
+          >Open Laptop Request →</a>
+        </article>
+
+        <article class="resource-card">
+          <span class="card-symbol">▦</span>
+          <h3>User Account Access</h3>
+          <p>Request assistance with enabling, disabling, or updating an account.</p>
+          <a
+            class="text-link"
+            href="https://vertiv.service-now.com/esc?id=sc_cat_item&amp;sys_id=c436c72fdbe79b44b1af38ff9d9619d0"
+            target="_blank"
+            rel="noopener noreferrer"
+          >Open Access Request →</a>
+        </article>
+
+        <article class="resource-card">
+          <span class="card-symbol">▦</span>
+          <h3>Printer Installation</h3>
+          <p>Request printer installation, configuration, or troubleshooting.</p>
+          <a
+            class="text-link"
+            href="https://vertiv.service-now.com/esc?id=sc_cat_item&amp;sys_id=34807d8ddb2b7600f5973c8f9d96198b"
+            target="_blank"
+            rel="noopener noreferrer"
+          >Open Printer Ticket →</a>
+        </article>
+
+      </div>
+
+      <!-- FREQUENTLY USED WEBSITES -->
+
+      <h2 class="section-title section-title-spaced">Website Links</h2>
+
+      <div class="resource-grid">
+
+        <article class="resource-card">
+          <span class="card-symbol">↗</span>
+          <h3>ServiceNow</h3>
+          <p>Access the IT service portal to submit requests and review tickets.</p>
+          <a
+            class="text-link"
+            href="https://vertiv.service-now.com/esc?id=ec_dashboard"
+            target="_blank"
+            rel="noopener noreferrer"
+          >Open ServiceNow →</a>
+        </article>
+
+        <article class="resource-card">
+          <span class="card-symbol">◎</span>
+          <h3>Okta</h3>
+          <p>Access the Vertiv sign-in portal for supported applications.</p>
+          <a
+            class="text-link"
+            href="https://vertivco.okta.com"
+            target="_blank"
+            rel="noopener noreferrer"
+          >Open Okta →</a>
+        </article>
+
+        <article class="resource-card">
+          <span class="card-symbol">✉</span>
+          <h3>Microsoft 365</h3>
+          <p>Access approved Microsoft 365 apps and services.</p>
+          <a
+            class="text-link"
+            href="LINK_TO_MICROSOFT365"
+            target="_blank"
+            rel="noopener noreferrer"
+          >Open Microsoft 365 →</a>
+        </article>
+
+        <article class="resource-card">
+          <span class="card-symbol">▦</span>
+          <h3>Oracle Fusion</h3>
+          <p>Open Oracle Fusion and related business applications.</p>
+          <a
+            class="text-link"
+            href="LINK_TO_ORACLE_FUSION"
+            target="_blank"
+            rel="noopener noreferrer"
+          >Open Oracle Fusion →</a>
+        </article>
+
+      </div>
+
+      <!-- GUIDES AND DOCUMENTATION -->
+
+      <h2 class="section-title section-title-spaced">Guides and Documentation</h2>
+
+      <div class="resource-grid">
+
+        <article class="resource-card">
+          <h3>New-Hire IT Setup</h3>
+          <p>Find setup instructions and onboarding information for new employees.</p>
+          <a class="text-link" href="new-hire-resources.html">
+            Open Onboarding Guide →
+          </a>
+        </article>
+
+        <article class="resource-card">
+          <h3>IT Knowledge Base</h3>
+          <p>Review approved documentation, how-to guides, and common fixes.</p>
+          <a class="text-link" href="ITDocumentation.html">
+            Open Documentation →
+          </a>
+        </article>
+
+        <article class="resource-card">
+          <h3>Cybersecurity Training</h3>
+          <p>Access the assigned annual cybersecurity training.</p>
+          <a
+            class="text-link"
+            href="LINK_TO_SECURITY_TRAINING"
+            target="_blank"
+            rel="noopener noreferrer"
+          >Open Training →</a>
+        </article>
+
+        <article class="resource-card">
+          <h3>Request an Application</h3>
+          <p>Use the approved process to request access to business applications.</p>
+          <a
+            class="text-link"
+            href="LINK_TO_ACCESS_REQUEST"
+            target="_blank"
+            rel="noopener noreferrer"
+          >Request Access →</a>
+        </article>
+
+      </div>
+
+    </section>
   </main>
-  <footer class="site-footer"><div class="container footer-inner"><div><a class="footer-brand" href="../index.html">Vertiv<span>.</span> <b>WILLIAMSTON IT</b></a><p>Local technology support and resources.</p></div><div class="footer-contact"><strong>Diana Barakat · IT Analyst</strong><a href="mailto:diana.barakat@vertivco.com">diana.barakat@vertivco.com</a></div><p class="copyright">© Vertiv · Internal support resource concept</p></div></footer>
-</body></html>
+
+  <!-- FOOTER WITH IMAGE LOGO -->
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+
+      <div>
+        <a
+          class="footer-brand"
+          href="../index.html"
+          aria-label="Williamston IT home"
+        >
+          <img
+            class="footer-logo"
+            src="../documents/vertivWhiteLogo.jpg"
+            alt="Vertiv"
+          >
+        </a>
+        <p>Local technology support and resources.</p>
+      </div>
+
+      <div class="footer-contact">
+        <strong>Diana Barakat · IT Analyst</strong>
+        <a href="mailto:diana.barakat@vertivco.com">
+          diana.barakat@vertivco.com
+        </a>
+      </div>
+
+      <div class="copyright">
+        <p>© 2026 Vertiv · Internal support resource concept</p>
+      </div>
+
+    </div>
+  </footer>
+
+</body>
+</html>

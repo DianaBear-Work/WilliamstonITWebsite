@@ -1,3 +1,4 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 :root {
@@ -78,7 +79,7 @@ a {
   flex-shrink: 0;
 }
 
-/* VERTIV LOGO */
+/* HEADER VERTIV LOGO */
 
 .vertiv-logo {
   display: block;
@@ -527,31 +528,23 @@ a {
   padding-bottom: 28px;
 }
 
+/* IMAGE LOGO IN FOOTER */
+
 .footer-brand {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
+  width: fit-content;
   text-decoration: none;
-  font-weight: 800;
-  font-size: 20px;
-  letter-spacing: -1px;
-}
-
-.footer-brand span {
-  color: var(--orange);
-}
-
-.footer-brand b {
-  font-size: 9px;
-  letter-spacing: 1px;
-  margin-left: 9px;
 }
 
 .footer-logo {
   display: block;
-  width: 100px;
+  width: 125px;
+  max-width: 100%;
   height: auto;
+  max-height: 65px;
   object-fit: contain;
+  object-position: left center;
 }
 
 .footer-inner p {
@@ -967,6 +960,10 @@ a {
   .footer-inner {
     grid-template-columns: 1fr;
     gap: 18px;
+  }
+
+  .footer-logo {
+    width: 110px;
   }
 
   .copyright {
