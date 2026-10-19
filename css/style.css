@@ -37,6 +37,7 @@ a {
 
 img {
   max-width: 100%;
+  height: auto;
 }
 
 .container {
@@ -1230,4 +1231,106 @@ img {
     animation-duration: .01ms !important;
     animation-iteration-count: 1 !important;
   }
+}
+
+/* ADDITIONAL MOBILE REFINEMENTS */
+
+@media (max-width: 700px) {
+  .header-inner {
+    column-gap: 10px;
+  }
+
+  .brand {
+    min-width: 0;
+    max-width: calc(100% - 90px);
+    flex-shrink: 1;
+  }
+
+  .site-name,
+  .site-brand-text {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .menu-toggle {
+    min-width: 76px;
+    min-height: 44px;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .nav-links a {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+  }
+
+  .button,
+  .featured-arrow {
+    touch-action: manipulation;
+  }
+
+  .featured-heading {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .featured-controls {
+    flex-shrink: 0;
+  }
+
+  .update-date {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/* EXTRA-SMALL PHONES */
+
+@media (max-width: 380px) {
+  .container {
+    width: calc(100% - 24px);
+  }
+
+  .vertiv-logo {
+    width: 76px;
+  }
+
+  .site-name,
+  .site-brand-text {
+    font-size: 9px;
+    letter-spacing: .5px;
+  }
+
+  .hero h1 {
+    font-size: clamp(32px, 10vw, 40px);
+    letter-spacing: -1.5px;
+  }
+
+  .featured-shell {
+    width: calc(100% - 16px);
+    padding: 12px;
+  }
+
+  .featured-card {
+    flex-basis: 90%;
+  }
+
+  .guide-card,
+  .update-card {
+    padding: 15px;
+  }
+}
+
+/* PREVENT ACCIDENTAL HORIZONTAL OVERFLOW */
+
+html,
+body {
+  max-width: 100%;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
 }
