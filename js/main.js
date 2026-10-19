@@ -3,20 +3,20 @@ document.addEventListener("DOMContentLoaded", () => {
   const toggle = document.querySelector(".menu-toggle");
   const nav = document.querySelector("#primary-nav");
 
+  // Mobile menu toggle
   if (toggle && nav) {
-    // Set the initial mobile menu state.
-    toggle.setAttribute("aria-expanded", "false");
+    toggle.addEventListener("click", (event) => {
+      event.preventDefault();
 
-    toggle.addEventListener("click", () => {
-      const open = nav.classList.toggle("is-open");
+      const isOpen = nav.classList.toggle("is-open");
 
-      toggle.setAttribute("aria-expanded", String(open));
-      toggle.innerHTML = open
+      toggle.setAttribute("aria-expanded", String(isOpen));
+      toggle.innerHTML = isOpen
         ? 'Close <span aria-hidden="true">×</span>'
         : 'Menu <span aria-hidden="true">☰</span>';
     });
 
-    // Close the mobile menu after a navigation link is selected.
+    // Close the menu after selecting a navigation link
     nav.querySelectorAll("a").forEach((link) => {
       link.addEventListener("click", () => {
         nav.classList.remove("is-open");
@@ -25,9 +25,19 @@ document.addEventListener("DOMContentLoaded", () => {
           'Menu <span aria-hidden="true">☰</span>';
       });
     });
+
+    // Close the menu when switching back to desktop width
+    window.addEventListener("resize", () => {
+      if (window.innerWidth > 700) {
+        nav.classList.remove("is-open");
+        toggle.setAttribute("aria-expanded", "false");
+        toggle.innerHTML =
+          'Menu <span aria-hidden="true">☰</span>';
+      }
+    });
   }
 
-  // Highlight the current page in the navigation.
+  // Highlight the current page in the navigation
   const currentPath = window.location.pathname.replace(/\/+$/, "");
 
   document.querySelectorAll(".nav-links a").forEach((link) => {
@@ -36,12 +46,10 @@ document.addEventListener("DOMContentLoaded", () => {
       window.location.href
     ).pathname.replace(/\/+$/, "");
 
-    const isCurrentPage =
+    if (
       linkPath === currentPath ||
-      (linkPath.endsWith("/index.html") &&
-        currentPath === linkPath.replace(/\/index\.html$/, ""));
-
-    if (isCurrentPage) {
+      (currentPath === "" && linkPath.endsWith("/index.html"))
+    ) {
       link.setAttribute("aria-current", "page");
     }
   });
