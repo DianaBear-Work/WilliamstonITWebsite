@@ -4,18 +4,151 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#171717">
-  <meta name="description" content="IT announcements, cybersecurity reminders, and technology updates for Vertiv Pelzer 2 employees.">
+  <meta name="description" content="Pelzer 2 IT projects, technology improvements, announcements, and support updates.">
 
-  <title>IT Updates | Pelzer 2 IT</title>
+  <title>IT Projects &amp; Updates | Pelzer 2 IT</title>
 
   <link rel="stylesheet" href="../css/style.css">
   <script src="../js/main.js" defer></script>
+
+  <style>
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+      gap: 1.25rem;
+      margin-top: 1.5rem;
+    }
+
+    .project-card {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      padding: 1.4rem;
+      border: 1px solid #dedede;
+      border-top: 4px solid #FE5B1B;
+      border-radius: 10px;
+      background: #fff;
+      min-width: 0;
+    }
+
+    .project-card h3 {
+      margin: 0;
+    }
+
+    .project-card p {
+      margin: 0;
+      line-height: 1.65;
+    }
+
+    .project-status {
+      display: inline-flex;
+      align-self: flex-start;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.35rem 0.65rem;
+      border-radius: 4px;
+      background: #f1f1f1;
+      color: #333;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .project-status::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      flex: 0 0 7px;
+      border-radius: 50%;
+      background: #666;
+    }
+
+    .project-status.in-progress::before {
+      background: #FE5B1B;
+    }
+
+    .project-status.waiting::before {
+      background: #9a6700;
+    }
+
+    .project-status.complete::before {
+      background: #218739;
+    }
+
+    .project-status.planning::before {
+      background: #666;
+    }
+
+    .project-detail {
+      margin-top: auto !important;
+      padding-top: 0.75rem;
+      border-top: 1px solid #e7e7e7;
+      color: #555;
+      font-size: 0.9rem;
+    }
+
+    .project-section-intro {
+      max-width: 760px;
+      line-height: 1.7;
+    }
+
+    .updates-list {
+      display: grid;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .update-card {
+      display: grid;
+      grid-template-columns: minmax(115px, 160px) minmax(0, 1fr);
+      gap: 1.25rem;
+      padding: 1.25rem;
+      border: 1px solid #dedede;
+      border-radius: 10px;
+      background: #fff;
+    }
+
+    .update-date {
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: #b84310;
+    }
+
+    .update-card h3 {
+      margin-top: 0;
+    }
+
+    .update-card p {
+      line-height: 1.65;
+    }
+
+    .update-card a {
+      overflow-wrap: anywhere;
+    }
+
+    .project-disclaimer {
+      margin-top: 1.5rem;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid #FE5B1B;
+      background: #f5f5f5;
+      line-height: 1.65;
+    }
+
+    @media (max-width: 600px) {
+      .update-card {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+      }
+    }
+  </style>
 </head>
 
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
 
-  <!-- ORIGINAL VERTIV HEADER -->
+  <!-- VERTIV HEADER -->
   <header class="site-header">
     <div class="container header-inner">
 
@@ -45,139 +178,245 @@
         <a href="resources.html">IT Resources</a>
         <a href="troubleshooting.html">Troubleshooting</a>
         <a href="appointments.html">Appointments</a>
-        <a href="updates.html" aria-current="page">Updates</a>
+        <a href="updates.html" aria-current="page">Projects &amp; Updates</a>
         <a href="Cybersecurity.html">Cybersecurity</a>
       </nav>
 
     </div>
   </header>
 
-  <!-- MAIN CONTENT -->
   <main id="main">
 
+    <!-- PAGE INTRODUCTION -->
     <section class="page-hero">
       <div class="container">
-        <p class="eyebrow">SITE INFORMATION</p>
-        <h1>IT News &amp; Updates</h1>
+        <p class="eyebrow">SITE TECHNOLOGY &amp; IMPROVEMENTS</p>
+        <h1>IT Projects <span>&amp; Updates.</span></h1>
         <p>
-          Your central place for Pelzer 2 IT announcements, service notices,
-          cybersecurity reminders, and new support resources.
+          Follow current technology projects, infrastructure improvements,
+          and new resources being developed for Pelzer 2.
         </p>
       </div>
     </section>
 
     <section class="section container">
 
-      <!-- SCOPE NOTICE -->
-      <div class="notice">
-        <strong>Pelzer 2 IT updates:</strong>
-        This page is intended for announcements, reminders, and resources
-        relevant to employees at Pelzer 2. Information will be added as
-        updates become available.
+      <!-- PROJECTS -->
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Last updated 10/19/26</p>
+          <h2>Projects in Progress</h2>
+        </div>
+        <p>Project status and the latest progress at Pelzer 2.</p>
+      </div>
+
+      <p class="project-section-intro">
+        These initiatives focus on improving access to engineering
+        information, supporting production and office operations, and
+        creating better ways to communicate IT information across the site.
+      </p>
+
+      <div class="project-grid">
+
+        <!-- STORES KIOSK -->
+        <article class="project-card">
+          <span class="project-status in-progress">In Progress</span>
+          <h3>Stores Kiosk for Quality Engineers</h3>
+          <p>
+            Developing a dedicated kiosk in the Stores area so authorized
+            users can look up and view engineering drawings without relying
+            on another department to retrieve them.
+          </p>
+          <p>
+            The kiosk is planned to be locked to Oracle Fusion Product
+            Development to provide access to the intended drawing resources.
+          </p>
+          <p class="project-detail">
+            <strong>Focus:</strong> Restricted kiosk access and engineering
+            drawing availability.
+          </p>
+        </article>
+
+        <!-- SMART RUN PRINTER -->
+        <article class="project-card">
+          <span class="project-status waiting">Location Assessment</span>
+          <h3>Smart Run Printer Relocation</h3>
+          <p>
+            Worked with Encore to assess whether Ethernet drops could be
+            installed in the Smart Run desk area for the Smart Run printer.
+          </p>
+          <p>
+            The area is too far from the MDF and IDF for the proposed
+            Ethernet installation, so the the Smart Run Printer will need to move.
+          </p>
+          <p class="project-detail">
+            <strong>Finding:</strong> The proposed network-drop location
+            needs an alternative solution.
+          </p>
+        </article>
+
+        <!-- SUPERVISOR DESKS -->
+        <article class="project-card">
+          <span class="project-status in-progress">In Progress</span>
+          <h3>Supervisor Desk Relocation</h3>
+          <p>
+            Coordinating the network requirements for the supervisor desk
+            relocation, including working to have Ethernet drops installed
+            in the new desk area.
+          </p>
+          <p class="project-detail">
+            <strong>Next step:</strong> Coordinate installation and confirm
+            connectivity requirements.
+          </p>
+        </article>
+
+        <!-- PRODUCTION FLOOR KIOSK -->
+        <article class="project-card">
+          <span class="project-status waiting">Awaiting Equipment</span>
+          <h3>Production Floor Kiosk</h3>
+          <p>
+            The kiosk build is complete. The remaining items are the correct
+            cable and desktop mount needed to finish the physical setup.
+          </p>
+          <p class="project-detail">
+            <strong>Next step:</strong> Complete installation once the
+            required cable and mount arrive.
+          </p>
+        </article>
+
+        <!-- TIER 2 PRESENTATION DISPLAY -->
+        <article class="project-card">
+          <span class="project-status in-progress">In Progress</span>
+          <h3>Office Display for Tier 2 IT Presentations</h3>
+          <p>
+            Preparing a display in the new office area to support monthly
+            IT updates during Tier 2 meetings.
+          </p>
+          <p>
+            The planned sessions will include site IT updates, demonstrations
+            of tools and processes, and helpful reminders for managers.
+          </p>
+          <p class="project-detail">
+            <strong>Goal:</strong> Establish a recurring, practical IT
+            update and demonstration session.
+          </p>
+        </article>
+
+        <!-- PELZER 2 WEBSITE -->
+        <article class="project-card">
+          <span class="project-status planning">Pending Approval</span>
+          <h3>Pelzer 2 IT Website</h3>
+          <p>
+            Developing a simple website for Pelzer 2 employees to find IT
+            resources, troubleshooting guidance, updates, and appointment
+            information in one place.
+          </p>
+          <p>
+            The proposed site would be accessible through a QR code,
+            making it easier for employees to reach support information.
+          </p>
+          <p class="project-detail">
+            <strong>Important:</strong> The website still requires full
+            approval before implementation or rollout to employees.
+          </p>
+        </article>
+
+      </div>
+
+      <div class="project-disclaimer">
+        <strong>Project status:</strong>
+        Statuses reflect current progress and may change as equipment,
+        installation schedules, technical requirements, and approvals are
+        confirmed.
+      </div>
+
+      <!-- SITE UPDATES -->
+      <div class="section-heading" style="margin-top: 3rem;">
+        <div>
+          <p class="eyebrow">HELPFUL INFORMATION</p>
+          <h2>IT Reminders &amp; Resources</h2>
+        </div>
+        <p>Important information for everyday IT support.</p>
       </div>
 
       <div class="updates-list">
 
-        <!-- ANNOUNCEMENTS -->
         <article class="update-card">
-          <div class="update-date">ANNOUNCEMENTS</div>
-
+          <div class="update-date">IT SUPPORT</div>
           <div>
-            <h2>IT announcements and service notices</h2>
-
+            <h3>Submit an IT ticket</h3>
             <p>
-              Check here for relevant IT announcements, planned service
-              changes, maintenance notices, and other technology updates
-              affecting Pelzer 2 employees.
+              Submit requests through ServiceNow so issues can be documented,
+              prioritized, and tracked. Include the affected device or
+              application, relevant error messages, and troubleshooting
+              steps already attempted.
             </p>
-
-            <a class="text-link" href="LINK_TO_ANNOUNCEMENTS">
-              View announcements
-              <span class="placeholder-tag">Add link</span> →
+            <a
+              class="text-link"
+              href="https://vertiv.service-now.com/esc?id=ec_dashboard"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Open ServiceNow →
             </a>
           </div>
         </article>
 
-        <!-- CYBERSECURITY TRAINING -->
         <article class="update-card">
-          <div class="update-date">REMINDER</div>
-
+          <div class="update-date">APPOINTMENTS</div>
           <div>
-            <h2>Annual cybersecurity training</h2>
+            <h3>An IT ticket is required before scheduling</h3>
+            <p>
+              Employees must have an IT ticket number for every appointment
+              and include it when booking. Appointments without a ticket
+              number will be canceled.
+            </p>
+            <a class="text-link" href="appointments.html">
+              View appointment information →
+            </a>
+          </div>
+        </article>
 
+        <article class="update-card">
+          <div class="update-date">CYBERSECURITY</div>
+          <div>
+            <h3>Annual cybersecurity training</h3>
             <p>
               Employees should complete assigned annual cybersecurity
               training by the deadline communicated by Vertiv. Managers
-              should remind their teams to complete any outstanding
-              required training.
+              should remind their teams to complete outstanding training.
             </p>
-
-            <a class="text-link" href="LINK_TO_SECURITY_TRAINING">
-              Open cybersecurity training
-              <span class="placeholder-tag">Add link</span> →
+            <a class="text-link" href="Cybersecurity.html">
+              Visit cybersecurity resources →
             </a>
           </div>
         </article>
 
-        <!-- IT RESOURCES -->
         <article class="update-card">
-          <div class="update-date">IT RESOURCES</div>
-
+          <div class="update-date">MICROSOFT 365</div>
           <div>
-            <h2>IT guides and documentation</h2>
-
+            <h3>Microsoft 365 sign-in reminder</h3>
             <p>
-              Visit the IT Resources page for helpful links, support
-              documentation, and approved resources. The Troubleshooting
-              page also provides basic checks for common IT issues.
+              When signing in to Outlook, Teams, and OneDrive, use your
+              Vertiv company account ending in <strong>@vertivco.com</strong>.
+              If you experience sign-in or MFA issues, follow the approved
+              recovery process or submit an IT ticket.
             </p>
-
-            <a class="text-link" href="resources.html">
-              Browse IT resources →
-            </a>
-
-            <br>
-
-            <a class="text-link" href="troubleshooting.html">
-              View troubleshooting guides →
-            </a>
-          </div>
-        </article>
-
-        <!-- MICROSOFT 365 SIGN-IN REMINDER -->
-        <article class="update-card">
-          <div class="update-date">IT REMINDER</div>
-
-          <div>
-            <h2>Microsoft 365 sign-in</h2>
-
-            <p>
-              When signing in to Microsoft 365 applications such as Outlook,
-              Teams, and OneDrive, use your Vertiv company account ending
-              in <strong>@vertivco.com</strong>. If you experience sign-in
-              or MFA issues, follow the approved account-recovery process
-              or submit an IT ticket.
-            </p>
-
             <a class="text-link" href="troubleshooting.html">
               View troubleshooting guidance →
             </a>
           </div>
         </article>
 
-        <!-- FEEDBACK -->
         <article class="update-card">
-          <div class="update-date">FEEDBACK</div>
-
+          <div class="update-date">SUGGESTIONS</div>
           <div>
-            <h2>Suggest an IT resource</h2>
-
+            <h3>Suggest an IT resource</h3>
             <p>
-              Have an idea for a guide, helpful link, or improvement that
-              would make IT support easier for your team? Send a suggestion
-              to the onsite IT Analyst.
+              Have an idea for a helpful guide, resource, or improvement
+              to the site's IT support information? Send a suggestion to
+              the onsite IT Analyst.
             </p>
-
             <a
               class="text-link"
               href="mailto:diana.barakat@vertivco.com?subject=Pelzer%202%20IT%20Website%20Suggestion"
@@ -189,15 +428,15 @@
 
       </div>
 
-      <!-- CONTACT IT -->
-      <div class="cta-panel">
+      <!-- SUPPORT CTA -->
+      <div class="cta-panel" style="margin-top: 2rem;">
         <div>
           <p class="eyebrow">NEED IT SUPPORT?</p>
           <h2>Have an issue that needs attention?</h2>
           <p>
             Submit a ServiceNow ticket so your request can be documented
-            and tracked. Include the affected device or application,
-            relevant error messages, and any steps you have tried.
+            and tracked. For scheduled appointments, include your ticket
+            number when booking.
           </p>
         </div>
 
@@ -214,7 +453,7 @@
     </section>
   </main>
 
-  <!-- ORIGINAL VERTIV FOOTER -->
+  <!-- VERTIV FOOTER -->
   <footer class="site-footer">
     <div class="container footer-inner">
 
