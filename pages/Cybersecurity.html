@@ -1,10 +1,11 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Cybersecurity resources for Vertiv Pelzer 2.">
+  <meta name="theme-color" content="#171717">
+
   <title>Cybersecurity | Pelzer 2 IT</title>
 
   <link rel="stylesheet" href="../css/style.css">
@@ -75,102 +76,115 @@
 </head>
 
 <body>
+  <a class="skip-link" href="#main">Skip to content</a>
 
-<header class="site-header">
-  <div class="container header-inner">
+  <!-- ORIGINAL VERTIV HEADER -->
+  <header class="site-header">
+    <div class="container header-inner">
 
-    <a class="brand" href="../index.html">
-      <img
-        src="../assets/vertivLogo.png"
-        alt="Vertiv"
-        class="vertiv-logo"
+      <a class="brand" href="../index.html" aria-label="Pelzer 2 IT home">
+        <img
+          class="vertiv-logo"
+          src="../documents/vertivWhiteLogo.jpg"
+          alt="Vertiv"
+        >
+
+        <span class="brand-divider" aria-hidden="true"></span>
+
+        <span class="site-name">
+          PELZER 2 INFORMATION TECHNOLOGY
+        </span>
+      </a>
+
+      <button
+        class="menu-toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="primary-nav"
       >
-      <span class="brand-divider"></span>
-      <span class="site-brand-text">
-        PELZER 2 <strong>INFORMATION TECHNOLOGY</strong>
-      </span>
-    </a>
+        Menu <span aria-hidden="true">☰</span>
+      </button>
 
-    <button class="menu-toggle" aria-expanded="false" type="button">
-      ☰ Menu
-    </button>
+      <nav id="primary-nav" class="nav-links" aria-label="Main navigation">
+        <a href="../index.html">Home</a>
+        <a href="resources.html">IT Resources</a>
+        <a href="troubleshooting.html">Troubleshooting</a>
+        <a href="appointments.html">Appointments</a>
+        <a href="updates.html">Updates</a>
+        <a href="Cybersecurity.html" aria-current="page">Cybersecurity</a>
+      </nav>
 
-    <nav class="nav-links" aria-label="Main navigation">
-      <a href="../index.html">Home</a>
-      <a href="resources.html">IT Resources</a>
-      <a href="Troubleshooting.html">Troubleshooting</a>
-      <a href="appointments.html">Appointments</a>
-      <a href="updates.html">Updates</a>
-    </nav>
+    </div>
+  </header>
 
-  </div>
-</header>
+  <main id="main">
+    <section class="cyber-coming-soon">
+      <div class="cyber-content">
 
-<main>
+        <div class="cyber-icon" aria-hidden="true">🔒</div>
 
-  <section class="cyber-coming-soon">
-    <div class="cyber-content">
+        <p class="eyebrow">CYBERSECURITY</p>
 
-      <div class="cyber-icon" aria-hidden="true">🔒</div>
+        <span class="cyber-status">UNDER CONSTRUCTION</span>
 
-      <p class="eyebrow">CYBERSECURITY</p>
+        <h1>
+          Nothing to see <span>here... yet.</span>
+        </h1>
 
-      <span class="cyber-status">UNDER CONSTRUCTION</span>
+        <p class="cyber-message">
+          This space is reserved for future cybersecurity resources,
+          awareness materials, and helpful security information for
+          Pelzer 2 employees.
+        </p>
 
-      <h1>
-        Nothing to see <span>here... yet.</span>
-      </h1>
+        <p>
+          <strong>Stay tuned.</strong> More to come!
+        </p>
 
-      <p class="cyber-message">
-        This space is reserved for future cybersecurity resources,
-        awareness materials, and helpful security information for
-        Pelzer 2 employees.
-      </p>
+        <div class="button-row" style="justify-content: center;">
+          <a class="button" href="../index.html">
+            Back to Home →
+          </a>
+        </div>
 
-      <p>
-        <strong>Stay tuned.</strong> More to come!
-      </p>
+        <p class="cyber-note">
+          In the meantime, continue to follow Vertiv's existing
+          cybersecurity policies and training requirements.
+        </p>
 
-      <div class="button-row" style="justify-content: center;">
-        <a class="button" href="../index.html">
-          Back to Home →
+      </div>
+    </section>
+  </main>
+
+  <!-- ORIGINAL VERTIV FOOTER -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+
+      <div>
+        <a class="footer-brand" href="../index.html" aria-label="Pelzer 2 IT home">
+          <img
+            src="../documents/vertivWhiteLogo.jpg"
+            alt="Vertiv"
+            class="footer-logo"
+          >
+          <b>PELZER 2 INFORMATION TECHNOLOGY</b>
+        </a>
+
+        <p>Local technology support and resources.</p>
+      </div>
+
+      <div class="footer-contact">
+        <strong>Diana Barakat · IT Analyst</strong>
+        <a href="mailto:diana.barakat@vertivco.com">
+          diana.barakat@vertivco.com
         </a>
       </div>
 
-      <p class="cyber-note">
-        In the meantime, continue to follow Vertiv's existing
-        cybersecurity policies and training requirements.
+      <p class="copyright">
+        © Vertiv · Internal support resource
       </p>
 
     </div>
-  </section>
-
-</main>
-
-<footer class="site-footer">
-  <div class="container footer-inner">
-
-    <div>
-      <a class="footer-brand" href="../index.html">
-        <img
-          src="../assets/vertiv-logo-white.svg"
-          alt="Vertiv"
-          class="footer-logo"
-        >
-        <span>PELZER 2 IT</span>
-      </a>
-      <p>Local technology support and resources.</p>
-    </div>
-
-    <div>
-      <strong>Diana Barakat | IT Analyst</strong><br>
-      <a href="mailto:diana.barakat@vertivco.com">
-        diana.barakat@vertivco.com
-      </a>
-    </div>
-
-  </div>
-</footer>
-
+  </footer>
 </body>
 </html>
