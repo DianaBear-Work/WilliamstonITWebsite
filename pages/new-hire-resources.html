@@ -3,77 +3,167 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>New Hire Resources | Williamston IT</title>
+  <meta name="theme-color" content="#171717">
+  <title>New Hire Resources | Pelzer 2 IT</title>
   <link rel="stylesheet" href="../css/style.css">
   <script src="../js/main.js" defer></script>
 </head>
+
 <body>
-<header class="site-header">
-  <div class="container header-inner">
-    <a class="brand" href="../index.html" aria-label="Williamston IT home">
-      <span class="vertiv-wordmark">Vertiv<span class="brand-dot">.</span></span>
-      <span class="brand-divider"></span>
-      <span class="site-name">WILLIAMSTON <strong>IT</strong></span>
-    </a>
-    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">Menu <span aria-hidden="true">☰</span></button>
-    <nav id="primary-nav" class="nav-links" aria-label="Main navigation">
-      <a href="../index.html">Home</a>
-      <a href="resources.html">IT Resources</a>
-      <a href="troubleshooting.html">Troubleshooting</a>
-      <a href="appointments.html">Appointments</a>
-      <a href="updates.html">Updates</a>
-    </nav>
-  </div>
-</header>
-<main id="main">
-  <section class="page-hero">
-    <div class="container">
-      <p class="eyebrow">WELCOME TO VERTIV</p>
-      <h1>New Hire <span>Resources.</span></h1>
-      <p class="hero-lede">Welcome to the Williamston team! Use these guides to get connected and set up the technology you need to get started.</p>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="../index.html" aria-label="Pelzer 2 IT home">
+        <img
+          class="vertiv-logo"
+          src="../documents/vertivWhiteLogo.jpg"
+          alt="Vertiv"
+        >
+        <span class="brand-divider" aria-hidden="true"></span>
+        <span class="site-name">PELZER 2 INFORMATION TECHNOLOGY</span>
+      </a>
+
+      <button
+        class="menu-toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="primary-nav"
+      >
+        Menu <span aria-hidden="true">☰</span>
+      </button>
+
+      <nav id="primary-nav" class="nav-links" aria-label="Main navigation">
+        <a href="../index.html">Home</a>
+        <a href="resources.html">IT Resources</a>
+        <a href="troubleshooting.html">Troubleshooting</a>
+        <a href="appointments.html">Appointments</a>
+        <a href="updates.html">Updates</a>
+        <a href="Cybersecurity.html">Cybersecurity</a>
+      </nav>
     </div>
-  </section>
-  <section class="container section" id="setup-guides">
-    <div class="section-heading">
-      <div><p class="eyebrow">GET CONNECTED</p><h2>New Hire Setup Guides</h2></div>
-      <p>Choose a guide below to review the setup process.</p>
+  </header>
+
+  <main id="main">
+    <section class="page-hero">
+      <div class="container">
+        <p class="eyebrow">WELCOME TO VERTIV</p>
+        <h1>New Hire <span>Resources.</span></h1>
+        <p class="hero-lede">
+          Welcome to the Pelzer 2 team! Use these guides to get connected
+          and set up the technology you need to get started.
+        </p>
+      </div>
+    </section>
+
+    <section class="container section" id="setup-guides">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">GET CONNECTED</p>
+          <h2>New Hire Setup Guides</h2>
+        </div>
+        <p>Choose a guide below to review the setup process.</p>
+      </div>
+
+      <div class="card-grid">
+
+        <article class="feature-card resource-card">
+          <span class="card-symbol" aria-hidden="true">✓</span>
+          <h3>Okta Setup</h3>
+          <p>
+            Learn how to set up Okta Verify on your laptop and cell phone
+            for approved sign-in and multifactor authentication.
+          </p>
+          <a
+            class="card-link"
+            href="../documents/Required%20-%20OKTA%20Verify%20Setup%2002.25.25.pdf"
+            target="_blank"
+            rel="noopener"
+          >
+            Open Okta Setup Guide →
+          </a>
+        </article>
+
+        <article class="feature-card resource-card">
+          <span class="card-symbol" aria-hidden="true">⌁</span>
+          <h3>Guest Wi-Fi Access</h3>
+          <p>
+            Learn how to connect a personal device or visitor device
+            to the available guest wireless network.
+          </p>
+          <a
+            class="card-link"
+            href="../documents/Guest%20Wifi%20Access.pdf"
+            target="_blank"
+            rel="noopener"
+          >
+            Open Guest Wi-Fi Guide →
+          </a>
+        </article>
+
+        <article class="feature-card resource-card">
+          <span class="card-symbol" aria-hidden="true">⇄</span>
+          <h3>Connecting to VPN</h3>
+          <p>
+            Learn how to connect to the company VPN when remote access
+            to internal Vertiv resources is required.
+          </p>
+          <a
+            class="card-link"
+            href="../documents/Vertiv%20Public%20KB%20-%20How%20to%20Connect%20and%20Disconnect%20to%20VPN%20(with%20OKTA%20Verify%20as%20MFA)%20-%20Service%20Portal%20Vertiv.pdf"
+            target="_blank"
+            rel="noopener"
+          >
+            Open VPN Guide →
+          </a>
+        </article>
+
+      </div>
+
+      <div class="notice">
+        <h3>Need additional assistance?</h3>
+        <p>
+          If you have trouble following a setup guide or accessing a
+          required resource, submit an IT ticket so your issue can be
+          documented and tracked.
+        </p>
+        <p>
+          <a
+            class="button"
+            href="https://vertiv.service-now.com/esc?id=ec_dashboard"
+            target="_blank"
+            rel="noopener"
+          >
+            Submit an IT Ticket ↗
+          </a>
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div>
+        <a class="footer-brand" href="../index.html" aria-label="Pelzer 2 IT home">
+          <img
+            class="footer-logo"
+            src="../documents/vertivWhiteLogo.jpg"
+            alt="Vertiv"
+          >
+          <span>PELZER 2 INFORMATION TECHNOLOGY</span>
+        </a>
+        <p>Local technology support and resources.</p>
+      </div>
+
+      <div class="footer-contact">
+        <strong>Diana Barakat · IT Analyst</strong>
+        <a href="mailto:diana.barakat@vertivco.com">
+          diana.barakat@vertivco.com
+        </a>
+      </div>
+
+      <p class="copyright">© Vertiv · Internal support resource</p>
     </div>
-    <div class="card-grid">
-      <article class="feature-card resource-card">
-        <span class="card-symbol" aria-hidden="true">☎</span>
-        <h3>Cell Phone Setup</h3>
-        <p>Learn how to set up your company cell phone and configure the required work-related access and settings.</p>
-        <!-- Replace this href with the approved cell phone setup document URL. -->
-        <a class="card-link" href="LINK_TO_CELL_PHONE_SETUP">Open Phone Setup Guide →</a>
-      </article>
-      <article class="feature-card resource-card">
-        <span class="card-symbol" aria-hidden="true">⌁</span>
-        <h3>Guest Wi-Fi Access</h3>
-        <p>Learn how to connect a personal device or visitor device to the available guest wireless network.</p>
-        <!-- Replace this href with the approved guest Wi-Fi guide URL. -->
-        <a class="card-link" href="LINK_TO_GUEST_WIFI">Open Guest Wi-Fi Guide →</a>
-      </article>
-      <article class="feature-card resource-card">
-        <span class="card-symbol" aria-hidden="true">⇄</span>
-        <h3>Connecting to VPN</h3>
-        <p>Learn how to connect to the company VPN when remote access to internal Vertiv resources is required.</p>
-        <!-- Replace this href with the approved VPN setup guide URL. -->
-        <a class="card-link" href="LINK_TO_VPN_SETUP">Open VPN Guide →</a>
-      </article>
-    </div>
-    <div class="notice">
-      <h3>Need additional assistance?</h3>
-      <p>If you have trouble following a setup guide or accessing a required resource, submit an IT ticket so your issue can be documented and tracked.</p>
-      <p><a class="button" href="https://vertiv.service-now.com/esc?id=ec_dashboard">Submit an IT Ticket ↗</a></p>
-    </div>
-  </section>
-</main>
-<footer class="site-footer">
-  <div class="container footer-inner">
-    <div><a class="footer-brand" href="../index.html">Vertiv<span>.</span> <b>WILLIAMSTON IT</b></a><p>Local technology support and resources.</p></div>
-    <div class="footer-contact"><strong>Diana Barakat · IT Analyst</strong><a href="mailto:diana.barakat@vertivco.com">diana.barakat@vertivco.com</a></div>
-    <p class="copyright">© Vertiv · Internal support resource concept</p>
-  </div>
-</footer>
+  </footer>
 </body>
 </html>
