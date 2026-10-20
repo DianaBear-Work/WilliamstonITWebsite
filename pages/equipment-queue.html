@@ -1,13 +1,12 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#171717">
-  <meta name="description" content="Pelzer 2 IT equipment availability, laptop build queue, and equipment requests.">
+  <meta name="description" content="View Pelzer 2 IT equipment inventory and submit laptop or accessory requests through Vertiv ServiceNow.">
 
-  <title>Equipment Queue | Pelzer 2 IT</title>
+  <title>Equipment Inventory | Pelzer 2 IT</title>
 
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/equipment-queue.css">
@@ -16,13 +15,16 @@
   <script src="../js/equipment-queue.js" defer></script>
 
   <style>
-    /* HEADER BRANDING */
+    /* =====================================
+       HEADER BRANDING
+       ===================================== */
+
     .equipment-page-header .brand {
       display: inline-flex;
       align-items: center;
       gap: 16px;
-      text-decoration: none;
       min-width: 0;
+      text-decoration: none;
     }
 
     .equipment-page-header .vertiv-logo {
@@ -34,14 +36,14 @@
     }
 
     .equipment-page-header .brand-divider {
-      height: 32px;
       width: 1px;
-      background: #d5dbe1;
+      height: 32px;
       flex-shrink: 0;
+      background: #d5dbe1;
     }
 
     .equipment-page-header .site-brand-text {
-      color: #ffffff;
+      color: #fff;
       font-size: 13px;
       font-weight: 500;
       letter-spacing: 1.5px;
@@ -53,7 +55,7 @@
     }
 
     .equipment-page-header .nav-links a {
-      color: #ffffff;
+      color: #fff;
       text-decoration: none;
     }
 
@@ -61,17 +63,264 @@
     .equipment-page-header .nav-links a:focus-visible,
     .equipment-page-header .nav-links a[aria-current="page"] {
       background: #FE5B1B;
-      color: #ffffff;
+      color: #fff;
     }
 
     .equipment-page-header .menu-toggle {
-      color: #ffffff;
-      border: 1px solid #777777;
+      color: #fff;
+      border: 1px solid #777;
       background: transparent;
       cursor: pointer;
     }
 
-    /* FOOTER BRANDING */
+    /* =====================================
+       PAGE INTRODUCTION
+       ===================================== */
+
+    .equipment-page .page-hero {
+      padding-top: 48px;
+      padding-bottom: 40px;
+    }
+
+    .equipment-page .page-hero h1 {
+      margin-bottom: 14px;
+    }
+
+    .equipment-page .page-hero p:last-child {
+      max-width: 760px;
+    }
+
+    /* =====================================
+       INVENTORY NOTICE
+       ===================================== */
+
+    .inventory-notice {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin: 0 0 28px;
+      padding: 18px 20px;
+      border-left: 4px solid #FE5B1B;
+      border-radius: 6px;
+      background: #f5f5f5;
+      color: #242424;
+      line-height: 1.6;
+    }
+
+    .inventory-notice-icon {
+      font-size: 22px;
+      line-height: 1.4;
+    }
+
+    .inventory-notice p {
+      margin: 4px 0 0;
+    }
+
+    /* =====================================
+       INVENTORY SUMMARY
+       ===================================== */
+
+    .equipment-stats {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+      margin-bottom: 28px;
+    }
+
+    .equipment-stats .stat-card {
+      border-top: 3px solid #FE5B1B;
+    }
+
+    .equipment-stats .stat-card strong {
+      display: block;
+      margin-top: 8px;
+      font-size: 30px;
+    }
+
+    /* =====================================
+       INVENTORY SEARCH
+       ===================================== */
+
+    .inventory-search-wrap {
+      width: min(100%, 340px);
+    }
+
+    .inventory-search-wrap label {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .equipment-page .search-input {
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    /* =====================================
+       INVENTORY CARDS
+       ===================================== */
+
+    .equipment-page .inventory-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 22px;
+      margin-top: 26px;
+    }
+
+    .equipment-page .inventory-card {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      min-width: 0;
+      padding: 24px;
+      border: 1px solid #dedede;
+      border-top: 4px solid #FE5B1B;
+      border-radius: 9px;
+      background: #fff;
+      color: #171717;
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.04);
+    }
+
+    .equipment-page .category-label {
+      display: inline-block;
+      margin-bottom: 12px;
+      color: #595959;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .equipment-page .inventory-card h3 {
+      margin: 0 0 10px;
+      font-size: 19px;
+      line-height: 1.4;
+    }
+
+    .equipment-page .item-description {
+      margin: 0 0 18px;
+      color: #595959;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .equipment-page .stock-label {
+      margin: auto 0 20px;
+      padding: 7px 11px;
+      border-radius: 5px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .equipment-page .stock-available {
+      background: #e8f5ec;
+      color: #176b36;
+    }
+
+    .equipment-page .stock-unavailable {
+      background: #f3eeee;
+      color: #8a2929;
+    }
+
+    .equipment-page .inventory-card .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      width: 100%;
+      box-sizing: border-box;
+      margin-top: 0;
+      padding: 12px 14px;
+      border: 0;
+      border-radius: 5px;
+      background: #FE5B1B;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.5;
+      text-align: center;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .equipment-page .inventory-card .btn-primary:hover {
+      background: #d9470e;
+      color: #fff;
+    }
+
+    .equipment-page .inventory-card .btn-primary:focus-visible {
+      outline: 3px solid #171717;
+      outline-offset: 3px;
+    }
+
+    .inventory-footer-note {
+      margin-top: 24px;
+      color: #595959;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .empty-state {
+      grid-column: 1 / -1;
+      padding: 24px;
+      color: #595959;
+      text-align: center;
+    }
+
+    /* =====================================
+       REQUEST PROCESS
+       ===================================== */
+
+    .request-options {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .request-option {
+      padding: 24px;
+      border: 1px solid #dedede;
+      border-radius: 8px;
+      background: #fff;
+      color: #171717;
+    }
+
+    .request-option h3 {
+      margin: 0 0 10px;
+    }
+
+    .request-option p {
+      margin-bottom: 18px;
+      color: #555;
+      line-height: 1.7;
+    }
+
+    .request-option a {
+      display: inline-block;
+      padding: 12px 16px;
+      border-radius: 5px;
+      background: #FE5B1B;
+      color: #fff;
+      font-weight: 700;
+      text-align: center;
+      text-decoration: none;
+    }
+
+    .request-option a:hover {
+      background: #d9470e;
+    }
+
+    .request-option a:focus-visible {
+      outline: 3px solid #171717;
+      outline-offset: 3px;
+    }
+
+    /* =====================================
+       FOOTER BRANDING
+       ===================================== */
+
     .equipment-page-footer .footer-inner {
       display: flex;
       align-items: center;
@@ -84,9 +333,9 @@
       display: inline-flex;
       align-items: center;
       gap: 12px;
-      color: #ffffff;
-      text-decoration: none;
+      color: #fff;
       font-weight: 700;
+      text-decoration: none;
     }
 
     .equipment-page-footer .footer-logo {
@@ -98,16 +347,26 @@
     }
 
     .equipment-page-footer p {
-      color: #eeeeee;
+      color: #eee;
       font-size: 13px;
     }
 
     .equipment-page-footer a:not(.footer-brand) {
-      color: #ffffff;
+      color: #fff;
     }
 
     .equipment-page-footer a:not(.footer-brand):hover {
       color: #FE5B1B;
+    }
+
+    /* =====================================
+       RESPONSIVE LAYOUT
+       ===================================== */
+
+    @media (max-width: 1000px) {
+      .equipment-page .inventory-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
     }
 
     @media (max-width: 850px) {
@@ -135,6 +394,26 @@
       }
     }
 
+    @media (max-width: 600px) {
+      .equipment-page .inventory-grid,
+      .request-options {
+        grid-template-columns: 1fr;
+      }
+
+      .inventory-search-wrap {
+        width: 100%;
+      }
+
+      .equipment-page .inventory-card {
+        padding: 20px;
+      }
+
+      .equipment-page-footer .footer-inner {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+
     @media (max-width: 480px) {
       .equipment-page-header .brand {
         gap: 8px;
@@ -155,9 +434,9 @@
         height: 25px;
       }
 
-      .equipment-page-footer .footer-inner {
-        align-items: flex-start;
-        flex-direction: column;
+      .equipment-page .page-hero {
+        padding-top: 32px;
+        padding-bottom: 28px;
       }
     }
   </style>
@@ -165,7 +444,10 @@
 
 <body>
 
-  <!-- HEADER -->
+  <!-- =====================================
+       HEADER
+       ===================================== -->
+
   <header class="site-header equipment-page-header">
     <div class="container header-inner">
 
@@ -200,251 +482,177 @@
         <a href="appointments.html">Appointments</a>
         <a href="updates.html">Updates</a>
         <a href="Cybersecurity.html">Cybersecurity</a>
-        <a href="equipment-queue.html" aria-current="page">Equipment Queue</a>
+        <a href="equipment-queue.html" aria-current="page">Equipment Inventory</a>
       </nav>
 
     </div>
   </header>
 
-  <!-- MAIN CONTENT -->
+  <!-- =====================================
+       MAIN CONTENT
+       ===================================== -->
+
   <main class="equipment-page">
+
+    <!-- PAGE INTRODUCTION -->
 
     <section class="page-hero">
       <p class="eyebrow">PELZER 2 · SOUTH CAROLINA</p>
-      <h1>IT Equipment Queue</h1>
+      <h1>IT Equipment Inventory</h1>
       <p>
-        Check equipment availability, submit equipment requests, and review
-        the laptop build workflow.
+        Check the listed availability of laptops and IT accessories at
+        Pelzer 2. Submit equipment requests through the official Vertiv
+        ServiceNow catalog.
       </p>
     </section>
 
-    <div class="prototype-notice">
-      <strong>Prototype:</strong>
-      This page uses demonstration data stored in the visitor's browser.
-      Requests are not submitted to ServiceNow or automatically delivered to IT.
+    <div class="container">
+
+      <!-- INVENTORY NOTICE -->
+
+      <aside class="inventory-notice" aria-label="Inventory information">
+        <span class="inventory-notice-icon" aria-hidden="true">ⓘ</span>
+        <div>
+          <strong>Inventory availability</strong>
+          <p>
+            Quantities are maintained by the local IT team and may change.
+            A quantity shown here does not reserve equipment or guarantee
+            availability when your request is processed.
+          </p>
+        </div>
+      </aside>
+
+      <!-- INVENTORY SUMMARY -->
+
+      <section class="stats-grid equipment-stats" aria-label="Inventory overview">
+        <article class="stat-card">
+          <span class="stat-label">Equipment Types</span>
+          <strong id="statItemTypes">0</strong>
+        </article>
+
+        <article class="stat-card">
+          <span class="stat-label">Units Listed</span>
+          <strong id="statUnits">0</strong>
+        </article>
+      </section>
+
+      <!-- INVENTORY -->
+
+      <section class="content-panel" id="inventory">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">EMPLOYEE SELF-SERVICE</p>
+            <h2>Available IT Equipment</h2>
+            <p>
+              Browse the current inventory and choose the appropriate
+              ServiceNow request.
+            </p>
+          </div>
+
+          <div class="inventory-search-wrap">
+            <label for="inventorySearch">Search inventory</label>
+            <input
+              id="inventorySearch"
+              class="search-input"
+              type="search"
+              placeholder="Laptop, charger, monitor..."
+              aria-label="Search equipment inventory"
+            >
+          </div>
+        </div>
+
+        <div
+          id="inventoryGrid"
+          class="inventory-grid"
+          aria-live="polite"
+        ></div>
+
+        <p class="inventory-footer-note">
+          Need a laptop? Select the laptop request option. For chargers,
+          backpacks, docking stations, keyboards, mice, and monitors,
+          use the accessories request option.
+        </p>
+      </section>
+
+      <!-- REQUEST OPTIONS -->
+
+      <section class="content-panel" id="equipment-requests">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">OFFICIAL REQUEST PROCESS</p>
+            <h2>Submit an Equipment Request</h2>
+            <p>
+              ServiceNow is the official place to submit your request.
+              Sign in with your Vertiv account if prompted.
+            </p>
+          </div>
+        </div>
+
+        <div class="request-options">
+
+          <article class="request-option">
+            <h3>Laptop Request</h3>
+            <p>
+              Use this catalog item to submit a request for an employee
+              laptop.
+            </p>
+            <a
+              href="https://vertiv.service-now.com/esc?id=sc_cat_item&amp;sys_id=4e774a921b3642106c9db802dd4bcb8d"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Open Laptop Request ↗
+            </a>
+          </article>
+
+          <article class="request-option">
+            <h3>Laptop Accessories Request</h3>
+            <p>
+              Use this catalog item to request accessories such as chargers,
+              backpacks, docking stations, keyboards, mice, and monitors.
+            </p>
+            <a
+              href="https://vertiv.service-now.com/esc?id=sc_cat_item&amp;sys_id=089b54c1db89d300b1af38ff9d961909"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Open Accessories Request ↗
+            </a>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- HOW IT WORKS -->
+
+      <section class="content-panel" id="request-process">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">REQUEST PROCESS</p>
+            <h2>What Happens Next?</h2>
+          </div>
+        </div>
+
+        <ol class="workflow-list">
+          <li>Review the inventory quantities listed on this page.</li>
+          <li>Choose the laptop or accessories request catalog.</li>
+          <li>Complete and submit the official ServiceNow request.</li>
+          <li>IT reviews the request and coordinates fulfillment through the established process.</li>
+        </ol>
+
+        <p class="inventory-footer-note">
+          Submitting a request through this website does not reserve stock.
+          The official ServiceNow request is the record of your submission.
+        </p>
+      </section>
+
     </div>
-
-    <!-- OVERVIEW -->
-    <section class="stats-grid" aria-label="Equipment overview">
-      <article class="stat-card">
-        <span class="stat-label">Inventory Items</span>
-        <strong id="statItemTypes">0</strong>
-      </article>
-
-      <article class="stat-card">
-        <span class="stat-label">Units Available</span>
-        <strong id="statUnits">0</strong>
-      </article>
-
-      <article class="stat-card">
-        <span class="stat-label">Laptop Builds</span>
-        <strong id="statBuilds">0</strong>
-      </article>
-
-      <article class="stat-card">
-        <span class="stat-label">Waitlist Requests</span>
-        <strong id="statWaitlist">0</strong>
-      </article>
-    </section>
-
-    <!-- INVENTORY -->
-    <section class="content-panel" id="inventory">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">EMPLOYEE SELF-SERVICE</p>
-          <h2>Available IT Inventory</h2>
-          <p>View available equipment and accessories.</p>
-        </div>
-
-        <input
-          id="inventorySearch"
-          class="search-input"
-          type="search"
-          placeholder="Search inventory..."
-          aria-label="Search inventory"
-        >
-      </div>
-
-      <div id="inventoryGrid" class="inventory-grid"></div>
-    </section>
-
-    <!-- EQUIPMENT REQUEST FORM -->
-    <section class="content-panel" id="request-equipment">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">REQUEST EQUIPMENT</p>
-          <h2>Equipment Request Form</h2>
-          <p>Provide your information and the related ServiceNow ticket.</p>
-        </div>
-      </div>
-
-      <form id="reservationForm" class="equipment-form">
-
-        <div class="form-group">
-          <label for="requestItem">Equipment *</label>
-          <select id="requestItem" name="requestItem" required>
-            <option value="">Select equipment</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="requestQuantity">Quantity *</label>
-          <input
-            id="requestQuantity"
-            name="requestQuantity"
-            type="number"
-            min="1"
-            step="1"
-            value="1"
-            required
-          >
-        </div>
-
-        <div class="form-group">
-          <label for="requestName">Employee Full Name *</label>
-          <input
-            id="requestName"
-            name="requestName"
-            type="text"
-            autocomplete="name"
-            placeholder="Enter your full name"
-            required
-          >
-        </div>
-
-        <div class="form-group">
-          <label for="requestEmail">Vertiv Work Email *</label>
-          <input
-            id="requestEmail"
-            name="requestEmail"
-            type="email"
-            autocomplete="email"
-            placeholder="name@vertivco.com"
-            required
-          >
-        </div>
-
-        <div class="form-group form-group-wide">
-          <label for="requestTicket">ServiceNow Ticket Number *</label>
-          <input
-            id="requestTicket"
-            name="requestTicket"
-            type="text"
-            placeholder="Example: RITM1234567"
-            required
-          >
-          <small>
-            Enter the ticket associated with your equipment request.
-          </small>
-        </div>
-
-        <div class="form-group form-group-wide">
-          <label for="requestNotes">Additional Details</label>
-          <textarea
-            id="requestNotes"
-            name="requestNotes"
-            rows="3"
-            placeholder="Optional details about your request"
-          ></textarea>
-        </div>
-
-        <div class="form-group-wide">
-          <button class="btn-primary" type="submit">
-            Submit Equipment Request
-          </button>
-          <p id="reservationMessage" class="form-message" role="status"></p>
-        </div>
-
-      </form>
-    </section>
-
-    <!-- LAPTOP BUILD QUEUE -->
-    <section class="content-panel" id="laptop-builds">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">IT WORKFLOW</p>
-          <h2>Laptop Build Queue</h2>
-          <p>Demonstration records for laptop preparation and accessories.</p>
-        </div>
-
-        <input
-          id="buildSearch"
-          class="search-input"
-          type="search"
-          placeholder="Search builds..."
-          aria-label="Search laptop builds"
-        >
-      </div>
-
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Employee</th>
-              <th>Manager</th>
-              <th>Status</th>
-              <th>Accessories</th>
-            </tr>
-          </thead>
-          <tbody id="buildTableBody"></tbody>
-        </table>
-      </div>
-    </section>
-
-    <!-- WAITLIST -->
-    <section class="content-panel" id="waitlist">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">OUT-OF-STOCK ITEMS</p>
-          <h2>Equipment Waitlist</h2>
-          <p>View waitlist entries recorded in this browser.</p>
-        </div>
-
-        <input
-          id="waitlistSearch"
-          class="search-input"
-          type="search"
-          placeholder="Search waitlist..."
-          aria-label="Search equipment waitlist"
-        >
-      </div>
-
-      <div id="waitlistList" class="waitlist-list"></div>
-    </section>
-
-    <!-- HOW IT WORKS -->
-    <section class="content-panel">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">REQUEST PROCESS</p>
-          <h2>What Happens Next?</h2>
-        </div>
-      </div>
-
-      <ol class="workflow-list">
-        <li>Select equipment and provide your contact information.</li>
-        <li>Include the associated ServiceNow ticket number.</li>
-        <li>IT reviews availability and coordinates fulfillment.</li>
-      </ol>
-
-      <p class="muted">
-        This prototype does not notify IT. Continue to use the approved
-        Vertiv ServiceNow process for actual requests.
-      </p>
-
-      <a
-        class="btn-primary"
-        href="https://vertiv.service-now.com/esc?id=ec_dashboard"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Open ServiceNow →
-      </a>
-    </section>
-
   </main>
 
-  <!-- FOOTER -->
+  <!-- =====================================
+       FOOTER
+       ===================================== -->
+
   <footer class="site-footer equipment-page-footer">
     <div class="container footer-inner">
 
@@ -462,11 +670,11 @@
       </div>
 
       <div>
-        <strong>Diana Barakat | IT Analyst</strong>
-        <br>
-        <a href="mailto:diana.barakat@vertivco.com">
-          diana.barakat@vertivco.com
-        </a>
+        <strong>IT Support</strong>
+        <p>
+          Submit equipment requests through the official
+          Vertiv ServiceNow catalog.
+        </p>
       </div>
 
     </div>
