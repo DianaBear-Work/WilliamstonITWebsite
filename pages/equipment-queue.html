@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#171717">
-  <meta name="description" content="View Pelzer 2 IT equipment inventory and submit laptop or accessory requests through Vertiv ServiceNow.">
+  <meta name="description" content="Pelzer 2 IT equipment inventory and official equipment request links.">
 
   <title>Equipment Inventory | Pelzer 2 IT</title>
 
@@ -15,9 +15,26 @@
   <script src="../js/equipment-queue.js" defer></script>
 
   <style>
-    /* =====================================
-       HEADER BRANDING
-       ===================================== */
+    :root {
+      --vertiv-orange: #FE5B1B;
+      --vertiv-black: #171717;
+      --text-gray: #595959;
+      --border-gray: #dedede;
+    }
+
+    /* HEADER — MATCH THE MAIN PELZER 2 IT WEBSITE */
+
+    .equipment-page-header {
+      background: #171717;
+      color: #ffffff;
+    }
+
+    .equipment-page-header .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
 
     .equipment-page-header .brand {
       display: inline-flex;
@@ -25,6 +42,7 @@
       gap: 16px;
       min-width: 0;
       text-decoration: none;
+      flex-shrink: 0;
     }
 
     .equipment-page-header .vertiv-logo {
@@ -33,17 +51,19 @@
       height: auto;
       max-height: 55px;
       object-fit: contain;
+      flex-shrink: 0;
     }
 
     .equipment-page-header .brand-divider {
+      display: block;
       width: 1px;
       height: 32px;
-      flex-shrink: 0;
       background: #d5dbe1;
+      flex-shrink: 0;
     }
 
     .equipment-page-header .site-brand-text {
-      color: #fff;
+      color: #f1f1f1;
       font-size: 13px;
       font-weight: 500;
       letter-spacing: 1.5px;
@@ -54,286 +74,358 @@
       color: #f1f1f1;
     }
 
+    .equipment-page-header .menu-toggle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 13px;
+      color: #ffffff;
+      background: transparent;
+      border: 1px solid #777777;
+      border-radius: 5px;
+      cursor: pointer;
+      font: inherit;
+    }
+
+    .equipment-page-header .menu-toggle:hover,
+    .equipment-page-header .menu-toggle:focus-visible {
+      color: var(--vertiv-orange);
+      border-color: var(--vertiv-orange);
+    }
+
     .equipment-page-header .nav-links a {
-      color: #fff;
+      color: #ffffff;
       text-decoration: none;
+      transition: color 0.2s ease;
     }
 
     .equipment-page-header .nav-links a:hover,
     .equipment-page-header .nav-links a:focus-visible,
     .equipment-page-header .nav-links a[aria-current="page"] {
-      background: #FE5B1B;
-      color: #fff;
+      color: var(--vertiv-orange);
     }
 
-    .equipment-page-header .menu-toggle {
-      color: #fff;
-      border: 1px solid #777;
-      background: transparent;
-      cursor: pointer;
-    }
-
-    /* =====================================
-       PAGE INTRODUCTION
-       ===================================== */
+    /* PAGE INTRODUCTION */
 
     .equipment-page .page-hero {
-      padding-top: 48px;
+      padding-top: 45px;
       padding-bottom: 40px;
     }
 
     .equipment-page .page-hero h1 {
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
 
     .equipment-page .page-hero p:last-child {
       max-width: 760px;
     }
 
-    /* =====================================
-       INVENTORY NOTICE
-       ===================================== */
+    /* SHARED CONTENT SPACING */
 
-    .inventory-notice {
+    .equipment-page .content-panel {
+      margin: 32px 0;
+    }
+
+    .equipment-page .section-heading {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 22px;
+      margin-bottom: 22px;
+    }
+
+    .equipment-page .section-heading h2 {
+      margin-bottom: 8px;
+    }
+
+    .equipment-page .section-heading p {
+      margin-top: 5px;
+    }
+
+    /* INVENTORY NOTICE */
+
+    .equipment-page .inventory-notice {
       display: flex;
       align-items: flex-start;
-      gap: 14px;
-      margin: 0 0 28px;
+      gap: 13px;
+      margin: 28px 0;
       padding: 18px 20px;
-      border-left: 4px solid #FE5B1B;
-      border-radius: 6px;
       background: #f5f5f5;
-      color: #242424;
-      line-height: 1.6;
+      border-left: 4px solid var(--vertiv-orange);
+      border-radius: 6px;
+      line-height: 1.65;
     }
 
-    .inventory-notice-icon {
-      font-size: 22px;
-      line-height: 1.4;
+    .equipment-page .inventory-notice-icon {
+      color: var(--vertiv-orange);
+      font-size: 23px;
+      flex-shrink: 0;
     }
 
-    .inventory-notice p {
+    .equipment-page .inventory-notice p {
       margin: 4px 0 0;
+      color: #444444;
     }
 
-    /* =====================================
-       INVENTORY SUMMARY
-       ===================================== */
+    /* SUMMARY COUNTERS — ORANGE NUMBERS */
 
-    .equipment-stats {
+    .equipment-page .equipment-stats {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 18px;
-      margin-bottom: 28px;
+      margin: 28px 0;
     }
 
-    .equipment-stats .stat-card {
-      border-top: 3px solid #FE5B1B;
+    .equipment-page .equipment-stats .stat-card {
+      border-top: 4px solid var(--vertiv-orange);
     }
 
-    .equipment-stats .stat-card strong {
+    .equipment-page .equipment-stats .stat-card strong {
       display: block;
       margin-top: 8px;
-      font-size: 30px;
+      color: var(--vertiv-orange) !important;
+      font-size: 32px;
+      font-weight: 800;
     }
 
-    /* =====================================
-       INVENTORY SEARCH
-       ===================================== */
+    /* REQUEST OPTIONS — ABOVE INVENTORY */
 
-    .inventory-search-wrap {
+    .equipment-page .request-options {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .equipment-page .request-option {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 24px;
+      background: #ffffff;
+      border: 1px solid var(--border-gray);
+      border-top: 4px solid var(--vertiv-orange);
+      border-radius: 8px;
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.04);
+    }
+
+    .equipment-page .request-option h3 {
+      margin: 0 0 10px;
+    }
+
+    .equipment-page .request-option p {
+      flex: 1;
+      margin: 0 0 20px;
+      color: var(--text-gray);
+      line-height: 1.7;
+    }
+
+    .equipment-page .request-option a {
+      display: inline-block;
+      padding: 12px 16px;
+      border: 1px solid var(--vertiv-orange);
+      border-radius: 5px;
+      background: var(--vertiv-orange);
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: background 0.2s ease;
+    }
+
+    .equipment-page .request-option a:hover {
+      background: #d9470e;
+      border-color: #d9470e;
+      color: #ffffff;
+    }
+
+    /* INVENTORY SEARCH */
+
+    .equipment-page .inventory-search-wrap {
       width: min(100%, 340px);
+      flex-shrink: 0;
     }
 
-    .inventory-search-wrap label {
+    .equipment-page .inventory-search-wrap label {
       display: block;
       margin-bottom: 7px;
       font-size: 13px;
       font-weight: 700;
     }
 
-    .equipment-page .search-input {
+    .equipment-page #inventorySearch {
       width: 100%;
+      min-height: 44px;
       box-sizing: border-box;
+      padding: 11px 13px;
+      border: 1px solid #cccccc;
+      border-radius: 6px;
+      font: inherit;
     }
 
-    /* =====================================
-       INVENTORY CARDS
-       ===================================== */
+    .equipment-page #inventorySearch:focus {
+      outline: 2px solid var(--vertiv-orange);
+      outline-offset: 2px;
+    }
 
-    .equipment-page .inventory-grid {
+    /* INVENTORY GRID */
+
+    .equipment-page #inventoryGrid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 22px;
-      margin-top: 26px;
+      margin-top: 24px;
     }
 
     .equipment-page .inventory-card {
       display: flex;
       flex-direction: column;
-      align-items: flex-start;
       min-width: 0;
-      padding: 24px;
-      border: 1px solid #dedede;
-      border-top: 4px solid #FE5B1B;
+      padding: 23px;
+      background: #ffffff;
+      border: 1px solid var(--border-gray);
+      border-top: 4px solid var(--vertiv-orange);
       border-radius: 9px;
-      background: #fff;
-      color: #171717;
       box-shadow: 0 3px 12px rgba(0, 0, 0, 0.04);
     }
 
-    .equipment-page .category-label {
+    .equipment-page .inventory-category {
       display: inline-block;
-      margin-bottom: 12px;
-      color: #595959;
+      margin-bottom: 10px;
+      color: var(--text-gray);
       font-size: 11px;
-      font-weight: 700;
+      font-weight: 800;
       letter-spacing: 1px;
       text-transform: uppercase;
     }
 
-    .equipment-page .inventory-card h3 {
+    .equipment-page .inventory-item-name {
       margin: 0 0 10px;
       font-size: 19px;
       line-height: 1.4;
+      overflow-wrap: anywhere;
     }
 
-    .equipment-page .item-description {
+    .equipment-page .inventory-description {
       margin: 0 0 18px;
-      color: #595959;
+      color: var(--text-gray);
       font-size: 14px;
-      line-height: 1.6;
+      line-height: 1.65;
     }
 
-    .equipment-page .stock-label {
+    /* STOCK QUANTITIES — ORANGE WHEN AVAILABLE */
+
+    .equipment-page .inventory-stock {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      align-self: flex-start;
       margin: auto 0 20px;
-      padding: 7px 11px;
+      padding: 8px 11px;
       border-radius: 5px;
       font-size: 13px;
-      font-weight: 700;
+      font-weight: 800;
     }
 
-    .equipment-page .stock-available {
-      background: #e8f5ec;
-      color: #176b36;
+    .equipment-page .inventory-stock.in-stock {
+      background: #fff0e8;
+      color: var(--vertiv-orange) !important;
     }
 
-    .equipment-page .stock-unavailable {
-      background: #f3eeee;
-      color: #8a2929;
+    .equipment-page .inventory-stock.out-of-stock {
+      background: #fceaea;
+      color: #a32626 !important;
     }
 
-    .equipment-page .inventory-card .btn-primary {
+    .equipment-page .stock-indicator {
+      width: 8px;
+      height: 8px;
+      flex-shrink: 0;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    /* SERVICE NOW BUTTON */
+
+    .equipment-page .inventory-request-button {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 7px;
+      gap: 8px;
       width: 100%;
       box-sizing: border-box;
-      margin-top: 0;
       padding: 12px 14px;
-      border: 0;
+      background: var(--vertiv-orange);
+      color: #ffffff;
+      border: 1px solid var(--vertiv-orange);
       border-radius: 5px;
-      background: #FE5B1B;
-      color: #fff;
       font-size: 13px;
       font-weight: 700;
       line-height: 1.5;
       text-align: center;
       text-decoration: none;
-      cursor: pointer;
       transition: background 0.2s ease;
     }
 
-    .equipment-page .inventory-card .btn-primary:hover {
+    .equipment-page .inventory-request-button:hover {
       background: #d9470e;
-      color: #fff;
+      border-color: #d9470e;
+      color: #ffffff;
     }
 
-    .equipment-page .inventory-card .btn-primary:focus-visible {
-      outline: 3px solid #171717;
+    .equipment-page .inventory-request-button:focus-visible,
+    .equipment-page .request-option a:focus-visible {
+      outline: 3px solid var(--vertiv-black);
       outline-offset: 3px;
     }
 
-    .inventory-footer-note {
-      margin-top: 24px;
-      color: #595959;
+    .equipment-page .inventory-empty {
+      grid-column: 1 / -1;
+      padding: 30px 20px;
+      background: #ffffff;
+      border: 1px dashed #cccccc;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    .equipment-page .inventory-empty h3 {
+      margin-top: 0;
+    }
+
+    .equipment-page .inventory-footer-note {
+      margin-top: 22px;
+      color: var(--text-gray);
       font-size: 13px;
       line-height: 1.7;
     }
 
-    .empty-state {
-      grid-column: 1 / -1;
-      padding: 24px;
-      color: #595959;
-      text-align: center;
+    /* REQUEST PROCESS */
+
+    .equipment-page .workflow-list {
+      padding-left: 24px;
+      line-height: 1.9;
     }
 
-    /* =====================================
-       REQUEST PROCESS
-       ===================================== */
-
-    .request-options {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 20px;
+    .equipment-page .workflow-list li::marker {
+      color: var(--vertiv-orange);
+      font-weight: 800;
     }
 
-    .request-option {
-      padding: 24px;
-      border: 1px solid #dedede;
-      border-radius: 8px;
-      background: #fff;
-      color: #171717;
-    }
-
-    .request-option h3 {
-      margin: 0 0 10px;
-    }
-
-    .request-option p {
-      margin-bottom: 18px;
-      color: #555;
-      line-height: 1.7;
-    }
-
-    .request-option a {
-      display: inline-block;
-      padding: 12px 16px;
-      border-radius: 5px;
-      background: #FE5B1B;
-      color: #fff;
-      font-weight: 700;
-      text-align: center;
-      text-decoration: none;
-    }
-
-    .request-option a:hover {
-      background: #d9470e;
-    }
-
-    .request-option a:focus-visible {
-      outline: 3px solid #171717;
-      outline-offset: 3px;
-    }
-
-    /* =====================================
-       FOOTER BRANDING
-       ===================================== */
+    /* FOOTER */
 
     .equipment-page-footer .footer-inner {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 28px;
       flex-wrap: wrap;
+      gap: 24px;
     }
 
     .equipment-page-footer .footer-brand {
       display: inline-flex;
       align-items: center;
       gap: 12px;
-      color: #fff;
+      color: #ffffff;
       font-weight: 700;
       text-decoration: none;
     }
@@ -341,30 +433,19 @@
     .equipment-page-footer .footer-logo {
       display: block;
       width: 100px;
-      height: auto;
       max-height: 45px;
+      height: auto;
       object-fit: contain;
     }
 
     .equipment-page-footer p {
-      color: #eee;
       font-size: 13px;
     }
 
-    .equipment-page-footer a:not(.footer-brand) {
-      color: #fff;
-    }
-
-    .equipment-page-footer a:not(.footer-brand):hover {
-      color: #FE5B1B;
-    }
-
-    /* =====================================
-       RESPONSIVE LAYOUT
-       ===================================== */
+    /* RESPONSIVE LAYOUT */
 
     @media (max-width: 1000px) {
-      .equipment-page .inventory-grid {
+      .equipment-page #inventoryGrid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
     }
@@ -375,7 +456,7 @@
       }
 
       .equipment-page-header .menu-toggle {
-        display: inline-block;
+        display: inline-flex;
       }
 
       .equipment-page-header .nav-links {
@@ -391,16 +472,42 @@
 
       .equipment-page-header .nav-links a {
         display: block;
+        padding: 10px 0;
       }
     }
 
     @media (max-width: 600px) {
-      .equipment-page .inventory-grid,
-      .request-options {
+      .equipment-page-header .brand {
+        gap: 8px;
+      }
+
+      .equipment-page-header .vertiv-logo {
+        width: 90px;
+        max-height: 42px;
+      }
+
+      .equipment-page-header .brand-divider {
+        height: 25px;
+      }
+
+      .equipment-page-header .site-brand-text {
+        max-width: 155px;
+        font-size: 10px;
+        letter-spacing: 1px;
+        white-space: normal;
+      }
+
+      .equipment-page #inventoryGrid,
+      .equipment-page .request-options {
         grid-template-columns: 1fr;
       }
 
-      .inventory-search-wrap {
+      .equipment-page .section-heading {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .equipment-page .inventory-search-wrap {
         width: 100%;
       }
 
@@ -413,49 +520,21 @@
         flex-direction: column;
       }
     }
-
-    @media (max-width: 480px) {
-      .equipment-page-header .brand {
-        gap: 8px;
-      }
-
-      .equipment-page-header .vertiv-logo {
-        width: 90px;
-        max-height: 42px;
-      }
-
-      .equipment-page-header .site-brand-text {
-        font-size: 10px;
-        letter-spacing: 1px;
-        white-space: normal;
-      }
-
-      .equipment-page-header .brand-divider {
-        height: 25px;
-      }
-
-      .equipment-page .page-hero {
-        padding-top: 32px;
-        padding-bottom: 28px;
-      }
-    }
   </style>
 </head>
 
 <body>
 
-  <!-- =====================================
-       HEADER
-       ===================================== -->
+  <!-- HEADER -->
 
   <header class="site-header equipment-page-header">
     <div class="container header-inner">
 
       <a class="brand" href="../index.html" aria-label="Pelzer 2 IT Home">
         <img
+          class="vertiv-logo"
           src="../documents/vertivWhiteLogo.jpg"
           alt="Vertiv"
-          class="vertiv-logo"
         >
 
         <span class="brand-divider" aria-hidden="true"></span>
@@ -464,47 +543,44 @@
           PELZER 2 <strong>INFORMATION TECHNOLOGY</strong>
         </span>
       </a>
-
+<!-- 
       <button
         class="menu-toggle"
+        type="button"
         aria-expanded="false"
         aria-controls="primary-nav"
         aria-label="Toggle navigation menu"
-        type="button"
       >
         ☰ Menu
-      </button>
+      </button> -->
 
       <nav id="primary-nav" class="nav-links" aria-label="Main navigation">
-      <a href="../index.html">Home</a>
-      <a href="resources.html">IT Resources</a>
-      <a href="troubleshooting.html">Troubleshooting</a>
-      <a href="appointments.html">Appointments</a>
-      <a href="updates.html">Updates</a>
-      <a href="Cybersecurity.html">Cybersecurity</a>
-      <a href="equipment-queue.html" aria-current="page" >Equipment Inventory</a>
-      <a href="laptop-build-queue.html">Laptop Build Queue</a>
+        <a href="../index.html">Home</a>
+        <a href="resources.html">IT Resources</a>
+        <a href="troubleshooting.html">Troubleshooting</a>
+        <a href="appointments.html">Appointments</a>
+        <a href="updates.html">Updates</a>
+        <a href="Cybersecurity.html">Cybersecurity</a>
+        <a href="equipment-queue.html" aria-current="page">Equipment Inventory</a>
+        <a href="laptop-build-queue.html">Laptop Build Queue</a>
       </nav>
 
     </div>
   </header>
-
-  <!-- =====================================
-       MAIN CONTENT
-       ===================================== -->
 
   <main class="equipment-page">
 
     <!-- PAGE INTRODUCTION -->
 
     <section class="page-hero">
-      <p class="eyebrow">PELZER 2 · SOUTH CAROLINA</p>
-      <h1>IT Equipment Inventory</h1>
-      <p>
-        Check the listed availability of laptops and IT accessories at
-        Pelzer 2. Submit equipment requests through the official Vertiv
-        ServiceNow catalog.
-      </p>
+      <div class="container">
+        <p class="eyebrow">PELZER 2 · SOUTH CAROLINA</p>
+        <h1>IT Equipment Inventory</h1>
+        <p>
+          Review listed equipment availability and submit laptop or
+          accessory requests through the official Vertiv ServiceNow catalog.
+        </p>
+      </div>
     </section>
 
     <div class="container">
@@ -517,15 +593,64 @@
           <strong>Inventory availability</strong>
           <p>
             Quantities are maintained by the local IT team and may change.
-            A quantity shown here does not reserve equipment or guarantee
-            availability when your request is processed.
+            Inventory figures do not reserve equipment or guarantee
+            availability when a request is processed.
           </p>
         </div>
       </aside>
 
+      <!-- SUBMIT REQUEST FIRST -->
+
+      <section class="content-panel" id="equipment-requests">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">EMPLOYEE SELF-SERVICE</p>
+            <h2>Submit an IT Equipment Request</h2>
+            <p>
+              Select the appropriate ServiceNow catalog to submit your
+              request. Sign in with your Vertiv account if prompted.
+            </p>
+          </div>
+        </div>
+
+        <div class="request-options">
+
+          <article class="request-option">
+            <h3>Request a Laptop</h3>
+            <p>
+              Submit a request for a standard laptop, engineering laptop,
+              or replacement device.
+            </p>
+            <a
+              href="https://vertiv.service-now.com/esc?id=sc_cat_item&amp;sys_id=4e774a921b3642106c9db802dd4bcb8d"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Open Laptop Request →
+            </a>
+          </article>
+
+          <article class="request-option">
+            <h3>Request Accessories</h3>
+            <p>
+              Request docking stations, chargers, monitors, DP cables,
+              keyboards, mice, headsets, or backpacks.
+            </p>
+            <a
+              href="https://vertiv.service-now.com/esc?id=sc_cat_item&amp;sys_id=089b54c1db89d300b1af38ff9d961909"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Open Accessories Request →
+            </a>
+          </article>
+
+        </div>
+      </section>
+
       <!-- INVENTORY SUMMARY -->
 
-      <section class="stats-grid equipment-stats" aria-label="Inventory overview">
+      <section class="stats-grid equipment-stats" aria-label="Inventory summary">
         <article class="stat-card">
           <span class="stat-label">Equipment Types</span>
           <strong id="statItemTypes">0</strong>
@@ -542,11 +667,10 @@
       <section class="content-panel" id="inventory">
         <div class="section-heading">
           <div>
-            <p class="eyebrow">EMPLOYEE SELF-SERVICE</p>
+            <p class="eyebrow">CURRENT STOCK</p>
             <h2>Available IT Equipment</h2>
             <p>
-              Browse the current inventory and choose the appropriate
-              ServiceNow request.
+              Search the inventory to check the quantities currently listed.
             </p>
           </div>
 
@@ -557,7 +681,7 @@
               class="search-input"
               type="search"
               placeholder="Laptop, charger, monitor..."
-              aria-label="Search equipment inventory"
+              autocomplete="off"
             >
           </div>
         </div>
@@ -569,113 +693,57 @@
         ></div>
 
         <p class="inventory-footer-note">
-          Need a laptop? Select the laptop request option. For chargers,
-          backpacks, docking stations, keyboards, mice, and monitors,
-          use the accessories request option.
+          Quantities are manually maintained. Submitting a request does not
+          automatically deduct inventory or reserve an item.
         </p>
       </section>
 
-      <!-- REQUEST OPTIONS -->
-
-      <section class="content-panel" id="equipment-requests">
-        <div class="section-heading">
-          <div>
-            <p class="eyebrow">OFFICIAL REQUEST PROCESS</p>
-            <h2>Submit an Equipment Request</h2>
-            <p>
-              ServiceNow is the official place to submit your request.
-              Sign in with your Vertiv account if prompted.
-            </p>
-          </div>
-        </div>
-
-        <div class="request-options">
-
-          <article class="request-option">
-            <h3>Laptop Request</h3>
-            <p>
-              Use this catalog item to submit a request for an employee
-              laptop.
-            </p>
-            <a
-              href="https://vertiv.service-now.com/esc?id=sc_cat_item&amp;sys_id=4e774a921b3642106c9db802dd4bcb8d"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Open Laptop Request ↗
-            </a>
-          </article>
-
-          <article class="request-option">
-            <h3>Laptop Accessories Request</h3>
-            <p>
-              Use this catalog item to request accessories such as chargers,
-              backpacks, docking stations, keyboards, mice, and monitors.
-            </p>
-            <a
-              href="https://vertiv.service-now.com/esc?id=sc_cat_item&amp;sys_id=089b54c1db89d300b1af38ff9d961909"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Open Accessories Request ↗
-            </a>
-          </article>
-
-        </div>
-      </section>
-
-      <!-- HOW IT WORKS -->
+      <!-- REQUEST PROCESS -->
 
       <section class="content-panel" id="request-process">
         <div class="section-heading">
           <div>
-            <p class="eyebrow">REQUEST PROCESS</p>
-            <h2>What Happens Next?</h2>
+            <p class="eyebrow">WHAT HAPPENS NEXT</p>
+            <h2>Equipment Request Process</h2>
           </div>
         </div>
 
         <ol class="workflow-list">
-          <li>Review the inventory quantities listed on this page.</li>
-          <li>Choose the laptop or accessories request catalog.</li>
+          <li>Review the quantities listed in the inventory.</li>
+          <li>Select the appropriate laptop or accessories request link.</li>
           <li>Complete and submit the official ServiceNow request.</li>
           <li>IT reviews the request and coordinates fulfillment through the established process.</li>
         </ol>
 
         <p class="inventory-footer-note">
-          Submitting a request through this website does not reserve stock.
           The official ServiceNow request is the record of your submission.
+          The inventory page itself does not collect or store requests.
         </p>
       </section>
 
     </div>
   </main>
 
-  <!-- =====================================
-       FOOTER
-       ===================================== -->
+  <!-- FOOTER -->
 
   <footer class="site-footer equipment-page-footer">
     <div class="container footer-inner">
 
       <div>
-        <a class="footer-brand" href="../index.html">
+        <a class="footer-brand" href="../index.html" aria-label="Pelzer 2 IT Home">
           <img
+            class="footer-logo"
             src="../documents/vertivWhiteLogo.jpg"
             alt="Vertiv"
-            class="footer-logo"
           >
           <span>PELZER 2 IT</span>
         </a>
-
         <p>Local technology support and resources.</p>
       </div>
 
       <div>
-        <strong>IT Support</strong>
-        <p>
-          Submit equipment requests through the official
-          Vertiv ServiceNow catalog.
-        </p>
+        <strong>IT Equipment Requests</strong>
+        <p>Submit requests through the official Vertiv ServiceNow catalog.</p>
       </div>
 
     </div>

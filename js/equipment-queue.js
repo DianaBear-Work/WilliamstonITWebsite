@@ -222,7 +222,7 @@ function renderInventory(searchTerm = "") {
 
     const stockLabel = inStock
       ? `${quantity} available`
-      : "Out of stock / quantity not entered";
+      : "Out of stock";
 
     const stockClass = inStock
       ? "in-stock"
