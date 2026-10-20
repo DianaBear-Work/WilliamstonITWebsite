@@ -1,0 +1,476 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#171717">
+  <meta name="description" content="Pelzer 2 IT equipment availability, laptop build queue, and equipment requests.">
+
+  <title>Equipment Queue | Pelzer 2 IT</title>
+
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/equipment-queue.css">
+
+  <script src="../js/main.js" defer></script>
+  <script src="../js/equipment-queue.js" defer></script>
+
+  <style>
+    /* HEADER BRANDING */
+    .equipment-page-header .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 16px;
+      text-decoration: none;
+      min-width: 0;
+    }
+
+    .equipment-page-header .vertiv-logo {
+      display: block;
+      width: 125px;
+      height: auto;
+      max-height: 55px;
+      object-fit: contain;
+    }
+
+    .equipment-page-header .brand-divider {
+      height: 32px;
+      width: 1px;
+      background: #d5dbe1;
+      flex-shrink: 0;
+    }
+
+    .equipment-page-header .site-brand-text {
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 1.5px;
+      white-space: nowrap;
+    }
+
+    .equipment-page-header .site-brand-text strong {
+      color: #f1f1f1;
+    }
+
+    .equipment-page-header .nav-links a {
+      color: #ffffff;
+      text-decoration: none;
+    }
+
+    .equipment-page-header .nav-links a:hover,
+    .equipment-page-header .nav-links a:focus-visible,
+    .equipment-page-header .nav-links a[aria-current="page"] {
+      background: #FE5B1B;
+      color: #ffffff;
+    }
+
+    .equipment-page-header .menu-toggle {
+      color: #ffffff;
+      border: 1px solid #777777;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    /* FOOTER BRANDING */
+    .equipment-page-footer .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 28px;
+      flex-wrap: wrap;
+    }
+
+    .equipment-page-footer .footer-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .equipment-page-footer .footer-logo {
+      display: block;
+      width: 100px;
+      height: auto;
+      max-height: 45px;
+      object-fit: contain;
+    }
+
+    .equipment-page-footer p {
+      color: #eeeeee;
+      font-size: 13px;
+    }
+
+    .equipment-page-footer a:not(.footer-brand) {
+      color: #ffffff;
+    }
+
+    .equipment-page-footer a:not(.footer-brand):hover {
+      color: #FE5B1B;
+    }
+
+    @media (max-width: 850px) {
+      .equipment-page-header .header-inner {
+        flex-wrap: wrap;
+      }
+
+      .equipment-page-header .menu-toggle {
+        display: inline-block;
+      }
+
+      .equipment-page-header .nav-links {
+        display: none;
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .equipment-page-header .nav-links.is-open {
+        display: flex;
+      }
+
+      .equipment-page-header .nav-links a {
+        display: block;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .equipment-page-header .brand {
+        gap: 8px;
+      }
+
+      .equipment-page-header .vertiv-logo {
+        width: 90px;
+        max-height: 42px;
+      }
+
+      .equipment-page-header .site-brand-text {
+        font-size: 10px;
+        letter-spacing: 1px;
+        white-space: normal;
+      }
+
+      .equipment-page-header .brand-divider {
+        height: 25px;
+      }
+
+      .equipment-page-footer .footer-inner {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header class="site-header equipment-page-header">
+    <div class="container header-inner">
+
+      <a class="brand" href="../index.html" aria-label="Pelzer 2 IT Home">
+        <img
+          src="../documents/vertivWhiteLogo.jpg"
+          alt="Vertiv"
+          class="vertiv-logo"
+        >
+
+        <span class="brand-divider" aria-hidden="true"></span>
+
+        <span class="site-brand-text">
+          PELZER 2 <strong>INFORMATION TECHNOLOGY</strong>
+        </span>
+      </a>
+
+      <button
+        class="menu-toggle"
+        aria-expanded="false"
+        aria-controls="primary-nav"
+        aria-label="Toggle navigation menu"
+        type="button"
+      >
+        ☰ Menu
+      </button>
+
+      <nav id="primary-nav" class="nav-links" aria-label="Main navigation">
+        <a href="../index.html">Home</a>
+        <a href="resources.html">IT Resources</a>
+        <a href="troubleshooting.html">Troubleshooting</a>
+        <a href="appointments.html">Appointments</a>
+        <a href="updates.html">Updates</a>
+        <a href="Cybersecurity.html">Cybersecurity</a>
+        <a href="equipment-queue.html" aria-current="page">Equipment Queue</a>
+      </nav>
+
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="equipment-page">
+
+    <section class="page-hero">
+      <p class="eyebrow">PELZER 2 · SOUTH CAROLINA</p>
+      <h1>IT Equipment Queue</h1>
+      <p>
+        Check equipment availability, submit equipment requests, and review
+        the laptop build workflow.
+      </p>
+    </section>
+
+    <div class="prototype-notice">
+      <strong>Prototype:</strong>
+      This page uses demonstration data stored in the visitor's browser.
+      Requests are not submitted to ServiceNow or automatically delivered to IT.
+    </div>
+
+    <!-- OVERVIEW -->
+    <section class="stats-grid" aria-label="Equipment overview">
+      <article class="stat-card">
+        <span class="stat-label">Inventory Items</span>
+        <strong id="statItemTypes">0</strong>
+      </article>
+
+      <article class="stat-card">
+        <span class="stat-label">Units Available</span>
+        <strong id="statUnits">0</strong>
+      </article>
+
+      <article class="stat-card">
+        <span class="stat-label">Laptop Builds</span>
+        <strong id="statBuilds">0</strong>
+      </article>
+
+      <article class="stat-card">
+        <span class="stat-label">Waitlist Requests</span>
+        <strong id="statWaitlist">0</strong>
+      </article>
+    </section>
+
+    <!-- INVENTORY -->
+    <section class="content-panel" id="inventory">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">EMPLOYEE SELF-SERVICE</p>
+          <h2>Available IT Inventory</h2>
+          <p>View available equipment and accessories.</p>
+        </div>
+
+        <input
+          id="inventorySearch"
+          class="search-input"
+          type="search"
+          placeholder="Search inventory..."
+          aria-label="Search inventory"
+        >
+      </div>
+
+      <div id="inventoryGrid" class="inventory-grid"></div>
+    </section>
+
+    <!-- EQUIPMENT REQUEST FORM -->
+    <section class="content-panel" id="request-equipment">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">REQUEST EQUIPMENT</p>
+          <h2>Equipment Request Form</h2>
+          <p>Provide your information and the related ServiceNow ticket.</p>
+        </div>
+      </div>
+
+      <form id="reservationForm" class="equipment-form">
+
+        <div class="form-group">
+          <label for="requestItem">Equipment *</label>
+          <select id="requestItem" name="requestItem" required>
+            <option value="">Select equipment</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="requestQuantity">Quantity *</label>
+          <input
+            id="requestQuantity"
+            name="requestQuantity"
+            type="number"
+            min="1"
+            step="1"
+            value="1"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="requestName">Employee Full Name *</label>
+          <input
+            id="requestName"
+            name="requestName"
+            type="text"
+            autocomplete="name"
+            placeholder="Enter your full name"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="requestEmail">Vertiv Work Email *</label>
+          <input
+            id="requestEmail"
+            name="requestEmail"
+            type="email"
+            autocomplete="email"
+            placeholder="name@vertivco.com"
+            required
+          >
+        </div>
+
+        <div class="form-group form-group-wide">
+          <label for="requestTicket">ServiceNow Ticket Number *</label>
+          <input
+            id="requestTicket"
+            name="requestTicket"
+            type="text"
+            placeholder="Example: RITM1234567"
+            required
+          >
+          <small>
+            Enter the ticket associated with your equipment request.
+          </small>
+        </div>
+
+        <div class="form-group form-group-wide">
+          <label for="requestNotes">Additional Details</label>
+          <textarea
+            id="requestNotes"
+            name="requestNotes"
+            rows="3"
+            placeholder="Optional details about your request"
+          ></textarea>
+        </div>
+
+        <div class="form-group-wide">
+          <button class="btn-primary" type="submit">
+            Submit Equipment Request
+          </button>
+          <p id="reservationMessage" class="form-message" role="status"></p>
+        </div>
+
+      </form>
+    </section>
+
+    <!-- LAPTOP BUILD QUEUE -->
+    <section class="content-panel" id="laptop-builds">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">IT WORKFLOW</p>
+          <h2>Laptop Build Queue</h2>
+          <p>Demonstration records for laptop preparation and accessories.</p>
+        </div>
+
+        <input
+          id="buildSearch"
+          class="search-input"
+          type="search"
+          placeholder="Search builds..."
+          aria-label="Search laptop builds"
+        >
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Employee</th>
+              <th>Manager</th>
+              <th>Status</th>
+              <th>Accessories</th>
+            </tr>
+          </thead>
+          <tbody id="buildTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- WAITLIST -->
+    <section class="content-panel" id="waitlist">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">OUT-OF-STOCK ITEMS</p>
+          <h2>Equipment Waitlist</h2>
+          <p>View waitlist entries recorded in this browser.</p>
+        </div>
+
+        <input
+          id="waitlistSearch"
+          class="search-input"
+          type="search"
+          placeholder="Search waitlist..."
+          aria-label="Search equipment waitlist"
+        >
+      </div>
+
+      <div id="waitlistList" class="waitlist-list"></div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="content-panel">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">REQUEST PROCESS</p>
+          <h2>What Happens Next?</h2>
+        </div>
+      </div>
+
+      <ol class="workflow-list">
+        <li>Select equipment and provide your contact information.</li>
+        <li>Include the associated ServiceNow ticket number.</li>
+        <li>IT reviews availability and coordinates fulfillment.</li>
+      </ol>
+
+      <p class="muted">
+        This prototype does not notify IT. Continue to use the approved
+        Vertiv ServiceNow process for actual requests.
+      </p>
+
+      <a
+        class="btn-primary"
+        href="https://vertiv.service-now.com/esc?id=ec_dashboard"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Open ServiceNow →
+      </a>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer equipment-page-footer">
+    <div class="container footer-inner">
+
+      <div>
+        <a class="footer-brand" href="../index.html">
+          <img
+            src="../documents/vertivWhiteLogo.jpg"
+            alt="Vertiv"
+            class="footer-logo"
+          >
+          <span>PELZER 2 IT</span>
+        </a>
+
+        <p>Local technology support and resources.</p>
+      </div>
+
+      <div>
+        <strong>Diana Barakat | IT Analyst</strong>
+        <br>
+        <a href="mailto:diana.barakat@vertivco.com">
+          diana.barakat@vertivco.com
+        </a>
+      </div>
+
+    </div>
+  </footer>
+
+</body>
+</html>
