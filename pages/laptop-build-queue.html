@@ -709,36 +709,39 @@
 
     const laptopBuilds = [
       {
-        id: "BUILD-001",
+        id: "Ticket SCTASK2426530",
         laptopType: "Standard Laptop",
         status: "building",
         stage: "Autopilot / Setup",
         updated: "2026-10-20",
-        notes: "Example entry — replace with the current build progress.",
+        notes: "Microsoft Account was created",
         blockers: []
       },
 
       {
-        id: "BUILD-002",
-        laptopType: "Engineering Laptop",
+        id: "Ticket SCTASK2422811",
+        laptopType: "Standard Laptop",
         status: "blocked",
         stage: "Account / Enrollment",
         updated: "2026-10-20",
-        notes: "Example entry — update this note with the current situation.",
+        notes: "Account Disabled in AD",
         blockers: [
-          "Example blocker: enrollment or account issue needs investigation."
+          "Account Disabled in AD"
         ]
       },
 
       {
-        id: "BUILD-003",
+        id: "Ticket SCTASK2426528",
         laptopType: "Standard Laptop",
-        status: "building",
-        stage: "Testing / Final Checks",
+        status: "blocked",
+        stage: "Account / Enrollment",
         updated: "2026-10-20",
-        notes: "Example entry — replace with the latest build notes.",
-        blockers: []
+        notes: "No Microsoft Account",
+        blockers: [
+          "No Microsoft Account"
+        ]
       }
+
     ];
 
     /* ======================================================
