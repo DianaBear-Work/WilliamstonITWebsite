@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#171717">
+  <meta name="description" content="Laptop build queue and build status dashboard for Pelzer 2 IT.">
+  <title>Laptop Build Queue | Pelzer 2 IT</title>
+
+  <style>
+    :root {
+      --black: #171717;
+      --dark: #222222;
+      --orange: #f36c21;
+      --green: #15803d;
+      --green-bg: #f0fdf4;
+      --green-border: #86efac;
+      --red: #b91c1c;
+      --red-bg: #fef2f2;
+      --red-border: #fca5a5;
+      --gray: #666666;
+      --light-gray: #f5f5f5;
+      --border: #dedede;
+      --white: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #f7f7f7;
+      color: var(--black);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .site-header {
+      background: var(--black);
+      color: var(--white);
+      border-bottom: 4px solid var(--orange);
+    }
+
+    .header-inner {
+      max-width: 1250px;
+      margin: auto;
+      padding: 15px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      text-decoration: none;
+      min-width: 0;
+    }
+
+    .brand img {
+      display: block;
+      width: 125px;
+      max-height: 55px;
+      object-fit: contain;
+    }
+
+    .brand-text {
+      border-left: 1px solid #555;
+      padding-left: 15px;
+      font-size: 13px;
+      color: #dddddd;
+    }
+
+    .brand-text strong {
+      display: block;
+      color: var(--white);
+      font-size: 16px;
+    }
+
+    .menu-toggle {
+      display: none;
+      color: var(--white);
+      background: transparent;
+      border: 1px solid #666;
+      border-radius: 6px;
+      padding: 9px 12px;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #eeeeee;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .nav-links a:hover,
+    .nav-links a[aria-current="page"] {
+      color: var(--orange);
+    }
+
+    .page-container {
+      width: min(1150px, calc(100% - 36px));
+      margin: 0 auto;
+    }
+
+    .hero {
+      background: var(--black);
+      color: var(--white);
+      padding: 46px 0 43px;
+      border-bottom: 5px solid var(--orange);
+    }
+
+    .eyebrow {
+      color: var(--orange);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin: 0 0 8px;
+    }
+
+    .hero h1 {
+      margin: 0 0 12px;
+      font-size: clamp(30px, 5vw, 44px);
+      line-height: 1.15;
+    }
+
+    .hero p {
+      color: #d1d1d1;
+      max-width: 720px;
+      margin: 0;
+      font-size: 16px;
+    }
+
+    .hero-note {
+      margin-top: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: #292929;
+      border: 1px solid #494949;
+      border-radius: 6px;
+      color: #eeeeee;
+      font-size: 12px;
+    }
+
+    main {
+      padding: 30px 0 55px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-top: 4px solid var(--orange);
+      border-radius: 10px;
+      padding: 19px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.035);
+    }
+
+    .stat-label {
+      color: var(--gray);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+
+    .stat-number {
+      display: block;
+      margin-top: 5px;
+      font-size: 34px;
+      font-weight: 800;
+      line-height: 1.2;
+    }
+
+    .section-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 18px;
+      margin: 35px 0 18px;
+    }
+
+    .section-heading h2 {
+      font-size: 24px;
+      margin: 0;
+    }
+
+    .section-heading p {
+      color: var(--gray);
+      font-size: 13px;
+      margin: 4px 0 0;
+    }
+
+    .queue-controls {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 22px;
+    }
+
+    .search-box,
+    .filter-select {
+      background: var(--white);
+      border: 1px solid #cccccc;
+      border-radius: 7px;
+      padding: 12px 13px;
+      font: inherit;
+      font-size: 14px;
+      min-height: 44px;
+    }
+
+    .search-box {
+      flex: 1 1 240px;
+      min-width: 0;
+    }
+
+    .filter-select {
+      flex: 0 1 210px;
+    }
+
+    .search-box:focus,
+    .filter-select:focus {
+      outline: 2px solid var(--orange);
+      outline-offset: 2px;
+    }
+
+    .build-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .build-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-top: 5px solid var(--green);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.04);
+    }
+
+    .build-card.is-complete {
+      border-top-color: #777777;
+    }
+
+    .build-card.is-blocked {
+      border-top-color: var(--red);
+    }
+
+    .build-card-header {
+      padding: 18px 19px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      gap: 12px;
+      border-bottom: 1px solid #eeeeee;
+    }
+
+    .build-id {
+      color: var(--gray);
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .build-card h3 {
+      margin: 4px 0 0;
+      font-size: 20px;
+      line-height: 1.3;
+      overflow-wrap: anywhere;
+    }
+
+    .status-badge {
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 20px;
+      padding: 6px 10px;
+      background: #dcfce7;
+      color: #166534;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .status-badge.blocked {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .status-badge.complete {
+      background: #eeeeee;
+      color: #444444;
+    }
+
+    .build-card-body {
+      padding: 17px 19px 20px;
+    }
+
+    .build-details {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 17px;
+    }
+
+    .detail-label {
+      display: block;
+      color: var(--gray);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 3px;
+    }
+
+    .detail-value {
+      font-size: 14px;
+      font-weight: 600;
+      overflow-wrap: anywhere;
+    }
+
+    .build-notes {
+      background: #f6f6f6;
+      border: 1px solid #e7e7e7;
+      border-radius: 7px;
+      padding: 12px 13px;
+      margin-bottom: 15px;
+    }
+
+    .build-notes h4,
+    .blocker-panel h4 {
+      margin: 0 0 5px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .build-notes p,
+    .blocker-panel p {
+      margin: 0;
+      font-size: 13px;
+      overflow-wrap: anywhere;
+      white-space: pre-wrap;
+    }
+
+    .blocker-panel {
+      background: var(--red-bg);
+      border: 1px solid var(--red-border);
+      border-left: 4px solid var(--red);
+      border-radius: 7px;
+      padding: 13px;
+      margin-top: 12px;
+    }
+
+    .blocker-panel h4 {
+      color: var(--red);
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .blocker-panel p {
+      color: #7f1d1d;
+    }
+
+    .no-blocker {
+      display: flex;
+      gap: 9px;
+      align-items: start;
+      background: var(--green-bg);
+      border: 1px solid var(--green-border);
+      border-radius: 7px;
+      padding: 12px 13px;
+      color: #166534;
+      font-size: 13px;
+      margin-top: 12px;
+    }
+
+    .empty-state {
+      grid-column: 1 / -1;
+      background: var(--white);
+      border: 1px dashed #cccccc;
+      border-radius: 10px;
+      padding: 32px 20px;
+      text-align: center;
+      color: var(--gray);
+    }
+
+    .empty-state h3 {
+      margin: 0 0 5px;
+      color: var(--black);
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      color: var(--gray);
+      font-size: 12px;
+      margin-top: 22px;
+    }
+
+    .legend span {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      display: inline-block;
+      border-radius: 50%;
+    }
+
+    .last-updated {
+      margin-top: 30px;
+      border-top: 1px solid var(--border);
+      padding-top: 16px;
+      color: var(--gray);
+      font-size: 12px;
+    }
+
+    .site-footer {
+      background: var(--black);
+      color: #dddddd;
+      border-top: 4px solid var(--orange);
+      padding: 24px 0;
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: center;
+      flex-wrap: wrap;
+      font-size: 12px;
+    }
+
+    .footer-inner p {
+      margin: 0;
+    }
+
+    .footer-inner a {
+      color: #eeeeee;
+      text-decoration: none;
+    }
+
+    .footer-inner a:hover {
+      color: var(--orange);
+    }
+
+    @media (max-width: 760px) {
+      .header-inner {
+        flex-wrap: wrap;
+        padding: 13px 18px;
+      }
+
+      .brand img {
+        width: 100px;
+      }
+
+      .brand-text {
+        font-size: 11px;
+      }
+
+      .brand-text strong {
+        font-size: 14px;
+      }
+
+      .menu-toggle {
+        display: block;
+      }
+
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+        gap: 0;
+        padding-top: 8px;
+      }
+
+      .nav-links.is-open {
+        display: flex;
+      }
+
+      .nav-links a {
+        padding: 12px 4px;
+        border-top: 1px solid #393939;
+      }
+
+      .page-container {
+        width: min(100% - 28px, 1150px);
+      }
+
+      .hero {
+        padding: 34px 0;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .stat-card {
+        padding: 14px 16px;
+      }
+
+      .stat-number {
+        font-size: 28px;
+      }
+
+      .build-list {
+        grid-template-columns: 1fr;
+      }
+
+      .section-heading {
+        align-items: start;
+        flex-direction: column;
+        gap: 5px;
+      }
+
+      .filter-select {
+        flex: 1 1 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="../index.html" aria-label="Pelzer 2 IT home">
+        <img
+          src="../documents/vertivWhiteLogo.jpg"
+          alt="Vertiv"
+        >
+        <span class="brand-text">
+          <strong>Pelzer 2 IT</strong>
+          IT Operations
+        </span>
+      </a>
+
+      <button
+        class="menu-toggle"
+        id="menu-toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="primary-nav"
+      >
+        Menu ☰
+      </button>
+
+      <nav class="nav-links" id="primary-nav" aria-label="Main navigation">
+      <a href="index.html" aria-current="page">Home</a>
+      <a href="pages/resources.html">IT Resources</a>
+      <a href="pages/troubleshooting.html">Troubleshooting</a>
+      <a href="pages/appointments.html">Appointments</a>
+      <a href="pages/updates.html">Updates</a>
+      <a href="pages/Cybersecurity.html">Cybersecurity</a>
+      <a href="equipment-queue.html" aria-current="page">Equipment Inventory</a>
+      <a href="laptop-build-queue.html" aria-current="page">Laptop Build Queue</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="page-container">
+      <p class="eyebrow">IT Operations Dashboard</p>
+      <h1>Laptop Build Queue</h1>
+      <p>
+        View current laptop builds, their progress, and any issues
+        preventing completion. Build status and notes are maintained by IT.
+      </p>
+      <div class="hero-note">
+        <span aria-hidden="true">●</span>
+        Queue information is manually maintained
+      </div>
+    </div>
+  </section>
+
+  <main class="page-container">
+    <section aria-label="Build queue summary">
+      <div class="stats-grid">
+        <article class="stat-card">
+          <span class="stat-label">Active Builds</span>
+          <strong class="stat-number" id="stat-active">0</strong>
+        </article>
+
+        <article class="stat-card">
+          <span class="stat-label">Blocked Builds</span>
+          <strong class="stat-number" id="stat-blocked">0</strong>
+        </article>
+
+        <article class="stat-card">
+          <span class="stat-label">Completed Builds</span>
+          <strong class="stat-number" id="stat-completed">0</strong>
+        </article>
+      </div>
+    </section>
+
+    <section aria-labelledby="queue-heading">
+      <div class="section-heading">
+        <div>
+          <h2 id="queue-heading">Current Builds</h2>
+          <p>Search the queue or filter by build status.</p>
+        </div>
+      </div>
+
+      <div class="queue-controls">
+        <input
+          class="search-box"
+          type="search"
+          id="build-search"
+          placeholder="Search build ID, laptop type, notes..."
+          aria-label="Search laptop builds"
+        >
+
+        <select
+          class="filter-select"
+          id="status-filter"
+          aria-label="Filter by build status"
+        >
+          <option value="all">All builds</option>
+          <option value="building">Building</option>
+          <option value="blocked">Blocked</option>
+          <option value="complete">Completed</option>
+        </select>
+      </div>
+
+      <div class="build-list" id="build-list" aria-live="polite"></div>
+
+      <div class="legend" aria-label="Status legend">
+        <span>
+          <i class="legend-dot" style="background:#15803d"></i>
+          In progress
+        </span>
+        <span>
+          <i class="legend-dot" style="background:#b91c1c"></i>
+          Blocked / needs attention
+        </span>
+        <span>
+          <i class="legend-dot" style="background:#777777"></i>
+          Completed
+        </span>
+      </div>
+
+      <p class="last-updated" id="queue-last-updated">
+        Queue maintained by Pelzer 2 IT.
+      </p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="page-container footer-inner">
+      <p>© <span id="current-year"></span> Pelzer 2 IT</p>
+      <p>
+        <a href="../index.html">IT Home</a>
+        &nbsp; | &nbsp;
+        <a href="equipment-queue.html">Equipment Inventory</a>
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    /* ======================================================
+       LAPTOP BUILD QUEUE — EDIT THIS SECTION
+
+       Add, remove, or update build objects in this array.
+
+       status:
+         "building" = currently being worked on
+         "blocked"  = waiting on an issue to be resolved
+         "complete" = build finished
+
+       Set blockers to an empty array [] when there are no
+       outstanding blockers.
+
+       Use generic build IDs and avoid confidential details.
+       ====================================================== */
+
+    const laptopBuilds = [
+      {
+        id: "BUILD-001",
+        laptopType: "Standard Laptop",
+        status: "building",
+        stage: "Autopilot / Setup",
+        updated: "2026-10-20",
+        notes: "Example entry — replace with the current build progress.",
+        blockers: []
+      },
+
+      {
+        id: "BUILD-002",
+        laptopType: "Engineering Laptop",
+        status: "blocked",
+        stage: "Account / Enrollment",
+        updated: "2026-10-20",
+        notes: "Example entry — update this note with the current situation.",
+        blockers: [
+          "Example blocker: enrollment or account issue needs investigation."
+        ]
+      },
+
+      {
+        id: "BUILD-003",
+        laptopType: "Standard Laptop",
+        status: "building",
+        stage: "Testing / Final Checks",
+        updated: "2026-10-20",
+        notes: "Example entry — replace with the latest build notes.",
+        blockers: []
+      }
+    ];
+
+    /* ======================================================
+       PAGE LOGIC — NO NEED TO EDIT BELOW THIS LINE
+       ====================================================== */
+
+    const buildList = document.getElementById("build-list");
+    const searchInput = document.getElementById("build-search");
+    const statusFilter = document.getElementById("status-filter");
+
+    function escapeHTML(value) {
+      return String(value ?? "").replace(/[&<>"']/g, function (char) {
+        const entities = {
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#39;"
+        };
+
+        return entities[char];
+      });
+    }
+
+    function getBuildStatus(build) {
+      const allowedStatuses = ["building", "blocked", "complete"];
+
+      return allowedStatuses.includes(build.status)
+        ? build.status
+        : "building";
+    }
+
+    function getStatusLabel(status) {
+      const labels = {
+        building: "In Progress",
+        blocked: "Blocked",
+        complete: "Completed"
+      };
+
+      return labels[status] || "In Progress";
+    }
+
+    function renderBuildCard(build) {
+      const status = getBuildStatus(build);
+      const blockers = Array.isArray(build.blockers)
+        ? build.blockers.filter(Boolean)
+        : [];
+
+      const hasBlockers = blockers.length > 0 || status === "blocked";
+
+      const blockerContent = hasBlockers
+        ? `
+          <div class="blocker-panel">
+            <h4>
+              <span aria-hidden="true">⚠</span>
+              Blockers / Issues
+            </h4>
+            <p>${escapeHTML(
+              blockers.length
+                ? blockers.join("\n\n")
+                : "This build is marked blocked. Add the reason in the blockers array."
+            )}</p>
+          </div>
+        `
+        : status !== "complete"
+          ? `
+            <div class="no-blocker">
+              <span aria-hidden="true">✓</span>
+              <span>No outstanding blockers currently listed.</span>
+            </div>
+          `
+          : `
+            <div class="no-blocker">
+              <span aria-hidden="true">✓</span>
+              <span>Build completed.</span>
+            </div>
+          `;
+
+      return `
+        <article class="build-card ${status === "blocked" ? "is-blocked" : ""} ${status === "complete" ? "is-complete" : ""}">
+          <div class="build-card-header">
+            <div>
+              <div class="build-id">${escapeHTML(build.id)}</div>
+              <h3>${escapeHTML(build.laptopType)}</h3>
+            </div>
+
+            <span class="status-badge ${status}">
+              ${escapeHTML(getStatusLabel(status))}
+            </span>
+          </div>
+
+          <div class="build-card-body">
+            <div class="build-details">
+              <div>
+                <span class="detail-label">Current Stage</span>
+                <span class="detail-value">${escapeHTML(build.stage || "Not specified")}</span>
+              </div>
+
+              <div>
+                <span class="detail-label">Last Updated</span>
+                <span class="detail-value">${escapeHTML(build.updated || "Not specified")}</span>
+              </div>
+            </div>
+
+            <div class="build-notes">
+              <h4>Build Notes</h4>
+              <p>${escapeHTML(build.notes || "No notes added.")}</p>
+            </div>
+
+            ${blockerContent}
+          </div>
+        </article>
+      `;
+    }
+
+    function updateStats() {
+      const active = laptopBuilds.filter(function (build) {
+        return getBuildStatus(build) !== "complete";
+      }).length;
+
+      const blocked = laptopBuilds.filter(function (build) {
+        return getBuildStatus(build) === "blocked";
+      }).length;
+
+      const completed = laptopBuilds.filter(function (build) {
+        return getBuildStatus(build) === "complete";
+      }).length;
+
+      document.getElementById("stat-active").textContent = active;
+      document.getElementById("stat-blocked").textContent = blocked;
+      document.getElementById("stat-completed").textContent = completed;
+    }
+
+    function renderQueue() {
+      const searchTerm = searchInput.value.trim().toLowerCase();
+      const selectedStatus = statusFilter.value;
+
+      const filteredBuilds = laptopBuilds.filter(function (build) {
+        const status = getBuildStatus(build);
+
+        const searchableText = [
+          build.id,
+          build.laptopType,
+          build.stage,
+          build.notes,
+          ...(Array.isArray(build.blockers) ? build.blockers : [])
+        ].join(" ").toLowerCase();
+
+        const matchesSearch = searchableText.includes(searchTerm);
+        const matchesStatus =
+          selectedStatus === "all" || status === selectedStatus;
+
+        return matchesSearch && matchesStatus;
+      });
+
+      if (filteredBuilds.length === 0) {
+        buildList.innerHTML = `
+          <div class="empty-state">
+            <h3>No builds found</h3>
+            <p>Try a different search term or status filter.</p>
+          </div>
+        `;
+      } else {
+        buildList.innerHTML = filteredBuilds.map(renderBuildCard).join("");
+      }
+
+      updateStats();
+    }
+
+    searchInput.addEventListener("input", renderQueue);
+    statusFilter.addEventListener("change", renderQueue);
+
+    const menuToggle = document.getElementById("menu-toggle");
+    const primaryNav = document.getElementById("primary-nav");
+
+    menuToggle.addEventListener("click", function () {
+      const isOpen = primaryNav.classList.toggle("is-open");
+      menuToggle.setAttribute("aria-expanded", String(isOpen));
+    });
+
+    primaryNav.querySelectorAll("a").forEach(function (link) {
+      link.addEventListener("click", function () {
+        primaryNav.classList.remove("is-open");
+        menuToggle.setAttribute("aria-expanded", "false");
+      });
+    });
+
+    document.getElementById("current-year").textContent =
+      new Date().getFullYear();
+
+    renderQueue();
+  </script>
+</body>
+</html>
