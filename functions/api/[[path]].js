@@ -322,10 +322,5 @@ async function handleRequest(context) {
 }
 
 export async function onRequest(context) {
-  const path = new URL(context.request.url).pathname;
-  if (!path.startsWith("/api/")) {
-    return context.next();
-  }
-
   return handleRequest(context);
 }
