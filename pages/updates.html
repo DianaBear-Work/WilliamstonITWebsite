@@ -10,7 +10,9 @@
   <title>IT Projects &amp; Updates | Pelzer 2 IT</title>
 
   <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/admin-editor.css">
   <script src="../js/main.js" defer></script>
+  <script src="../js/admin-editor.js" defer></script>
 
   <style>
     .project-grid {
@@ -211,6 +213,7 @@
       <a href="laptop-build-queue.html">Laptop Build Queue</a>
       </nav>
 
+      <button class="admin-open" id="admin-open" type="button">IT admin sign in</button>
     </div>
   </header>
 
@@ -228,7 +231,7 @@
       </div>
     </section>
 
-    <section class="section container">
+    <section class="section container" id="admin-editable-updates">
 
       <!-- PROJECTS -->
       <div class="section-heading">
@@ -515,6 +518,35 @@
 
     </section>
   </main>
+
+  <script>
+    (function () {
+      const editableContent = document.getElementById("admin-editable-updates");
+      const initialContent = editableContent.innerHTML;
+
+      window.siteAdminConfig = {
+        scope: "updates",
+        mode: "visual",
+        initialData: initialContent,
+        getData: function () {
+          return editableContent.innerHTML;
+        },
+        applyData: function (html) {
+          if (typeof html !== "string") {
+            throw new Error("Saved updates content is invalid.");
+          }
+          editableContent.innerHTML = window.sanitizeAdminHtml(html);
+        },
+        validateData: function () {
+          return true;
+        },
+        setEditing: function (isEditing) {
+          editableContent.contentEditable = String(Boolean(isEditing));
+          editableContent.classList.toggle("admin-editing", Boolean(isEditing));
+        }
+      };
+    })();
+  </script>
 
   <!-- VERTIV FOOTER -->
   <footer class="site-footer">

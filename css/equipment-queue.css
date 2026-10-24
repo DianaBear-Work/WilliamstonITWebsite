@@ -236,6 +236,11 @@ body {
   font-size: 14px;
 }
 
+.inventory-card .inventory-restock-status {
+  color: var(--eq-muted);
+  font-size: 13px;
+}
+
 .stock-label {
   margin: 12px 0;
   font-weight: 700;

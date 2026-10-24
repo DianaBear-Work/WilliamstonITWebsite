@@ -1,0 +1,169 @@
+.admin-open {
+  padding: 9px 12px;
+  border: 1px solid #777;
+  border-radius: 5px;
+  background: transparent;
+  color: #fff;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.admin-open:hover,
+.admin-open:focus-visible {
+  border-color: #fe5b1b;
+  color: #fe5b1b;
+}
+
+.admin-panel {
+  position: fixed;
+  z-index: 1000;
+  inset: auto 20px 20px auto;
+  width: min(540px, calc(100vw - 32px));
+  max-height: min(80vh, 760px);
+  overflow: auto;
+  padding: 20px;
+  border: 1px solid #bbb;
+  border-top: 4px solid #fe5b1b;
+  border-radius: 8px;
+  background: #fff;
+  color: #171717;
+  box-shadow: 0 8px 32px #0004;
+  font: 14px/1.5 Arial, Helvetica, sans-serif;
+}
+
+.admin-panel[hidden] {
+  display: none;
+}
+
+.admin-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.admin-panel h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.admin-panel button {
+  min-height: 40px;
+  padding: 8px 12px;
+  border: 1px solid #777;
+  border-radius: 5px;
+  background: #fff;
+  color: #171717;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.admin-panel button:hover,
+.admin-panel button:focus-visible {
+  border-color: #fe5b1b;
+}
+
+.admin-panel .admin-primary {
+  border-color: #fe5b1b;
+  background: #fe5b1b;
+  color: #fff;
+}
+
+.admin-panel label {
+  display: block;
+  margin: 14px 0 5px;
+  font-weight: 700;
+}
+
+.admin-panel input,
+.admin-panel textarea {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  border: 1px solid #aaa;
+  border-radius: 5px;
+  font: inherit;
+}
+
+.admin-panel textarea {
+  min-height: 300px;
+  resize: vertical;
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 12px;
+}
+
+.admin-panel input:focus,
+.admin-panel textarea:focus {
+  outline: 2px solid #fe5b1b;
+  outline-offset: 2px;
+}
+
+.admin-panel .admin-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.admin-panel .admin-status {
+  min-height: 1.5em;
+  margin: 8px 0;
+  color: #444;
+}
+
+.admin-panel .admin-status[data-error="true"] {
+  color: #a32626;
+}
+
+.admin-panel .admin-help {
+  color: #555;
+  font-size: 13px;
+}
+
+.admin-record {
+  min-width: 0;
+  margin: 14px 0;
+  padding: 12px;
+  border: 1px solid #d5d5d5;
+  border-radius: 6px;
+}
+
+.admin-record legend {
+  padding: 0 6px;
+  font-weight: 700;
+}
+
+.admin-record > button {
+  margin-top: 10px;
+}
+
+.admin-editing {
+  outline: 2px dashed #fe5b1b;
+  outline-offset: 4px;
+}
+
+.admin-public-status {
+  margin: 0;
+  padding: 9px 16px;
+  background: #fff0e8;
+  color: #7a2b0b;
+  font: 13px/1.5 Arial, Helvetica, sans-serif;
+  text-align: center;
+}
+
+.admin-public-status[hidden] {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  .admin-panel {
+    inset: auto 8px 8px;
+    width: auto;
+    max-height: 85vh;
+  }
+}

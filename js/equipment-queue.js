@@ -22,7 +22,7 @@ const serviceNowRequests = {
    0 means the quantity has not been entered or is out of stock.
    --------------------------------------------------------- */
 
-const inventory = [
+const defaultInventory = [
   {
     id: 1,
     name: "Standard Laptop",
@@ -142,6 +142,10 @@ const inventory = [
   }
 ];
 
+let inventory = defaultInventory.map(function (item) {
+  return { ...item };
+});
+
 /* ---------------------------------------------------------
    HELPER FUNCTIONS
    --------------------------------------------------------- */
@@ -217,11 +221,18 @@ function renderInventory(searchTerm = "") {
 
   inventoryGrid.innerHTML = filteredInventory.map(function (item) {
     const quantity = formatQuantity(item.quantity);
-    const inStock = quantity > 0;
+    const numericQuantity = Number(item.quantity);
+    const hasNumericQuantity =
+      Number.isFinite(numericQuantity) && numericQuantity >= 0;
+    const inStock = hasNumericQuantity
+      ? quantity > 0
+      : String(item.quantity).trim() !== "";
     const requestLink = getRequestLink(item);
 
     const stockLabel = inStock
-      ? `${quantity} available`
+      ? hasNumericQuantity
+        ? `${quantity} available`
+        : String(item.quantity)
       : "Out of stock";
 
     const stockClass = inStock
@@ -242,6 +253,10 @@ function renderInventory(searchTerm = "") {
 
           <p class="inventory-description">
             ${escapeHTML(item.description)}
+          </p>
+
+          <p class="inventory-restock-status">
+            <strong>Restock:</strong> ${escapeHTML(item.restockStatus)}
           </p>
 
           <div class="inventory-stock ${stockClass}">
@@ -331,6 +346,65 @@ function setupMobileNavigation() {
     });
   });
 }
+
+window.siteAdminConfig = {
+  scope: "equipment",
+  mode: "json",
+  initialData: defaultInventory,
+  editorFields: [
+    { key: "id", label: "Item ID", type: "text" },
+    { key: "name", label: "Item name", type: "text" },
+    { key: "category", label: "Category", type: "text" },
+    { key: "quantity", label: "Quantity or availability", type: "text" },
+    { key: "restockStatus", label: "Restock status", type: "text" },
+    { key: "description", label: "Description", type: "textarea" },
+    {
+      key: "requestType",
+      label: "Request type",
+      type: "select",
+      options: [
+        { value: "laptop", label: "Laptop" },
+        { value: "accessory", label: "Accessory" }
+      ]
+    }
+  ],
+  createItem: function () {
+    return {
+      id: "",
+      name: "",
+      category: "",
+      quantity: "0",
+      restockStatus: "Not Yet Requested",
+      description: "",
+      requestType: "accessory"
+    };
+  },
+  getData: function () {
+    return inventory;
+  },
+  validateData: function (data) {
+    return Array.isArray(data) && data.every(function (item) {
+      return item &&
+        (typeof item.id === "number" || typeof item.id === "string") &&
+        typeof item.name === "string" && item.name.trim() !== "" &&
+        typeof item.category === "string" &&
+        (typeof item.quantity === "number" || typeof item.quantity === "string") &&
+        typeof item.restockStatus === "string" &&
+        typeof item.description === "string" &&
+        ["laptop", "accessory"].includes(item.requestType);
+    });
+  },
+  applyData: function (data) {
+    if (!this.validateData(data)) {
+      throw new Error("Saved equipment data is invalid.");
+    }
+    inventory = data;
+    const searchInput = getElement("inventorySearch");
+    renderInventory(searchInput ? searchInput.value : "");
+    updateStats();
+  },
+  setEditing: function () {}
+};
 
 /* ---------------------------------------------------------
    INITIALIZE PAGE

@@ -7,6 +7,9 @@
   <meta name="description" content="Laptop build queue and build status dashboard for Pelzer 2 IT.">
   <title>Laptop Build Queue | Pelzer 2 IT</title>
 
+  <link rel="stylesheet" href="../css/admin-editor.css">
+  <script src="../js/admin-editor.js" defer></script>
+
   <style>
     :root {
       --black: #171717;
@@ -589,6 +592,7 @@
       <a href="equipment-queue.html">Equipment Inventory</a>
       <a href="laptop-build-queue.html" aria-current="page" >Laptop Build Queue</a>
       </nav>
+      <button class="admin-open" id="admin-open" type="button">IT admin sign in</button>
     </div>
   </header>
 
@@ -707,11 +711,11 @@
        Use generic build IDs and avoid confidential details.
        ====================================================== */
 
-    const laptopBuilds = [
+    let laptopBuilds = [
       {
         id: "Ticket SCTASK2430033",
         laptopType: "Standard Laptop",
-        status: "Complete",
+        status: "complete",
         stage: "Pickup",
         updated: "2026-10-20",
         notes: "10/5 Microsoft Account was created, 10/20 Laptop build completed... Ready for Pickup",
@@ -922,6 +926,67 @@
 
       updateStats();
     }
+
+    window.siteAdminConfig = {
+      scope: "builds",
+      mode: "json",
+      initialData: JSON.parse(JSON.stringify(laptopBuilds)),
+      editorFields: [
+        { key: "id", label: "Build ID", type: "text" },
+        { key: "laptopType", label: "Laptop type", type: "text" },
+        {
+          key: "status",
+          label: "Status",
+          type: "select",
+          options: [
+            { value: "building", label: "In progress" },
+            { value: "blocked", label: "Blocked" },
+            { value: "complete", label: "Completed" }
+          ]
+        },
+        { key: "stage", label: "Current stage", type: "text" },
+        { key: "updated", label: "Last updated", type: "text" },
+        { key: "notes", label: "Build notes", type: "textarea" },
+        { key: "blockers", label: "Blockers (one per line)", type: "list" }
+      ],
+      createItem: function () {
+        return {
+          id: "",
+          laptopType: "",
+          status: "building",
+          stage: "",
+          updated: new Date().toISOString().slice(0, 10),
+          notes: "",
+          blockers: []
+        };
+      },
+      getData: function () {
+        return laptopBuilds;
+      },
+      validateData: function (data) {
+        return Array.isArray(data) && data.every(function (build) {
+          return build &&
+            typeof build.id === "string" && build.id.trim() !== "" &&
+            typeof build.laptopType === "string" && build.laptopType.trim() !== "" &&
+            ["building", "blocked", "complete"].includes(build.status) &&
+            typeof build.stage === "string" &&
+            typeof build.updated === "string" &&
+            typeof build.notes === "string" &&
+            Array.isArray(build.blockers) &&
+            build.blockers.every(function (blocker) {
+              return typeof blocker === "string";
+            });
+        });
+      },
+      applyData: function (data) {
+        if (!this.validateData(data)) {
+          throw new Error("Saved laptop build data is invalid.");
+        }
+        laptopBuilds = data;
+        renderQueue();
+      },
+      setEditing: function () {}
+    };
 
     searchInput.addEventListener("input", renderQueue);
     statusFilter.addEventListener("change", renderQueue);
