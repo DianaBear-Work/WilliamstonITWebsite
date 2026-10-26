@@ -16,10 +16,10 @@ function jsonResponse(data, status = 200, headers = {}) {
 }
 
 function readCookie(request, name) {
-  const cookieHeader = request.headers.get("Cookie") || "";
-  const cookie = cookieHeader.split(";")
-    .map((part) => part.trim())
-    .find((part) => part.startsWith(`${name}=`));
+  const header = request.headers.get("Cookie") || "";
+  const cookie = header.split(";")
+    .map(part => part.trim())
+    .find(part => part.startsWith(`${name}=`));
 
   return cookie ? cookie.slice(name.length + 1) : "";
 }
@@ -39,7 +39,7 @@ async function sign(value, secret) {
     new TextEncoder().encode(value)
   );
 
-  return Array.from(new Uint8Array(signature), (byte) =>
+  return Array.from(new Uint8Array(signature), byte =>
     byte.toString(16).padStart(2, "0")
   ).join("");
 }
@@ -55,14 +55,22 @@ async function verifySession(request, secret) {
 
   if (
     !/^\d{10}$/.test(expiry) ||
-    !/^[a-f0-9]{64}$/.test(signature) ||
     Number(expiry) <= Math.floor(Date.now() / 1000)
   ) {
     return false;
   }
 
   const expected = await sign(expiry, secret);
-  return signature === expected;
+  const a = new TextEncoder().encode(expected);
+  const b = new TextEncoder().encode(signature);
+
+  let difference = a.length ^ b.length;
+
+  for (let i = 0; i < a.length; i++) {
+    difference |= a[i] ^ (b[i] || 0);
+  }
+
+  return difference === 0;
 }
 
 function cookieHeader(value, maxAge) {
@@ -81,13 +89,14 @@ function isString(value, maxLength = 2000) {
 function isEquipment(value) {
   return Array.isArray(value) &&
     value.length <= 500 &&
-    value.every((item) =>
+    value.every(item =>
       item &&
       (typeof item.id === "number" || isString(item.id, 100)) &&
       isString(item.name, 200) &&
       item.name.trim() !== "" &&
       isString(item.category, 100) &&
-      (typeof item.quantity === "number" || isString(item.quantity, 100)) &&
+      (typeof item.quantity === "number" ||
+        isString(item.quantity, 100)) &&
       isString(item.restockStatus, 200) &&
       isString(item.description, 2000) &&
       ["laptop", "accessory"].includes(item.requestType)
@@ -97,7 +106,7 @@ function isEquipment(value) {
 function isBuilds(value) {
   return Array.isArray(value) &&
     value.length <= 500 &&
-    value.every((build) =>
+    value.every(build =>
       build &&
       isString(build.id, 200) &&
       build.id.trim() !== "" &&
@@ -109,7 +118,7 @@ function isBuilds(value) {
       isString(build.notes, 4000) &&
       Array.isArray(build.blockers) &&
       build.blockers.length <= 50 &&
-      build.blockers.every((blocker) => isString(blocker, 2000))
+      build.blockers.every(blocker => isString(blocker, 2000))
     );
 }
 
@@ -128,14 +137,10 @@ async function getContent(scope, env) {
     return jsonResponse({ content: null, updatedAt: null });
   }
 
-  try {
-    return jsonResponse({
-      content: JSON.parse(row.content),
-      updatedAt: row.updated_at
-    });
-  } catch {
-    return jsonResponse({ error: "Stored content is invalid." }, 500);
-  }
+  return jsonResponse({
+    content: JSON.parse(row.content),
+    updatedAt: row.updated_at
+  });
 }
 
 async function login(request, env) {
@@ -143,29 +148,33 @@ async function login(request, env) {
     return jsonResponse({ error: "Invalid request origin." }, 403);
   }
 
-  const adminPassword =
-    typeof env.ADMIN_PASSWORD === "string"
-      ? env.ADMIN_PASSWORD
-      : "";
-
-  const sessionSecret =
-    typeof env.SESSION_SECRET === "string"
-      ? env.SESSION_SECRET
-      : "";
-
-  // A configured password is required, but its length is not
-  // used to reject an existing password at sign-in.
-  if (!adminPassword) {
-    console.error("ADMIN_PASSWORD is missing.");
+  // Check the actual runtime bindings.
+  if (typeof env.ADMIN_PASSWORD !== "string" ||
+      env.ADMIN_PASSWORD.length === 0) {
+    console.error("Missing ADMIN_PASSWORD runtime binding.");
     return jsonResponse({
-      error: "ADMIN_PASSWORD is missing from the Cloudflare environment."
+      error: "ADMIN_PASSWORD is missing from the Cloudflare environment. Check the Production secret and deployment."
     }, 503);
   }
 
-  if (sessionSecret.length < 32) {
-    console.error("SESSION_SECRET is missing or too short.");
+  if (env.ADMIN_PASSWORD.length < 12) {
     return jsonResponse({
-      error: "SESSION_SECRET must be configured with at least 32 characters."
+      error: "ADMIN_PASSWORD must be at least 12 characters."
+    }, 503);
+  }
+
+  if (typeof env.SESSION_SECRET !== "string" ||
+      env.SESSION_SECRET.length < 12) {
+    console.error("Missing or too-short SESSION_SECRET runtime binding.");
+    return jsonResponse({
+      error: "SESSION_SECRET is missing or too short. Configure a secret of at least 12 characters."
+    }, 503);
+  }
+
+  if (!env.DB) {
+    console.error("Missing DB runtime binding.");
+    return jsonResponse({
+      error: "The DB database binding is missing."
     }, 503);
   }
 
@@ -179,20 +188,17 @@ async function login(request, env) {
 
   const ipAddress =
     request.headers.get("CF-Connecting-IP") || "unknown";
-
-  const ipKey = await sign(ipAddress, sessionSecret);
+  const ipKey = await sign(ipAddress, env.SESSION_SECRET);
 
   await env.DB.prepare(
     "DELETE FROM login_attempts WHERE attempt_at < unixepoch() - 86400"
   ).run();
 
   const attempts = await env.DB.prepare(
-    `SELECT COUNT(*) AS total
-     FROM login_attempts
-     WHERE ip_key = ? AND attempt_at > unixepoch() - 900`
+    "SELECT COUNT(*) AS total FROM login_attempts WHERE ip_key = ? AND attempt_at > unixepoch() - 900"
   ).bind(ipKey).first();
 
-  if (Number(attempts?.total || 0) >= 10) {
+  if (attempts && attempts.total >= 10) {
     return jsonResponse({
       error: "Too many sign-in attempts. Try again in 15 minutes."
     }, 429);
@@ -216,15 +222,24 @@ async function login(request, env) {
     !body ||
     typeof body !== "object" ||
     Array.isArray(body) ||
-    !isString(body.password, 256)
+    typeof body.password !== "string" ||
+    body.password.length > 256
   ) {
     return jsonResponse({ error: "Enter the admin password." }, 400);
   }
 
-  const submitted = await sign(body.password, sessionSecret);
-  const expected = await sign(adminPassword, sessionSecret);
+  const submitted = await sign(body.password, env.SESSION_SECRET);
+  const expected = await sign(env.ADMIN_PASSWORD, env.SESSION_SECRET);
+  const a = new TextEncoder().encode(expected);
+  const b = new TextEncoder().encode(submitted);
 
-  if (submitted !== expected) {
+  let difference = a.length ^ b.length;
+
+  for (let i = 0; i < a.length; i++) {
+    difference |= a[i] ^ (b[i] || 0);
+  }
+
+  if (difference !== 0) {
     await env.DB.prepare(
       "INSERT INTO login_attempts (ip_key) VALUES (?)"
     ).bind(ipKey).run();
@@ -242,7 +257,10 @@ async function login(request, env) {
     Math.floor(Date.now() / 1000) + SESSION_SECONDS
   );
 
-  const token = `${expiry}.${await sign(expiry, sessionSecret)}`;
+  const token = `${expiry}.${await sign(
+    expiry,
+    env.SESSION_SECRET
+  )}`;
 
   return jsonResponse(
     { authenticated: true },
@@ -253,19 +271,15 @@ async function login(request, env) {
 
 async function handleRequest(context) {
   const { request, env } = context;
-  const url = new URL(request.url);
-  const path = url.pathname;
+  const path = new URL(request.url).pathname;
 
   try {
     if (path === "/api/session" && request.method === "GET") {
       if (
         typeof env.SESSION_SECRET !== "string" ||
-        env.SESSION_SECRET.length < 32
+        env.SESSION_SECRET.length < 12
       ) {
-        return jsonResponse({
-          authenticated: false,
-          error: "Session signing is not configured."
-        }, 503);
+        return jsonResponse({ authenticated: false });
       }
 
       return jsonResponse({
@@ -292,15 +306,19 @@ async function handleRequest(context) {
       );
     }
 
-    const contentMatch = path.match(/^\/api\/content\/([a-z]+)$/);
+    const match = path.match(/^\/api\/content\/([a-z]+)$/);
 
-    if (!contentMatch || !CONTENT_SCOPES.has(contentMatch[1])) {
+    if (!match || !CONTENT_SCOPES.has(match[1])) {
       return jsonResponse({ error: "Not found." }, 404);
     }
 
-    const scope = contentMatch[1];
+    const scope = match[1];
 
     if (request.method === "GET") {
+      if (!env.DB) {
+        return jsonResponse({ error: "The DB binding is missing." }, 503);
+      }
+
       return await getContent(scope, env);
     }
 
@@ -312,10 +330,14 @@ async function handleRequest(context) {
       return jsonResponse({ error: "Invalid request origin." }, 403);
     }
 
+    if (!env.DB) {
+      return jsonResponse({ error: "The DB binding is missing." }, 503);
+    }
+
     if (
       typeof env.SESSION_SECRET !== "string" ||
-      env.SESSION_SECRET.length < 32 ||
-      !(await verifySession(request, env.SESSION_SECRET))
+      env.SESSION_SECRET.length < 12 ||
+      !await verifySession(request, env.SESSION_SECRET)
     ) {
       return jsonResponse({
         error: "Sign in as an IT administrator to edit content."
@@ -343,7 +365,9 @@ async function handleRequest(context) {
     try {
       const rawBody = await request.text();
 
-      if (new TextEncoder().encode(rawBody).length > MAX_CONTENT_BYTES) {
+      if (
+        new TextEncoder().encode(rawBody).length > MAX_CONTENT_BYTES
+      ) {
         return jsonResponse({ error: "Content is too large." }, 413);
       }
 
@@ -356,11 +380,10 @@ async function handleRequest(context) {
       return jsonResponse({ error: "Invalid content request." }, 400);
     }
 
-    const serializedContent = JSON.stringify(body.content);
+    const serialized = JSON.stringify(body.content);
 
     if (
-      typeof serializedContent !== "string" ||
-      new TextEncoder().encode(serializedContent).length > MAX_CONTENT_BYTES
+      new TextEncoder().encode(serialized).length > MAX_CONTENT_BYTES
     ) {
       return jsonResponse({ error: "Content is too large." }, 413);
     }
@@ -377,12 +400,11 @@ async function handleRequest(context) {
        ON CONFLICT(scope) DO UPDATE SET
          content = excluded.content,
          updated_at = excluded.updated_at`
-    ).bind(scope, serializedContent).run();
+    ).bind(scope, serialized).run();
 
     return jsonResponse({ saved: true });
   } catch (error) {
     console.error("Admin API request failed:", error);
-
     return jsonResponse({
       error: "The request could not be completed."
     }, 500);
