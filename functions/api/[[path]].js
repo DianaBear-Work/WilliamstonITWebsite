@@ -148,26 +148,29 @@ async function login(request, env) {
     return jsonResponse({ error: "Invalid request origin." }, 403);
   }
 
-  // Check the actual runtime bindings.
-  if (typeof env.ADMIN_PASSWORD !== "string" ||
-      env.ADMIN_PASSWORD.length === 0) {
-    console.error("Missing ADMIN_PASSWORD runtime binding.");
+  if (
+    typeof env.ADMINPASSWORD !== "string" ||
+    env.ADMINPASSWORD.length === 0
+  ) {
+    console.error("Missing ADMINPASSWORD runtime binding.");
     return jsonResponse({
-      error: "ADMIN_PASSWORD is missing from the Cloudflare environment. Check the Production secret and deployment."
+      error: "ADMINPASSWORD is missing from the Cloudflare environment. Check the Worker secret and deployment."
     }, 503);
   }
 
-  if (env.ADMIN_PASSWORD.length < 12) {
+  if (env.ADMINPASSWORD.length < 12) {
     return jsonResponse({
-      error: "ADMIN_PASSWORD must be at least 12 characters."
+      error: "ADMINPASSWORD must be at least 12 characters."
     }, 503);
   }
 
-  if (typeof env.SESSION_SECRET !== "string" ||
-      env.SESSION_SECRET.length < 12) {
-    console.error("Missing or too-short SESSION_SECRET runtime binding.");
+  if (
+    typeof env.SESSIONSECRET !== "string" ||
+    env.SESSIONSECRET.length < 32
+  ) {
+    console.error("Missing or too-short SESSIONSECRET runtime binding.");
     return jsonResponse({
-      error: "SESSION_SECRET is missing or too short. Configure a secret of at least 12 characters."
+      error: "SESSIONSECRET is missing or too short. Configure a secret of at least 32 characters."
     }, 503);
   }
 
@@ -188,7 +191,7 @@ async function login(request, env) {
 
   const ipAddress =
     request.headers.get("CF-Connecting-IP") || "unknown";
-  const ipKey = await sign(ipAddress, env.SESSION_SECRET);
+  const ipKey = await sign(ipAddress, env.SESSIONSECRET);
 
   await env.DB.prepare(
     "DELETE FROM login_attempts WHERE attempt_at < unixepoch() - 86400"
@@ -228,8 +231,8 @@ async function login(request, env) {
     return jsonResponse({ error: "Enter the admin password." }, 400);
   }
 
-  const submitted = await sign(body.password, env.SESSION_SECRET);
-  const expected = await sign(env.ADMIN_PASSWORD, env.SESSION_SECRET);
+  const submitted = await sign(body.password, env.SESSIONSECRET);
+  const expected = await sign(env.ADMINPASSWORD, env.SESSIONSECRET);
   const a = new TextEncoder().encode(expected);
   const b = new TextEncoder().encode(submitted);
 
@@ -259,7 +262,7 @@ async function login(request, env) {
 
   const token = `${expiry}.${await sign(
     expiry,
-    env.SESSION_SECRET
+    env.SESSIONSECRET
   )}`;
 
   return jsonResponse(
@@ -276,8 +279,8 @@ async function handleRequest(context) {
   try {
     if (path === "/api/session" && request.method === "GET") {
       if (
-        typeof env.SESSION_SECRET !== "string" ||
-        env.SESSION_SECRET.length < 12
+        typeof env.SESSIONSECRET !== "string" ||
+        env.SESSIONSECRET.length < 32
       ) {
         return jsonResponse({ authenticated: false });
       }
@@ -285,7 +288,7 @@ async function handleRequest(context) {
       return jsonResponse({
         authenticated: await verifySession(
           request,
-          env.SESSION_SECRET
+          env.SESSIONSECRET
         )
       });
     }
@@ -335,9 +338,9 @@ async function handleRequest(context) {
     }
 
     if (
-      typeof env.SESSION_SECRET !== "string" ||
-      env.SESSION_SECRET.length < 12 ||
-      !await verifySession(request, env.SESSION_SECRET)
+      typeof env.SESSIONSECRET !== "string" ||
+      env.SESSIONSECRET.length < 32 ||
+      !await verifySession(request, env.SESSIONSECRET)
     ) {
       return jsonResponse({
         error: "Sign in as an IT administrator to edit content."
