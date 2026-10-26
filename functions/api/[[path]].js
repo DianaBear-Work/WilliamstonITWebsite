@@ -145,11 +145,11 @@ async function login(request, env) {
     return jsonResponse({ error: "Invalid request origin." }, 403);
   }
 
-  if (!env.ADMIN_PASSWORD || env.ADMIN_PASSWORD.length < 10) {
+  if (!env.ADMIN_PASSWORD || env.ADMIN_PASSWORD.length < 16) {
     return jsonResponse({ error: "Admin password is not configured securely." }, 503);
   }
 
-  if (!env.SESSION_SECRET || env.SESSION_SECRET.length < 10) {
+  if (!env.SESSION_SECRET || env.SESSION_SECRET.length < 32) {
     return jsonResponse({ error: "Admin session signing is not configured." }, 503);
   }
 
