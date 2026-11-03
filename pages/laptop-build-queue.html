@@ -47,7 +47,7 @@
     }
 
     .site-header {
-      background: var(--black);
+      background: #000000;
       color: var(--white);
       border-bottom: 4px solid var(--orange);
     }
@@ -287,6 +287,10 @@
       border-top-color: var(--red);
     }
 
+    .build-card.is-ready {
+      border-top-color: var(--orange);
+    }
+
     .build-card-header {
       padding: 18px 19px 14px;
       display: flex;
@@ -335,6 +339,11 @@
     .status-badge.complete {
       background: #eeeeee;
       color: #444444;
+    }
+
+    .status-badge.ready {
+      background: #fff4e5;
+      color: #9a4d00;
     }
 
     .build-card-body {
@@ -436,6 +445,41 @@
       color: var(--black);
     }
 
+    .archive-section {
+      margin-top: 32px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--white);
+    }
+
+    .archive-section summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 16px 19px;
+      cursor: pointer;
+      font-weight: 800;
+      list-style-position: inside;
+    }
+
+    .archive-count {
+      color: var(--gray);
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .archive-description {
+      margin: 0;
+      padding: 0 19px 16px;
+      color: var(--gray);
+      font-size: 13px;
+    }
+
+    .archive-section .build-list {
+      padding: 0 19px 19px;
+    }
+
     .legend {
       display: flex;
       flex-wrap: wrap;
@@ -467,7 +511,7 @@
     }
 
     .site-footer {
-      background: var(--black);
+      background: #000000;
       color: #dddddd;
       border-top: 4px solid var(--orange);
       padding: 24px 0;
@@ -627,31 +671,31 @@
   </header>
 
   <script>
-    const menuToggle = document.getElementById("menu-toggle");
-    const primaryNav = document.getElementById("primary-nav");
+    const queueMenuToggle = document.getElementById("menu-toggle");
+    const queuePrimaryNav = document.getElementById("primary-nav");
 
-    menuToggle.addEventListener("click", () => {
-      const isOpen = primaryNav.classList.toggle("is-open");
-      menuToggle.setAttribute("aria-expanded", String(isOpen));
-      menuToggle.innerHTML = isOpen
+    queueMenuToggle.addEventListener("click", () => {
+      const isOpen = queuePrimaryNav.classList.toggle("is-open");
+      queueMenuToggle.setAttribute("aria-expanded", String(isOpen));
+      queueMenuToggle.innerHTML = isOpen
         ? 'Close <span aria-hidden="true">×</span>'
         : 'Menu <span aria-hidden="true">☰</span>';
     });
 
-    primaryNav.querySelectorAll("a").forEach((link) => {
+    queuePrimaryNav.querySelectorAll("a").forEach((link) => {
       link.addEventListener("click", () => {
-        primaryNav.classList.remove("is-open");
-        menuToggle.setAttribute("aria-expanded", "false");
-        menuToggle.innerHTML =
+        queuePrimaryNav.classList.remove("is-open");
+        queueMenuToggle.setAttribute("aria-expanded", "false");
+        queueMenuToggle.innerHTML =
           'Menu <span aria-hidden="true">☰</span>';
       });
     });
 
     window.addEventListener("resize", () => {
-      if (getComputedStyle(menuToggle).display === "none") {
-        primaryNav.classList.remove("is-open");
-        menuToggle.setAttribute("aria-expanded", "false");
-        menuToggle.innerHTML =
+      if (getComputedStyle(queueMenuToggle).display === "none") {
+        queuePrimaryNav.classList.remove("is-open");
+        queueMenuToggle.setAttribute("aria-expanded", "false");
+        queueMenuToggle.innerHTML =
           'Menu <span aria-hidden="true">☰</span>';
       }
     });
@@ -696,7 +740,7 @@
       <div class="section-heading">
         <div>
           <h2 id="queue-heading">Current Builds</h2>
-          <p>Search the queue or filter by build status.</p>
+          <p>Search the queue or filter by current status.</p>
         </div>
       </div>
 
@@ -717,16 +761,32 @@
           <option value="all">All builds</option>
           <option value="building">Building</option>
           <option value="blocked">Blocked</option>
+          <option value="ready">Ready for Pickup</option>
           <option value="complete">Completed</option>
         </select>
       </div>
 
       <div class="build-list" id="build-list" aria-live="polite"></div>
 
+      <details class="archive-section" id="archive-section">
+        <summary>
+          <span>Archived Builds</span>
+          <span class="archive-count" id="archive-count">0 builds</span>
+        </summary>
+        <p class="archive-description">
+          Completed builds move here after five days. Archived records are retained.
+        </p>
+        <div class="build-list" id="archive-list" aria-live="polite"></div>
+      </details>
+
       <div class="legend" aria-label="Status legend">
         <span>
           <i class="legend-dot" style="background:#15803d"></i>
           In progress
+        </span>
+        <span>
+          <i class="legend-dot" style="background:#f36c21"></i>
+          Ready for Pickup
         </span>
         <span>
           <i class="legend-dot" style="background:#b91c1c"></i>
@@ -764,7 +824,11 @@
        status:
          "building" = currently being worked on
          "blocked"  = waiting on an issue to be resolved
+         "ready"    = ready for pickup
          "complete" = build finished
+
+       stage is selected from the current-state list below.
+       completedAt is set when a build is marked complete.
 
        Set blockers to an empty array [] when there are no
        outstanding blockers.
@@ -777,8 +841,9 @@
         id: "Ticket SCTASK2430033",
         laptopType: "Standard Laptop",
         status: "complete",
-        stage: "Pickup",
+        stage: "Pending Pickup",
         updated: "2026-10-20",
+        completedAt: "2026-10-20T00:00:00.000Z",
         notes: "10/5 Microsoft Account was created, 10/20 Laptop build completed... Ready for Pickup",
         blockers: []
       },
@@ -787,7 +852,7 @@
         id: "Ticket SCTASK2422811",
         laptopType: "Standard Laptop",
         status: "blocked",
-        stage: "Account / Enrollment",
+        stage: "Account/Setup",
         updated: "2026-10-20",
         notes: "Account Disabled in AD",
         blockers: [
@@ -799,7 +864,7 @@
         id: "Ticket SCTASK2426528",
         laptopType: "Standard Laptop",
         status: "blocked",
-        stage: "Account / Enrollment",
+        stage: "Account/Setup",
         updated: "2026-10-20",
         notes: "Account Disabled",
         blockers: [
@@ -811,7 +876,7 @@
         id: "Ticket SCTASK2426532",
         laptopType: "Standard Laptop",
         status: "blocked",
-        stage: "Account / Enrollment",
+        stage: "Account/Setup",
         updated: "2026-10-20",
         notes: "No Microsoft Account",
         blockers: [
@@ -826,8 +891,12 @@
        ====================================================== */
 
     const buildList = document.getElementById("build-list");
+    const archiveList = document.getElementById("archive-list");
+    const archiveCount = document.getElementById("archive-count");
     const searchInput = document.getElementById("build-search");
     const statusFilter = document.getElementById("status-filter");
+    const archiveAfterMs = 5 * 24 * 60 * 60 * 1000;
+    let archiveTimer;
 
     function escapeHTML(value) {
       return String(value ?? "").replace(/[&<>"']/g, function (char) {
@@ -844,7 +913,7 @@
     }
 
     function getBuildStatus(build) {
-      const allowedStatuses = ["building", "blocked", "complete"];
+      const allowedStatuses = ["building", "blocked", "ready", "complete"];
 
       return allowedStatuses.includes(build.status)
         ? build.status
@@ -855,10 +924,39 @@
       const labels = {
         building: "In Progress",
         blocked: "Blocked",
+        ready: "Ready for Pickup",
         complete: "Completed"
       };
 
       return labels[status] || "In Progress";
+    }
+
+    function getCompletedAt(build) {
+      const values = [build.completedAt, build.updated];
+      for (const value of values) {
+        if (typeof value !== "string" || !value.trim()) {
+          continue;
+        }
+
+        const dateValue = /^\d{4}-\d{2}-\d{2}$/.test(value)
+          ? `${value}T00:00:00`
+          : value;
+        const timestamp = Date.parse(dateValue);
+        if (!Number.isNaN(timestamp)) {
+          return timestamp;
+        }
+      }
+
+      return null;
+    }
+
+    function isArchived(build, now) {
+      if (getBuildStatus(build) !== "complete") {
+        return false;
+      }
+
+      const completedAt = getCompletedAt(build);
+      return completedAt !== null && now - completedAt >= archiveAfterMs;
     }
 
     function renderBuildCard(build) {
@@ -898,7 +996,7 @@
           `;
 
       return `
-        <article class="build-card ${status === "blocked" ? "is-blocked" : ""} ${status === "complete" ? "is-complete" : ""}">
+        <article class="build-card ${status === "blocked" ? "is-blocked" : ""} ${status === "ready" ? "is-ready" : ""} ${status === "complete" ? "is-complete" : ""}">
           <div class="build-card-header">
             <div>
               <div class="build-id">${escapeHTML(build.id)}</div>
@@ -913,7 +1011,7 @@
           <div class="build-card-body">
             <div class="build-details">
               <div>
-                <span class="detail-label">Current Stage</span>
+                <span class="detail-label">Current State</span>
                 <span class="detail-value">${escapeHTML(build.stage || "Not specified")}</span>
               </div>
 
@@ -921,6 +1019,14 @@
                 <span class="detail-label">Last Updated</span>
                 <span class="detail-value">${escapeHTML(build.updated || "Not specified")}</span>
               </div>
+              ${status === "complete" && getCompletedAt(build) !== null ? `
+                <div>
+                  <span class="detail-label">Completed</span>
+                  <span class="detail-value">${escapeHTML(
+                    new Date(getCompletedAt(build)).toLocaleDateString()
+                  )}</span>
+                </div>
+              ` : ""}
             </div>
 
             <div class="build-notes">
@@ -935,15 +1041,19 @@
     }
 
     function updateStats() {
-      const active = laptopBuilds.filter(function (build) {
+      const now = Date.now();
+      const currentBuilds = laptopBuilds.filter(function (build) {
+        return !isArchived(build, now);
+      });
+      const active = currentBuilds.filter(function (build) {
         return getBuildStatus(build) !== "complete";
       }).length;
 
-      const blocked = laptopBuilds.filter(function (build) {
+      const blocked = currentBuilds.filter(function (build) {
         return getBuildStatus(build) === "blocked";
       }).length;
 
-      const completed = laptopBuilds.filter(function (build) {
+      const completed = currentBuilds.filter(function (build) {
         return getBuildStatus(build) === "complete";
       }).length;
 
@@ -952,12 +1062,54 @@
       document.getElementById("stat-completed").textContent = completed;
     }
 
+    function renderArchivedBuilds(now) {
+      const archivedBuilds = laptopBuilds.filter(function (build) {
+        return isArchived(build, now);
+      });
+      archiveCount.textContent =
+        `${archivedBuilds.length} ${archivedBuilds.length === 1 ? "build" : "builds"}`;
+      archiveList.innerHTML = archivedBuilds.length
+        ? archivedBuilds.map(renderBuildCard).join("")
+        : `
+          <div class="empty-state">
+            <h3>No archived builds</h3>
+            <p>Completed builds will appear here after five days.</p>
+          </div>
+        `;
+    }
+
+    function scheduleArchiveRefresh(now) {
+      window.clearTimeout(archiveTimer);
+      const nextArchiveAt = laptopBuilds
+        .filter(function (build) {
+          return getBuildStatus(build) === "complete" && !isArchived(build, now);
+        })
+        .map(function (build) {
+          const completedAt = getCompletedAt(build);
+          return completedAt === null
+            ? Infinity
+            : completedAt + archiveAfterMs;
+        })
+        .filter(Number.isFinite)
+        .sort(function (a, b) { return a - b; })[0];
+
+      if (nextArchiveAt !== undefined) {
+        archiveTimer = window.setTimeout(function () {
+          renderQueue();
+        }, Math.max(0, nextArchiveAt - Date.now()));
+      }
+    }
+
     function renderQueue() {
       const searchTerm = searchInput.value.trim().toLowerCase();
       const selectedStatus = statusFilter.value;
+      const now = Date.now();
 
       const filteredBuilds = laptopBuilds.filter(function (build) {
         const status = getBuildStatus(build);
+        if (isArchived(build, now)) {
+          return false;
+        }
 
         const searchableText = [
           build.id,
@@ -985,6 +1137,8 @@
         buildList.innerHTML = filteredBuilds.map(renderBuildCard).join("");
       }
 
+      renderArchivedBuilds(now);
+      scheduleArchiveRefresh(now);
       updateStats();
     }
 
@@ -1002,14 +1156,52 @@
           options: [
             { value: "building", label: "In progress" },
             { value: "blocked", label: "Blocked" },
+            { value: "ready", label: "Ready for Pickup" },
             { value: "complete", label: "Completed" }
           ]
         },
-        { key: "stage", label: "Current stage", type: "text" },
+        {
+          key: "stage",
+          label: "Current state",
+          type: "select",
+          options: [
+            { value: "Pending AD Enable", label: "Pending AD Enable" },
+            { value: "M365 account", label: "M365 account" },
+            { value: "Pending Hardware", label: "Pending Hardware" },
+            { value: "Account/Setup", label: "Account/Setup" },
+            { value: "Pending Pickup", label: "Pending Pickup" },
+            { value: "Completed", label: "Completed" }
+          ]
+        },
         { key: "updated", label: "Last updated", type: "text" },
         { key: "notes", label: "Build notes", type: "textarea" },
         { key: "blockers", label: "Blockers (one per line)", type: "list" }
       ],
+      prepareSaveData: function (data) {
+        const previousBuilds = new Map(laptopBuilds.map(function (build) {
+          return [build.id, build];
+        }));
+
+        return data.map(function (build) {
+          if (build.status !== "complete") {
+            const activeBuild = { ...build };
+            delete activeBuild.completedAt;
+            return activeBuild;
+          }
+
+          const previousBuild = previousBuilds.get(build.id);
+          const wasAlreadyComplete =
+            previousBuild && getBuildStatus(previousBuild) === "complete";
+          const completedAt = wasAlreadyComplete
+            ? previousBuild.completedAt ||
+              (previousBuild.updated
+                ? `${previousBuild.updated}T00:00:00.000Z`
+                : new Date().toISOString())
+            : new Date().toISOString();
+
+          return { ...build, completedAt };
+        });
+      },
       createItem: function () {
         return {
           id: "",
@@ -1029,10 +1221,12 @@
           return build &&
             typeof build.id === "string" && build.id.trim() !== "" &&
             typeof build.laptopType === "string" && build.laptopType.trim() !== "" &&
-            ["building", "blocked", "complete"].includes(build.status) &&
+            ["building", "blocked", "ready", "complete"].includes(build.status) &&
             typeof build.stage === "string" &&
             typeof build.updated === "string" &&
             typeof build.notes === "string" &&
+            (build.completedAt === undefined ||
+              typeof build.completedAt === "string") &&
             Array.isArray(build.blockers) &&
             build.blockers.every(function (blocker) {
               return typeof blocker === "string";
@@ -1043,7 +1237,27 @@
         if (!this.validateData(data)) {
           throw new Error("Saved laptop build data is invalid.");
         }
-        laptopBuilds = data;
+        laptopBuilds = data.map(function (build) {
+          let stage = build.stage;
+          if (stage === "Pickup") {
+            stage = "Pending Pickup";
+          } else if (stage === "Account / Enrollment") {
+            stage = "Account/Setup";
+          }
+
+          let completedAt = build.completedAt;
+          if (build.status === "complete") {
+            if (!completedAt) {
+              completedAt = build.updated
+                ? `${build.updated}T00:00:00.000Z`
+                : new Date().toISOString();
+            }
+          } else {
+            completedAt = undefined;
+          }
+
+          return { ...build, stage, completedAt };
+        });
         renderQueue();
       },
       setEditing: function () {}
@@ -1052,20 +1266,7 @@
     searchInput.addEventListener("input", renderQueue);
     statusFilter.addEventListener("change", renderQueue);
 
-    const menuToggle = document.getElementById("menu-toggle");
-    const primaryNav = document.getElementById("primary-nav");
 
-    menuToggle.addEventListener("click", function () {
-      const isOpen = primaryNav.classList.toggle("is-open");
-      menuToggle.setAttribute("aria-expanded", String(isOpen));
-    });
-
-    primaryNav.querySelectorAll("a").forEach(function (link) {
-      link.addEventListener("click", function () {
-        primaryNav.classList.remove("is-open");
-        menuToggle.setAttribute("aria-expanded", "false");
-      });
-    });
 
     document.getElementById("current-year").textContent =
       new Date().getFullYear();

@@ -330,7 +330,15 @@ window.siteAdminConfig = {
     { key: "name", label: "Item name", type: "text" },
     { key: "category", label: "Category", type: "text" },
     { key: "quantity", label: "Quantity or availability", type: "text" },
-    { key: "restockStatus", label: "Restock status", type: "text" },
+    {
+      key: "restockStatus",
+      label: "Restock status",
+      type: "select",
+      options: [
+        { value: "Not Yet Requested", label: "Not Yet Requested" },
+        { value: "Ordered", label: "Ordered" }
+      ]
+    },
     { key: "description", label: "Description", type: "textarea" },
     {
       key: "requestType",
@@ -363,7 +371,7 @@ window.siteAdminConfig = {
         typeof item.name === "string" && item.name.trim() !== "" &&
         typeof item.category === "string" &&
         (typeof item.quantity === "number" || typeof item.quantity === "string") &&
-        typeof item.restockStatus === "string" &&
+        ["Not Yet Requested", "Ordered"].includes(item.restockStatus) &&
         typeof item.description === "string" &&
         ["laptop", "accessory"].includes(item.requestType);
     });

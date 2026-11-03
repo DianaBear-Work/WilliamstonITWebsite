@@ -63,10 +63,13 @@ binding and encrypted secrets to be configured in Cloudflare.
 
 - **Equipment inventory:** add, remove, or edit entries. Each item includes
   `id`, `name`, `category`, `quantity`, `restockStatus`, `description`, and
-  `requestType` (`laptop` or `accessory`).
+  `requestType` (`laptop` or `accessory`). Restock status can be set to
+  `Not Yet Requested` or `Ordered`.
 - **Laptop build queue:** add, remove, or edit entries. Each build includes `id`,
-  `laptopType`, `status` (`building`, `blocked`, or `complete`), `stage`,
-  `updated`, `notes`, and a `blockers` array.
+  `laptopType`, `status` (`building`, `blocked`, `ready`, or `complete`), a
+  `stage` selected from the current-state list, `updated`, `notes`, and a
+  `blockers` array. Builds move to the viewable Archived Builds section five
+  days after completion; archived entries remain saved.
 - **Updates:** sign in and edit the visible page text directly. Save publishes
   the edits. Unsafe HTML and event-handler attributes are removed before the
   saved content is displayed.

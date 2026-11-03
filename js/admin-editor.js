@@ -234,6 +234,18 @@
             optionElement.textContent = option.label;
             input.appendChild(optionElement);
           });
+          const currentValue = record[field.key] == null
+            ? ""
+            : String(record[field.key]);
+          if (!Array.from(input.options).some(function (option) {
+            return option.value === currentValue;
+          }) && currentValue) {
+            const existingOption = document.createElement("option");
+            existingOption.value = currentValue;
+            existingOption.textContent = `${currentValue} (existing)`;
+            input.appendChild(existingOption);
+          }
+          input.value = currentValue;
         } else if (field.type === "textarea" || field.type === "list") {
           input = document.createElement("textarea");
           input.rows = field.type === "list" ? 3 : 4;
@@ -388,6 +400,9 @@
           content = sanitizeAdminHtml(config.getData());
         } else {
           content = readRecords();
+          if (typeof config.prepareSaveData === "function") {
+            content = config.prepareSaveData(content);
+          }
           if (!config.validateData(content)) {
             throw new Error("Check the required fields and status values.");
           }
