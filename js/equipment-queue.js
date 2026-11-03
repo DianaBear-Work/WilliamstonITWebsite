@@ -321,32 +321,6 @@ function setupInventorySearch() {
   });
 }
 
-/* ---------------------------------------------------------
-   MOBILE NAVIGATION
-   --------------------------------------------------------- */
-
-function setupMobileNavigation() {
-  const menuToggle = document.querySelector(".menu-toggle");
-  const primaryNav = getElement("primary-nav");
-
-  if (!menuToggle || !primaryNav) {
-    return;
-  }
-
-  menuToggle.addEventListener("click", function () {
-    const isOpen = primaryNav.classList.toggle("is-open");
-
-    menuToggle.setAttribute("aria-expanded", String(isOpen));
-  });
-
-  primaryNav.querySelectorAll("a").forEach(function (link) {
-    link.addEventListener("click", function () {
-      primaryNav.classList.remove("is-open");
-      menuToggle.setAttribute("aria-expanded", "false");
-    });
-  });
-}
-
 window.siteAdminConfig = {
   scope: "equipment",
   mode: "json",
@@ -411,7 +385,6 @@ window.siteAdminConfig = {
    --------------------------------------------------------- */
 
 document.addEventListener("DOMContentLoaded", function () {
-  setupMobileNavigation();
   setupInventorySearch();
   renderInventory();
   updateStats();

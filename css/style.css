@@ -977,14 +977,46 @@ img {
 @media (max-width: 980px) {
   .header-inner {
     gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .menu-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
   }
 
   .nav-links {
-    gap: 13px;
+    display: none;
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 4px 0 8px;
+  }
+
+  .nav-links.is-open {
+    display: flex;
   }
 
   .nav-links a {
-    font-size: 12px;
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 12px 2px;
+    border-bottom: 1px solid #333;
+  }
+
+  .menu-toggle {
+    min-width: 76px;
+    min-height: 44px;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .site-header .admin-open,
+  .equipment-page-header .admin-open {
+    margin-left: auto;
   }
 
   .hero-grid {
@@ -1045,30 +1077,6 @@ img {
   .site-brand-text {
     font-size: 10px;
     letter-spacing: 1px;
-  }
-
-  .menu-toggle {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .nav-links {
-    display: none;
-    width: 100%;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0;
-    padding: 4px 0 8px;
-  }
-
-  .nav-links.is-open {
-    display: flex;
-  }
-
-  .nav-links a {
-    padding: 12px 2px;
-    border-bottom: 1px solid #333;
   }
 
   .hero-grid {
@@ -1250,19 +1258,6 @@ img {
   .site-brand-text {
     white-space: normal;
     overflow-wrap: anywhere;
-  }
-
-  .menu-toggle {
-    min-width: 76px;
-    min-height: 44px;
-    justify-content: center;
-    flex-shrink: 0;
-  }
-
-  .nav-links a {
-    display: flex;
-    align-items: center;
-    min-height: 44px;
   }
 
   .button,
@@ -1623,5 +1618,185 @@ a {
   .eq-form button,
   .eq-small {
     grid-column: auto;
+  }
+}
+
+
+/* SHARED HEADING SCALE */
+
+:root {
+  --h1-hero: clamp(36px, 5vw, 56px);
+  --h1-page: clamp(30px, 4vw, 44px);
+  --h2-section: clamp(24px, 2.6vw, 30px);
+  --h2-card: 20px;
+  --h3-item: 17px;
+  --heading-gap: 14px;
+  --section-gap: 28px;
+}
+
+h1,
+h2,
+h3 {
+  max-width: 100%;
+  font-family: inherit;
+}
+
+h1 {
+  font-weight: 800;
+  line-height: 1.12;
+  letter-spacing: -1.2px;
+}
+
+h2 {
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -.6px;
+}
+
+h3 {
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: -.2px;
+}
+
+.eyebrow,
+.eq-eyebrow {
+  color: var(--orange);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.6px;
+  line-height: 1.4;
+  margin: 0 0 10px;
+}
+
+.hero h1 {
+  font-size: var(--h1-hero);
+  line-height: 1.1;
+  letter-spacing: -1.6px;
+  margin: 0 0 var(--heading-gap);
+}
+
+.page-hero h1,
+.eq-hero h1,
+.equipment-page .page-hero h1 {
+  font-size: var(--h1-page);
+  line-height: 1.12;
+  letter-spacing: -1.2px;
+  margin: 0 0 var(--heading-gap);
+}
+
+.eq-hero h1 span {
+  color: var(--orange);
+}
+
+.page-hero,
+.eq-hero {
+  padding: 56px 0;
+}
+
+.section-heading h2,
+.section-title,
+.documentation-intro h2,
+.bottom-contact h2,
+.updates-strip h2,
+.updates-banner h2,
+.appointment-main h2,
+.featured-heading h2,
+.eq-heading h2,
+.equipment-page .section-heading h2 {
+  font-size: var(--h2-section);
+  line-height: 1.2;
+  letter-spacing: -.6px;
+  margin: 0;
+}
+
+.section-heading,
+.eq-heading,
+.featured-heading {
+  align-items: flex-end;
+  margin-bottom: var(--section-gap);
+}
+
+.section-title {
+  margin: 0 0 var(--section-gap);
+}
+
+.section-title-spaced {
+  margin-top: 48px;
+}
+
+.appointment-main h2 {
+  margin-bottom: var(--heading-gap);
+}
+
+.section-heading > p,
+.eq-heading p:not(.eq-eyebrow),
+.featured-heading p {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.hero-contact h2,
+.contact-panel h2,
+.contact-card h2,
+.guide-card h2,
+.update-card h2,
+.cta-panel h2,
+.documentation-card h2 {
+  font-size: var(--h2-card);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -.3px;
+  margin: 0 0 8px;
+}
+
+.feature-card h3,
+.resource-card h3,
+.featured-card h3,
+.project-card h3,
+.updates-list .update-card h3,
+.eq-record h3,
+.eq-stock h3,
+.eq-form h3 {
+  font-size: var(--h3-item);
+  line-height: 1.35;
+  letter-spacing: -.2px;
+  margin: 0 0 8px;
+}
+
+.page-hero p:not(.eyebrow),
+.eq-hero p:not(.eq-eyebrow) {
+  max-width: 680px;
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+@media (max-width: 700px) {
+  :root {
+    --h1-hero: clamp(32px, 9vw, 42px);
+    --h1-page: clamp(28px, 8vw, 36px);
+    --h2-section: clamp(22px, 6vw, 28px);
+    --section-gap: 22px;
+  }
+
+  h1,
+  h2,
+  h3 {
+    overflow-wrap: anywhere;
+  }
+
+  .section-heading,
+  .eq-heading,
+  .featured-heading {
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .page-hero,
+  .eq-hero {
+    padding: 42px 0;
   }
 }

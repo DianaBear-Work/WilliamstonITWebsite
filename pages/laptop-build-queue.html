@@ -25,6 +25,9 @@
       --light-gray: #f5f5f5;
       --border: #dedede;
       --white: #ffffff;
+      --queue-h1: clamp(30px, 5vw, 44px);
+      --queue-h2: clamp(22px, 2.6vw, 24px);
+      --queue-h3: 18px;
     }
 
     * {
@@ -52,19 +55,20 @@
     .header-inner {
       max-width: 1250px;
       margin: auto;
-      padding: 15px 24px;
+      padding: 15px 20px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 24px;
+      gap: 16px;
     }
 
     .brand {
       display: flex;
       align-items: center;
-      gap: 15px;
+      gap: 12px;
       text-decoration: none;
       min-width: 0;
+      flex-shrink: 0;
     }
 
     .brand img {
@@ -101,14 +105,17 @@
     .nav-links {
       display: flex;
       align-items: center;
-      gap: 22px;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      gap: 8px 14px;
     }
 
     .nav-links a {
       text-decoration: none;
       color: #eeeeee;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 600;
+      white-space: nowrap;
     }
 
     .nav-links a:hover,
@@ -139,8 +146,11 @@
 
     .hero h1 {
       margin: 0 0 12px;
-      font-size: clamp(30px, 5vw, 44px);
-      line-height: 1.15;
+      font-size: var(--queue-h1);
+      font-weight: 800;
+      line-height: 1.12;
+      letter-spacing: -.03em;
+      overflow-wrap: anywhere;
     }
 
     .hero p {
@@ -208,7 +218,10 @@
     }
 
     .section-heading h2 {
-      font-size: 24px;
+      font-size: var(--queue-h2);
+      font-weight: 800;
+      line-height: 1.2;
+      letter-spacing: -.6px;
       margin: 0;
     }
 
@@ -293,8 +306,10 @@
 
     .build-card h3 {
       margin: 4px 0 0;
-      font-size: 20px;
-      line-height: 1.3;
+      font-size: var(--queue-h3);
+      font-weight: 700;
+      line-height: 1.35;
+      letter-spacing: -.2px;
       overflow-wrap: anywhere;
     }
 
@@ -480,7 +495,7 @@
       color: var(--orange);
     }
 
-    @media (max-width: 760px) {
+    @media (max-width: 1000px) {
       .header-inner {
         flex-wrap: wrap;
         padding: 13px 18px;
@@ -492,6 +507,7 @@
 
       .brand-text {
         font-size: 11px;
+        white-space: nowrap;
       }
 
       .brand-text strong {
@@ -518,6 +534,17 @@
       .nav-links a {
         padding: 12px 4px;
         border-top: 1px solid #393939;
+      }
+
+      .admin-open {
+        margin-left: auto;
+      }
+    }
+
+    @media (max-width: 760px) {
+      :root {
+        --queue-h1: clamp(28px, 8vw, 36px);
+        --queue-h2: clamp(21px, 6vw, 24px);
       }
 
       .page-container {
@@ -554,6 +581,10 @@
       .filter-select {
         flex: 1 1 100%;
       }
+
+      .hero-note {
+        flex-wrap: wrap;
+      }
     }
   </style>
 </head>
@@ -568,7 +599,6 @@
         >
         <span class="brand-text">
           <strong>Pelzer 2 IT</strong>
-          IT Operations
         </span>
       </a>
 
@@ -595,6 +625,37 @@
       <button class="admin-open" id="admin-open" type="button">IT admin sign in</button>
     </div>
   </header>
+
+  <script>
+    const menuToggle = document.getElementById("menu-toggle");
+    const primaryNav = document.getElementById("primary-nav");
+
+    menuToggle.addEventListener("click", () => {
+      const isOpen = primaryNav.classList.toggle("is-open");
+      menuToggle.setAttribute("aria-expanded", String(isOpen));
+      menuToggle.innerHTML = isOpen
+        ? 'Close <span aria-hidden="true">×</span>'
+        : 'Menu <span aria-hidden="true">☰</span>';
+    });
+
+    primaryNav.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", () => {
+        primaryNav.classList.remove("is-open");
+        menuToggle.setAttribute("aria-expanded", "false");
+        menuToggle.innerHTML =
+          'Menu <span aria-hidden="true">☰</span>';
+      });
+    });
+
+    window.addEventListener("resize", () => {
+      if (getComputedStyle(menuToggle).display === "none") {
+        primaryNav.classList.remove("is-open");
+        menuToggle.setAttribute("aria-expanded", "false");
+        menuToggle.innerHTML =
+          'Menu <span aria-hidden="true">☰</span>';
+      }
+    });
+  </script>
 
   <section class="hero">
     <div class="page-container">

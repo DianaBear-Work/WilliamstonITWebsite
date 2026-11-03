@@ -26,9 +26,9 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
 
-    // Close the menu when switching back to desktop width
+    // Close the menu when the responsive layout hides the toggle
     window.addEventListener("resize", () => {
-      if (window.innerWidth > 700) {
+      if (getComputedStyle(toggle).display === "none") {
         nav.classList.remove("is-open");
         toggle.setAttribute("aria-expanded", "false");
         toggle.innerHTML =
