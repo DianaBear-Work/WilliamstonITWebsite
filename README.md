@@ -95,9 +95,8 @@ binding and encrypted secrets to be configured in Cloudflare.
   `stage` selected from the current-state list, `updated`, `notes`, and a
   `blockers` array. Builds move to the viewable Archived Builds section five
   days after completion; archived entries remain saved.
-- **Updates:** sign in and edit the visible page text directly. Save publishes
-  the edits, including project descriptions and statuses in Projects in
-  Progress. Unsafe HTML and event-handler attributes are removed before the
-  saved content is displayed.
+- **Updates:** add, remove, reorder, and edit only the cards in Projects in
+  Progress, including each status label and its circle color. Helpful
+  Information and all following content are not editable from the admin panel.
 - **Restore published version:** remove saved edits for that page and return
   to the version shipped with the website.

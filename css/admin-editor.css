@@ -26,10 +26,14 @@
 .admin-panel {
   position: fixed;
   z-index: 1000;
-  inset: 0;
-  margin: auto;
+  top: 16px;
+  right: 16px;
+  left: auto;
+  bottom: auto;
+  margin: 0;
   width: min(540px, calc(100vw - 32px));
-  max-height: min(80vh, 760px);
+  max-height: min(78vh, 760px);
+  box-sizing: border-box;
   overflow: auto;
   padding: 20px;
   border: 1px solid #bbb;
@@ -46,11 +50,16 @@
 }
 
 .admin-panel-header {
+  position: sticky;
+  top: -20px;
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  margin-bottom: 12px;
+  margin: -8px 0 12px;
+  padding: 8px 0;
+  background: #fff;
 }
 
 .admin-dashboard-nav {
@@ -121,6 +130,12 @@
   resize: vertical;
   font-family: Consolas, "Courier New", monospace;
   font-size: 12px;
+}
+
+.admin-panel:not(.admin-panel-visual) textarea {
+  min-height: 96px;
+  font-family: inherit;
+  font-size: inherit;
 }
 
 .admin-panel input:focus,
@@ -218,8 +233,14 @@
 
 @media (max-width: 600px) {
   .admin-panel {
+    top: 8px;
+    right: 8px;
     width: calc(100vw - 16px);
-    max-height: 85vh;
+    max-height: 75vh;
     padding: 16px;
+  }
+
+  .admin-panel-header {
+    top: -16px;
   }
 }

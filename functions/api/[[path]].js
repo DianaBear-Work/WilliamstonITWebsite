@@ -218,10 +218,32 @@ function isBuilds(value) {
     );
 }
 
+function isProjectUpdates(value) {
+  const circleColors = new Set(["orange", "yellow", "green", "gray"]);
+  return Array.isArray(value) &&
+    value.length <= 100 &&
+    value.every(project =>
+      project &&
+      isString(project.title, 200) &&
+      project.title.trim() !== "" &&
+      isString(project.status, 100) &&
+      project.status.trim() !== "" &&
+      circleColors.has(project.circleColor) &&
+      Array.isArray(project.descriptions) &&
+      project.descriptions.length <= 10 &&
+      project.descriptions.every(description =>
+        isString(description, 2000) && description.trim() !== ""
+      ) &&
+      isString(project.detailLabel, 100) &&
+      isString(project.detailText, 2000)
+    );
+}
+
 function isValidContent(scope, content) {
   if (scope === "equipment") return isEquipment(content);
   if (scope === "builds") return isBuilds(content);
-  return scope === "updates" && isString(content, 150_000);
+  return scope === "updates" &&
+    (isString(content, 150_000) || isProjectUpdates(content));
 }
 
 async function getContent(scope, env) {
@@ -628,7 +650,7 @@ async function handleRequest(context) {
   } catch (error) {
     console.error("Admin API request failed:", error);
     return jsonResponse({
-      error: "The request could not be completed."
+      error: "The admin service failed (HTTP 500). Check the Cloudflare Pages Function logs and D1 database setup; details are recorded in the server logs."
     }, 500);
   }
 }

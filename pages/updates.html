@@ -83,6 +83,22 @@
       background: #666;
     }
 
+    .project-status.circle-orange::before {
+      background: #FE5B1B;
+    }
+
+    .project-status.circle-yellow::before {
+      background: #9a6700;
+    }
+
+    .project-status.circle-green::before {
+      background: #218739;
+    }
+
+    .project-status.circle-gray::before {
+      background: #666;
+    }
+
     .project-detail {
       margin-top: auto !important;
       padding-top: 0.75rem;
@@ -521,28 +537,192 @@
 
   <script>
     (function () {
-      const editableContent = document.getElementById("admin-editable-updates");
-      const initialContent = editableContent.innerHTML;
+      const projectGrid = document.querySelector(".project-grid");
+
+      function projectFromCard(card) {
+        const status = card.querySelector(".project-status");
+        const colorClasses = ["orange", "yellow", "green", "gray"];
+        const classToColor = {
+          "in-progress": "orange",
+          waiting: "yellow",
+          complete: "green",
+          planning: "gray"
+        };
+        const statusClass = Array.from(status.classList).find(function (name) {
+          return Object.prototype.hasOwnProperty.call(classToColor, name);
+        });
+        const detail = card.querySelector(".project-detail");
+        const detailLabel = detail && detail.querySelector("strong");
+        let detailText = "";
+
+        if (detail) {
+          const detailCopy = detail.cloneNode(true);
+          const detailCopyLabel = detailCopy.querySelector("strong");
+          if (detailCopyLabel) {
+            detailCopyLabel.remove();
+          }
+          detailText = detailCopy.textContent.replace(/\s+/g, " ").trim();
+        }
+
+        const colorClass = Array.from(status.classList).find(function (name) {
+          return colorClasses.includes(name.replace("circle-", ""));
+        });
+
+        return {
+          title: card.querySelector("h3").textContent.trim(),
+          status: status.textContent.trim(),
+          circleColor: colorClass
+            ? colorClass.replace("circle-", "")
+            : classToColor[statusClass] || "gray",
+          descriptions: Array.from(card.children)
+            .filter(function (child) {
+              return child.tagName === "P" &&
+                !child.classList.contains("project-detail");
+            })
+            .map(function (paragraph) {
+              return paragraph.textContent.replace(/\s+/g, " ").trim();
+            })
+            .filter(Boolean),
+          detailLabel: detailLabel
+            ? detailLabel.textContent.replace(/:\s*$/, "").trim()
+            : "",
+          detailText: detailText
+        };
+      }
+
+      function readLegacyProjectCards(html) {
+        const parsed = new DOMParser().parseFromString(html, "text/html");
+        const cards = parsed.querySelectorAll(".project-grid .project-card");
+        if (!cards.length) {
+          throw new Error("Saved project data could not be read.");
+        }
+        return Array.from(cards, projectFromCard);
+      }
+
+      function renderProjects(projects) {
+        projectGrid.replaceChildren();
+        projects.forEach(function (project) {
+          const card = document.createElement("article");
+          card.className = "project-card";
+
+          const status = document.createElement("span");
+          status.className = `project-status circle-${project.circleColor}`;
+          status.textContent = project.status;
+          card.appendChild(status);
+
+          const title = document.createElement("h3");
+          title.textContent = project.title;
+          card.appendChild(title);
+
+          project.descriptions.forEach(function (description) {
+            const paragraph = document.createElement("p");
+            paragraph.textContent = description;
+            card.appendChild(paragraph);
+          });
+
+          if (project.detailLabel || project.detailText) {
+            const detail = document.createElement("p");
+            detail.className = "project-detail";
+            if (project.detailLabel) {
+              const label = document.createElement("strong");
+              label.textContent = `${project.detailLabel}:`;
+              detail.appendChild(label);
+              if (project.detailText) {
+                detail.appendChild(document.createTextNode(" "));
+              }
+            }
+            detail.appendChild(document.createTextNode(project.detailText));
+            card.appendChild(detail);
+          }
+
+          projectGrid.appendChild(card);
+        });
+      }
+
+      const initialProjects = Array.from(
+        projectGrid.querySelectorAll(".project-card"),
+        projectFromCard
+      );
 
       window.siteAdminConfig = {
         scope: "updates",
-        mode: "visual",
-        initialData: initialContent,
+        mode: "json",
+        recordLabel: "Project task",
+        editorHelp: "Edit only the project cards under Projects in Progress. Add or remove cards and choose the status circle color. Helpful Information and all content below it are not editable here.",
+        initialData: initialProjects,
+        editorFields: [
+          { key: "title", label: "Project title", type: "text" },
+          { key: "status", label: "Status label", type: "text" },
+          {
+            key: "circleColor",
+            label: "Status circle color",
+            type: "select",
+            options: [
+              { value: "orange", label: "Orange" },
+              { value: "yellow", label: "Yellow" },
+              { value: "green", label: "Green" },
+              { value: "gray", label: "Gray" }
+            ]
+          },
+          {
+            key: "description",
+            label: "Project description (separate paragraphs with a blank line)",
+            type: "textarea"
+          },
+          { key: "detailLabel", label: "Detail label (optional)", type: "text" },
+          { key: "detailText", label: "Detail text (optional)", type: "textarea" }
+        ],
+        createItem: function () {
+          return {
+            title: "New project",
+            status: "In Progress",
+            circleColor: "orange",
+            description: "",
+            detailLabel: "",
+            detailText: ""
+          };
+        },
+        prepareSaveData: function (projects) {
+          return projects.map(function (project) {
+            const { description, ...savedProject } = project;
+            return {
+              ...savedProject,
+              descriptions: description.split(/\r?\n\s*\r?\n/)
+                .map(function (paragraph) {
+                  return paragraph.trim();
+                })
+                .filter(Boolean)
+            };
+          });
+        },
+        validateData: function (projects) {
+          return projects.length <= 100 && projects.every(function (project) {
+            return typeof project.title === "string" &&
+              project.title.trim() !== "" &&
+              typeof project.status === "string" &&
+              project.status.trim() !== "" &&
+              ["orange", "yellow", "green", "gray"].includes(project.circleColor);
+          });
+        },
         getData: function () {
-          return editableContent.innerHTML;
+          return Array.from(
+            projectGrid.querySelectorAll(".project-card"),
+            projectFromCard
+          ).map(function (project) {
+            return {
+              ...project,
+              description: project.descriptions.join("\n\n")
+            };
+          });
         },
-        applyData: function (html) {
-          if (typeof html !== "string") {
-            throw new Error("Saved updates content is invalid.");
+        applyData: function (content) {
+          const projects = typeof content === "string"
+            ? readLegacyProjectCards(content)
+            : content;
+          if (!Array.isArray(projects) || projects.length > 100) {
+            throw new Error("Saved project data is invalid.");
           }
-          editableContent.innerHTML = window.sanitizeAdminHtml(html);
-        },
-        validateData: function () {
-          return true;
-        },
-        setEditing: function (isEditing) {
-          editableContent.contentEditable = String(Boolean(isEditing));
-          editableContent.classList.toggle("admin-editing", Boolean(isEditing));
+          renderProjects(projects);
         }
       };
     })();

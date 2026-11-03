@@ -125,11 +125,15 @@
         const unavailableAtCurrentSite =
           window.location.protocol === "file:" ||
           window.location.hostname.endsWith("github.io");
+        const responseError = typeof result.error === "string" &&
+          result.error.trim()
+          ? result.error
+          : null;
         throw new Error(
-          result.error ||
+          responseError ||
           (unavailableAtCurrentSite || response.status === 404
             ? adminServiceUnavailableMessage()
-            : "The request could not be completed.")
+            : `The admin service returned HTTP ${response.status} for ${url}. Please try again; if it continues, contact the site administrator.`)
         );
       }
 
@@ -140,6 +144,9 @@
   function buildPanel() {
     const panel = document.createElement("dialog");
     panel.className = "admin-panel";
+    if (config.mode === "visual") {
+      panel.classList.add("admin-panel-visual");
+    }
     panel.id = "admin-panel";
     panel.setAttribute("aria-labelledby", "admin-panel-title");
     panel.innerHTML = `
@@ -369,6 +376,7 @@
     }
 
     help.textContent =
+      config.editorHelp ||
       "Update fields, use Move up or Move down to arrange entries, then save to publish.";
     renderRecords(config.getData());
   }
@@ -381,7 +389,7 @@
       const fieldset = document.createElement("fieldset");
       fieldset.className = "admin-record";
       const legend = document.createElement("legend");
-      legend.textContent = `Entry ${index + 1}`;
+      legend.textContent = `${config.recordLabel || "Entry"} ${index + 1}`;
       fieldset.appendChild(legend);
 
       config.editorFields.forEach(function (field) {
@@ -554,7 +562,7 @@
         panel.close();
         finishClosingPanel();
       } else {
-        panel.showModal();
+        panel.show();
         openButton.setAttribute("aria-expanded", "true");
         if (authenticated) {
           prepareEditor();
@@ -729,7 +737,9 @@
     panel.querySelector('[data-action="logout"]').addEventListener("click", async function () {
       try {
         await request("/api/logout", { method: "POST" });
-        config.setEditing(false);
+        if (config.mode === "visual") {
+          config.setEditing(false);
+        }
         applyContent(lastSavedContent);
         authenticated = false;
         isMaster = false;
