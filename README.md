@@ -72,8 +72,8 @@ binding and encrypted secrets to be configured in Cloudflare.
 - **Equipment inventory:** add, remove, or edit entries. Each item includes
   `id`, `name`, `category`, `quantity`, `restockStatus`, `description`, and
   `requestType` (`laptop` or `accessory`). Use Move up and Move down to set
-  their display order. Restock status can be set to `Not Yet Requested` or
-  `Ordered`.
+  their display order. Restock status can be set to `Not Yet Requested`,
+  `Requested`, `Ordered`, or `Restocked`.
 - **Laptop build queue:** add, remove, or edit entries. Each build includes `id`,
   `laptopType`, `status` (`building`, `blocked`, `ready`, or `complete`), a
   `stage` selected from the current-state list, `updated`, `notes`, and a

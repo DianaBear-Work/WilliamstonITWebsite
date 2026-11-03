@@ -3,6 +3,12 @@ const SESSION_COOKIE = "pelzer_it_admin";
 const SESSION_SECONDS = 8 * 60 * 60;
 const MAX_CONTENT_BYTES = 200_000;
 const CONTENT_SCOPES = new Set(["equipment", "builds", "updates"]);
+const RESTOCK_STATUSES = new Set([
+  "Not Yet Requested",
+  "Ordered",
+  "Requested",
+  "Restocked"
+]);
 
 function getAdminPassword(env) {
   return typeof env.ADMIN_PASSWORD === "string"
@@ -151,7 +157,7 @@ function isEquipment(value) {
       isString(item.category, 100) &&
       (typeof item.quantity === "number" ||
         isString(item.quantity, 100)) &&
-      isString(item.restockStatus, 200) &&
+      RESTOCK_STATUSES.has(item.restockStatus) &&
       isString(item.description, 2000) &&
       ["laptop", "accessory"].includes(item.requestType)
     );

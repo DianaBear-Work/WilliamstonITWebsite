@@ -336,7 +336,9 @@ window.siteAdminConfig = {
       type: "select",
       options: [
         { value: "Not Yet Requested", label: "Not Yet Requested" },
-        { value: "Ordered", label: "Ordered" }
+        { value: "Ordered", label: "Ordered" },
+        { value: "Requested", label: "Requested" },
+        { value: "Restocked", label: "Restocked" }
       ]
     },
     { key: "description", label: "Description", type: "textarea" },
@@ -371,7 +373,8 @@ window.siteAdminConfig = {
         typeof item.name === "string" && item.name.trim() !== "" &&
         typeof item.category === "string" &&
         (typeof item.quantity === "number" || typeof item.quantity === "string") &&
-        ["Not Yet Requested", "Ordered"].includes(item.restockStatus) &&
+        ["Not Yet Requested", "Ordered", "Requested", "Restocked"]
+          .includes(item.restockStatus) &&
         typeof item.description === "string" &&
         ["laptop", "accessory"].includes(item.requestType);
     });
