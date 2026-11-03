@@ -199,12 +199,12 @@
 
     if (config.mode === "visual") {
       help.textContent =
-        "Edit the visible page text below the toolbar, then save. Links and page structure are preserved and unsafe markup is removed.";
+        "On the Updates page, click text in Projects in Progress or IT Reminders & Resources to edit it. Save changes to publish. Your admin sign-in is shared across admin-enabled pages on this site.";
       return;
     }
 
     help.textContent =
-      "Update the fields below, add or remove entries, then save to publish.";
+      "Update fields, use Move up or Move down to arrange entries, then save to publish.";
     renderRecords(config.getData());
   }
 
@@ -267,6 +267,41 @@
         fieldset.append(label, input);
       });
 
+      const actions = document.createElement("div");
+      actions.className = "admin-record-actions";
+
+      const moveUpButton = document.createElement("button");
+      moveUpButton.type = "button";
+      moveUpButton.textContent = "Move up";
+      moveUpButton.setAttribute("aria-label", `Move entry ${index + 1} up`);
+      moveUpButton.disabled = index === 0;
+      moveUpButton.addEventListener("click", function () {
+        const updatedRecords = readRecords();
+        [updatedRecords[index - 1], updatedRecords[index]] =
+          [updatedRecords[index], updatedRecords[index - 1]];
+        renderRecords(updatedRecords);
+        container.querySelector(
+          `.admin-record:nth-child(${index}) .admin-record-actions button:nth-child(2)`
+        ).focus();
+      });
+      actions.appendChild(moveUpButton);
+
+      const moveDownButton = document.createElement("button");
+      moveDownButton.type = "button";
+      moveDownButton.textContent = "Move down";
+      moveDownButton.setAttribute("aria-label", `Move entry ${index + 1} down`);
+      moveDownButton.disabled = index === records.length - 1;
+      moveDownButton.addEventListener("click", function () {
+        const updatedRecords = readRecords();
+        [updatedRecords[index], updatedRecords[index + 1]] =
+          [updatedRecords[index + 1], updatedRecords[index]];
+        renderRecords(updatedRecords);
+        container.querySelector(
+          `.admin-record:nth-child(${index + 2}) .admin-record-actions button`
+        ).focus();
+      });
+      actions.appendChild(moveDownButton);
+
       const removeButton = document.createElement("button");
       removeButton.type = "button";
       removeButton.textContent = "Remove entry";
@@ -276,7 +311,8 @@
         updatedRecords.splice(index, 1);
         renderRecords(updatedRecords);
       });
-      fieldset.appendChild(removeButton);
+      actions.appendChild(removeButton);
+      fieldset.appendChild(actions);
       container.appendChild(fieldset);
     });
   }

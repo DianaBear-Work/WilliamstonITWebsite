@@ -13,7 +13,9 @@ This setup uses one shared admin password rather than individual Microsoft
 accounts. The password is checked by a Cloudflare Pages Function and is never
 included in the website files. Use a strong password, share it only with
 authorized admins, and rotate it if it is exposed. Since admins share it, the
-site cannot identify which admin made a change.
+site cannot identify which admin made a change. After signing in, the same
+browser remains signed in across admin-enabled pages on the hosted site for up
+to eight hours.
 
 All saved content remains public. Do not add employee names, credentials,
 personal information, or confidential ticket details to the queues or updates.
@@ -63,15 +65,17 @@ binding and encrypted secrets to be configured in Cloudflare.
 
 - **Equipment inventory:** add, remove, or edit entries. Each item includes
   `id`, `name`, `category`, `quantity`, `restockStatus`, `description`, and
-  `requestType` (`laptop` or `accessory`). Restock status can be set to
-  `Not Yet Requested` or `Ordered`.
+  `requestType` (`laptop` or `accessory`). Use Move up and Move down to set
+  their display order. Restock status can be set to `Not Yet Requested` or
+  `Ordered`.
 - **Laptop build queue:** add, remove, or edit entries. Each build includes `id`,
   `laptopType`, `status` (`building`, `blocked`, `ready`, or `complete`), a
   `stage` selected from the current-state list, `updated`, `notes`, and a
   `blockers` array. Builds move to the viewable Archived Builds section five
   days after completion; archived entries remain saved.
 - **Updates:** sign in and edit the visible page text directly. Save publishes
-  the edits. Unsafe HTML and event-handler attributes are removed before the
+  the edits, including project descriptions and statuses in Projects in
+  Progress. Unsafe HTML and event-handler attributes are removed before the
   saved content is displayed.
 - **Restore published version:** remove saved edits for that page and return
   to the version shipped with the website.

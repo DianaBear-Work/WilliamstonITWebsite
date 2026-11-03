@@ -138,8 +138,16 @@
   font-weight: 700;
 }
 
-.admin-record > button {
+.admin-record-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
   margin-top: 10px;
+}
+
+.admin-record-actions button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
 }
 
 .admin-editing {
