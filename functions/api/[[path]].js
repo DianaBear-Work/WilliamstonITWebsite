@@ -7,6 +7,18 @@ const MAX_ADMIN_USERS = 3;
 const MIN_ADMIN_PASSWORD_LENGTH = 16;
 const ADMIN_USER_ITERATIONS = 120_000;
 
+function getAdminPassword(env) {
+  return typeof env.ADMIN_PASSWORD === "string"
+    ? env.ADMIN_PASSWORD
+    : env.ADMINPASSWORD;
+}
+
+function getSessionSecret(env) {
+  return typeof env.SESSION_SECRET === "string"
+    ? env.SESSION_SECRET
+    : env.SESSIONSECRET;
+}
+
 function jsonResponse(data, status = 200, headers = {}) {
   return new Response(JSON.stringify(data), {
     status,
@@ -246,17 +258,15 @@ async function handleAdminUsers(request, env, pathname) {
   );
   if (!usersPath && !userMatch) return null;
 
-  if (
-    typeof env.SESSION_SECRET !== "string" ||
-    env.SESSION_SECRET.length < 32
-  ) {
+  const sessionSecret = getSessionSecret(env);
+  if (typeof sessionSecret !== "string" || sessionSecret.length < 32) {
     return jsonResponse({ error: "Admin sessions are not configured." }, 503);
   }
   if (!env.DB) {
     return jsonResponse({ error: "The DB database binding is missing." }, 503);
   }
 
-  const session = await verifySession(request, env.SESSION_SECRET, env);
+  const session = await verifySession(request, sessionSecret, env);
   if (!session || !session.isMaster) {
     return jsonResponse({ error: "Only the master admin can manage accounts." }, 403);
   }
@@ -361,29 +371,28 @@ async function login(request, env) {
     return jsonResponse({ error: "Invalid request origin." }, 403);
   }
 
+  const adminPassword = getAdminPassword(env);
   if (
-    typeof env.ADMIN_PASSWORD !== "string" ||
-    env.ADMIN_PASSWORD.length === 0
+    typeof adminPassword !== "string" ||
+    adminPassword.length === 0
   ) {
     console.error("Missing ADMIN_PASSWORD runtime binding.");
     return jsonResponse({
-      error: "ADMIN_PASSWORD is missing from the Cloudflare environment. Check the Worker secret and deployment."
+      error: "ADMIN_PASSWORD (or legacy ADMINPASSWORD) is missing from the Cloudflare environment. Check the Worker secret and deployment."
     }, 503);
   }
 
-  if (env.ADMIN_PASSWORD.length < 12) {
+  if (adminPassword.length < 12) {
     return jsonResponse({
       error: "ADMIN_PASSWORD must be at least 12 characters."
     }, 503);
   }
 
-  if (
-    typeof env.SESSION_SECRET !== "string" ||
-    env.SESSION_SECRET.length < 32
-  ) {
+  const sessionSecret = getSessionSecret(env);
+  if (typeof sessionSecret !== "string" || sessionSecret.length < 32) {
     console.error("Missing or too-short SESSION_SECRET runtime binding.");
     return jsonResponse({
-      error: "SESSION_SECRET is missing or too short. Configure a secret of at least 32 characters."
+      error: "SESSION_SECRET (or legacy SESSIONSECRET) is missing or too short. Configure a secret of at least 32 characters."
     }, 503);
   }
 
@@ -396,7 +405,7 @@ async function login(request, env) {
 
   const ipAddress =
     request.headers.get("CF-Connecting-IP") || "unknown";
-  const ipKey = await sign(ipAddress, env.SESSION_SECRET);
+  const ipKey = await sign(ipAddress, sessionSecret);
 
   await env.DB.prepare(
     "DELETE FROM login_attempts WHERE attempt_at < unixepoch() - 86400"
@@ -436,8 +445,8 @@ async function login(request, env) {
   let accepted = false;
   if (username === "diana") {
     accepted = await passwordMatches(body.password, {
-      password: env.ADMIN_PASSWORD,
-      secret: env.SESSION_SECRET
+      password: adminPassword,
+      secret: sessionSecret
     });
     version = "master";
   } else {
@@ -451,7 +460,7 @@ async function login(request, env) {
       );
       accepted = await passwordMatches(actual, {
         password: user.password_hash,
-        secret: env.SESSION_SECRET
+        secret: sessionSecret
       });
       version = String(user.session_version);
     }
@@ -471,7 +480,7 @@ async function login(request, env) {
     "DELETE FROM login_attempts WHERE ip_key = ?"
   ).bind(ipKey).run();
 
-  const token = await createSession(username, version, env.SESSION_SECRET);
+  const token = await createSession(username, version, sessionSecret);
 
   return jsonResponse(
     { authenticated: true, username, isMaster: username === "diana" },
@@ -486,14 +495,12 @@ async function handleRequest(context) {
 
   try {
     if (path === "/api/session" && request.method === "GET") {
-      if (
-        typeof env.SESSION_SECRET !== "string" ||
-        env.SESSION_SECRET.length < 32
-      ) {
+      const sessionSecret = getSessionSecret(env);
+      if (typeof sessionSecret !== "string" || sessionSecret.length < 32) {
         return jsonResponse({ authenticated: false });
       }
 
-      const session = await verifySession(request, env.SESSION_SECRET, env);
+      const session = await verifySession(request, sessionSecret, env);
       return jsonResponse({
         authenticated: Boolean(session),
         username: session ? session.username : null,
@@ -548,10 +555,11 @@ async function handleRequest(context) {
       return jsonResponse({ error: "The DB binding is missing." }, 503);
     }
 
+    const sessionSecret = getSessionSecret(env);
     if (
-      typeof env.SESSION_SECRET !== "string" ||
-      env.SESSION_SECRET.length < 32 ||
-      !await verifySession(request, env.SESSION_SECRET, env)
+      typeof sessionSecret !== "string" ||
+      sessionSecret.length < 32 ||
+      !await verifySession(request, sessionSecret, env)
     ) {
       return jsonResponse({
         error: "Sign in as an IT administrator to edit content."

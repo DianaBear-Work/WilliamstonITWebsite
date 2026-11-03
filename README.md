@@ -52,9 +52,10 @@ current pricing and obtain your organization's approval before deployment.
    - Variable name: `DB`
    - D1 database: `pelzer-it-content`
 5. Add these encrypted secrets to the Pages project's production environment:
-   - `ADMIN_PASSWORD`: a randomly generated password of at least 16 characters.
-   - `SESSION_SECRET`: a separate, randomly generated secret of at least 32
-     characters.
+   - `ADMIN_PASSWORD` (or the existing `ADMINPASSWORD` binding): a randomly
+     generated password of at least 16 characters.
+   - `SESSION_SECRET` (or the existing `SESSIONSECRET` binding): a separate,
+     randomly generated secret of at least 32 characters.
 
    Generate and store both values with your organization's approved password
    manager. Do not put them in this repository or send them in chat.
