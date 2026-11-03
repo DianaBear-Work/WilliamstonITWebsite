@@ -522,6 +522,17 @@
     openButton.setAttribute("aria-controls", "admin-panel");
     openButton.setAttribute("aria-expanded", "false");
 
+    function finishClosingPanel() {
+      if (openButton.getAttribute("aria-expanded") !== "true") {
+        return;
+      }
+      openButton.setAttribute("aria-expanded", "false");
+      if (config.mode === "visual") {
+        config.setEditing(false);
+        applyContent(lastSavedContent);
+      }
+    }
+
     panel.querySelectorAll(".admin-dashboard-nav [data-admin-view]")
       .forEach(function (button) {
         button.addEventListener("click", async function () {
@@ -541,6 +552,7 @@
     openButton.addEventListener("click", function () {
       if (panel.open) {
         panel.close();
+        finishClosingPanel();
       } else {
         panel.showModal();
         openButton.setAttribute("aria-expanded", "true");
@@ -556,16 +568,12 @@
       }
     });
 
-    panel.addEventListener("close", function () {
-      openButton.setAttribute("aria-expanded", "false");
-      if (config.mode === "visual") {
-        config.setEditing(false);
-        applyContent(lastSavedContent);
-      }
-    });
+    panel.addEventListener("cancel", finishClosingPanel);
+    panel.addEventListener("close", finishClosingPanel);
 
     panel.querySelector('[data-action="close"]').addEventListener("click", function () {
       panel.close();
+      finishClosingPanel();
     });
 
     try {
