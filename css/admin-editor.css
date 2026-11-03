@@ -1,19 +1,26 @@
 .admin-open {
-  padding: 9px 12px;
-  border: 1px solid #777;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 9px 14px;
+  border: 1px solid #fe5b1b;
   border-radius: 5px;
-  background: transparent;
+  background: #fe5b1b;
   color: #fff;
   font: inherit;
   font-size: 13px;
   font-weight: 700;
   cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
 }
 
 .admin-open:hover,
 .admin-open:focus-visible {
-  border-color: #fe5b1b;
-  color: #fe5b1b;
+  border-color: #ff7a47;
+  background: #ff7a47;
+  color: #fff;
 }
 
 .admin-panel {
@@ -43,6 +50,24 @@
   justify-content: space-between;
   gap: 16px;
   margin-bottom: 12px;
+}
+
+.admin-dashboard-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 14px 0;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #ddd;
+}
+
+.admin-panel .admin-dashboard-nav button {
+  min-height: 38px;
+}
+
+.admin-panel .admin-dashboard-nav button.is-active {
+  border-color: #fe5b1b;
+  background: #fff0e8;
 }
 
 .admin-panel h2 {

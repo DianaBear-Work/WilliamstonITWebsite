@@ -10,6 +10,7 @@
   <title>Pelzer 2 IT | Vertiv</title>
 
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/admin-editor.css">
   <script src="js/main.js" defer></script>
 
   <style>
@@ -102,7 +103,9 @@
       .site-brand-text {
         font-size: 10px;
         letter-spacing: 1px;
-        white-space: normal;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
 
       .brand-divider {
@@ -156,6 +159,7 @@
       <a href="pages/equipment-queue.html">Equipment Inventory</a>
       <a href="pages/laptop-build-queue.html">Laptop Build Queue</a>
     </nav>
+    <a class="admin-open" href="pages/updates.html#admin-login">Admin sign in</a>
 
   </div>
 </header>

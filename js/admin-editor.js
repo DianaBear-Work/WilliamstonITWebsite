@@ -137,31 +137,37 @@
         </div>
       </form>
       <div id="admin-tools" hidden>
+        <nav class="admin-dashboard-nav" aria-label="Admin dashboard">
+          <button type="button" class="is-active" data-admin-view="editor">Edit this page</button>
+          <button type="button" data-admin-view="users" hidden>User dashboard &amp; passwords</button>
+          <button type="button" data-action="logout">Sign out</button>
+        </nav>
+        <section id="admin-editor-view" data-admin-panel-view>
         <p class="admin-help" id="admin-help"></p>
         <div id="admin-records"></div>
         <div class="admin-actions">
           <button type="button" data-action="add-record">Add entry</button>
           <button class="admin-primary" type="button" data-action="save">Save changes</button>
           <button type="button" data-action="reset">Restore published version</button>
-          <button type="button" data-action="logout">Sign out</button>
         </div>
+        </section>
+        <section class="admin-account-panel" id="admin-account-panel" data-admin-panel-view hidden>
+          <h3>User dashboard &amp; passwords</h3>
+          <p class="admin-help">Master account: diana. Change its password in the Cloudflare Pages ADMIN_PASSWORD secret. Create and manage up to three additional accounts here; each account gets a unique password.</p>
+          <form id="admin-account-create">
+            <label for="admin-new-display-name">Display name</label>
+            <input id="admin-new-display-name" name="displayName" maxlength="80" required>
+            <label for="admin-new-username">Login username</label>
+            <input id="admin-new-username" name="username" pattern="[a-zA-Z0-9._-]{3,32}" autocomplete="off" required>
+            <label for="admin-new-password">Password (at least 16 characters)</label>
+            <input id="admin-new-password" name="password" type="password" minlength="16" maxlength="256" autocomplete="new-password" required>
+            <div class="admin-actions">
+              <button class="admin-primary" type="submit">Create account</button>
+            </div>
+          </form>
+          <div id="admin-user-list" aria-live="polite"></div>
+        </section>
       </div>
-      <section class="admin-account-panel" id="admin-account-panel" hidden>
-        <h3>Managed admin accounts</h3>
-        <p class="admin-help">Create and manage up to three additional admin accounts. Use a unique password for each account.</p>
-        <form id="admin-account-create">
-          <label for="admin-new-display-name">Display name</label>
-          <input id="admin-new-display-name" name="displayName" maxlength="80" required>
-          <label for="admin-new-username">Login username</label>
-          <input id="admin-new-username" name="username" pattern="[a-zA-Z0-9._-]{3,32}" autocomplete="off" required>
-          <label for="admin-new-password">Password (at least 16 characters)</label>
-          <input id="admin-new-password" name="password" type="password" minlength="16" maxlength="256" autocomplete="new-password" required>
-          <div class="admin-actions">
-            <button class="admin-primary" type="submit">Create account</button>
-          </div>
-        </form>
-        <div id="admin-user-list" aria-live="polite"></div>
-      </section>
     `;
     document.body.appendChild(panel);
     return panel;
@@ -198,10 +204,31 @@
     login.hidden = authenticated;
     tools.hidden = !authenticated;
     openButton.textContent = authenticated
-      ? "IT admin (signed in)"
-      : "IT admin sign in";
-    document.getElementById("admin-account-panel").hidden =
-      !authenticated || !isMaster;
+      ? "Admin dashboard"
+      : "Admin sign in";
+    const userDashboardButton = document.querySelector(
+      '#admin-panel [data-admin-view="users"]'
+    );
+    userDashboardButton.hidden = !authenticated || !isMaster;
+    if (!authenticated || !isMaster) {
+      showAdminView("editor");
+    }
+  }
+
+  function showAdminView(view) {
+    const userView = view === "users";
+    document.getElementById("admin-editor-view").hidden = userView;
+    document.getElementById("admin-account-panel").hidden = !userView;
+    document.querySelectorAll(".admin-dashboard-nav [data-admin-view]")
+      .forEach(function (button) {
+        const active = button.dataset.adminView === view;
+        button.classList.toggle("is-active", active);
+        if (active) {
+          button.setAttribute("aria-current", "page");
+        } else {
+          button.removeAttribute("aria-current");
+        }
+      });
   }
 
   function renderAdminUsers(users) {
@@ -296,6 +323,9 @@
       method: "GET",
       headers: {}
     });
+    if (!Array.isArray(result.users)) {
+      throw new Error("The user dashboard returned an invalid account list.");
+    }
     renderAdminUsers(result.users);
   }
 
@@ -471,6 +501,22 @@
     let lastSavedContent = JSON.parse(JSON.stringify(config.initialData));
     openButton.setAttribute("aria-controls", "admin-panel");
     openButton.setAttribute("aria-expanded", "false");
+
+    panel.querySelectorAll(".admin-dashboard-nav [data-admin-view]")
+      .forEach(function (button) {
+        button.addEventListener("click", async function () {
+          showAdminView(button.dataset.adminView);
+          if (button.dataset.adminView === "users") {
+            try {
+              await loadAdminUsers();
+            } catch (error) {
+              setStatus(error.message, true);
+            }
+          } else {
+            prepareEditor();
+          }
+        });
+      });
 
     openButton.addEventListener("click", function () {
       panel.hidden = !panel.hidden;
@@ -661,6 +707,10 @@
         setStatus(error.message, true);
       }
     });
+
+    if (window.location.hash === "#admin-login") {
+      openButton.click();
+    }
   }
 
   document.addEventListener("DOMContentLoaded", initialize);

@@ -53,7 +53,8 @@
     }
 
     .header-inner {
-      max-width: 1250px;
+      width: min(1440px, calc(100% - 48px));
+      max-width: 1440px;
       margin: auto;
       padding: 15px 20px;
       display: flex;
@@ -83,6 +84,7 @@
       padding-left: 15px;
       font-size: 13px;
       color: #dddddd;
+      white-space: nowrap;
     }
 
     .brand-text strong {
@@ -539,9 +541,10 @@
       color: var(--orange);
     }
 
-    @media (max-width: 1000px) {
+    @media (max-width: 1425px) {
       .header-inner {
         flex-wrap: wrap;
+        width: calc(100% - 32px);
         padding: 13px 18px;
       }
 
@@ -552,6 +555,8 @@
       .brand-text {
         font-size: 11px;
         white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
 
       .brand-text strong {
@@ -666,7 +671,7 @@
       <a href="equipment-queue.html">Equipment Inventory</a>
       <a href="laptop-build-queue.html" aria-current="page" >Laptop Build Queue</a>
       </nav>
-      <button class="admin-open" id="admin-open" type="button">IT admin sign in</button>
+      <button class="admin-open" id="admin-open" type="button">Admin sign in</button>
     </div>
   </header>
 

@@ -11,6 +11,9 @@ The master admin signs in with username `diana` and the existing
 `ADMIN_PASSWORD`. The master can create, reset, and delete up to three
 additional admin accounts; those accounts can edit content but cannot manage
 other accounts. Saved changes and account records are stored in Cloudflare D1.
+The header's **Admin sign in** tab opens the page editor. The master admin
+also has a **User dashboard & passwords** tab for managed accounts; other
+admins see only the page editor.
 
 The master password is checked by a Cloudflare Pages Function and is never
 included in the website files. Managed admin accounts use individual

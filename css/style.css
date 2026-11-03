@@ -70,6 +70,8 @@ img {
 }
 
 .header-inner {
+  width: min(1440px, calc(100% - 48px));
+  max-width: 1440px;
   min-height: 82px;
   display: flex;
   align-items: center;
@@ -141,7 +143,7 @@ img {
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: 12px;
 }
 
 .nav-links a {
@@ -973,11 +975,8 @@ img {
   font-size: 12px;
 }
 
-/* TABLET RESPONSIVE */
-
-@media (max-width: 980px) {
+@media (max-width: 1425px) {
   .header-inner {
-    gap: 16px;
     flex-wrap: wrap;
   }
 
@@ -1019,6 +1018,14 @@ img {
   .equipment-page-header .admin-open {
     margin-left: auto;
   }
+}
+
+/* TABLET RESPONSIVE */
+
+@media (max-width: 980px) {
+  .header-inner {
+    gap: 16px;
+  }
 
   .hero-grid {
     gap: 34px;
@@ -1053,6 +1060,7 @@ img {
   .header-inner {
     min-height: 72px;
     flex-wrap: wrap;
+    width: calc(100% - 32px);
     padding-top: 12px;
     padding-bottom: 12px;
   }
@@ -1078,6 +1086,9 @@ img {
   .site-brand-text {
     font-size: 10px;
     letter-spacing: 1px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .hero-grid {
@@ -1257,8 +1268,7 @@ img {
 
   .site-name,
   .site-brand-text {
-    white-space: normal;
-    overflow-wrap: anywhere;
+    white-space: nowrap;
   }
 
   .button,

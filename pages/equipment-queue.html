@@ -32,6 +32,8 @@
     }
 
     .equipment-page-header .header-inner {
+      width: min(1440px, calc(100% - 48px));
+      max-width: 1440px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -461,9 +463,13 @@
       }
     }
 
-    @media (max-width: 980px) {
+    @media (max-width: 1425px) {
       .equipment-page-header .header-inner {
         flex-wrap: wrap;
+      }
+
+      .equipment-page-header .admin-open {
+        margin-left: auto;
       }
 
       .equipment-page-header .menu-toggle {
@@ -506,10 +512,12 @@
       }
 
       .equipment-page-header .site-brand-text {
-        max-width: none;
+        max-width: 120px;
         font-size: 10px;
         letter-spacing: 1px;
         white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
 
       .equipment-page-header .header-inner {
@@ -584,7 +592,7 @@
         <a href="laptop-build-queue.html">Laptop Build Queue</a>
       </nav>
 
-      <button class="admin-open" id="admin-open" type="button">IT admin sign in</button>
+      <button class="admin-open" id="admin-open" type="button">Admin sign in</button>
     </div>
   </header>
 
