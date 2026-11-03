@@ -105,7 +105,7 @@ img {
 }
 
 .site-brand-text strong {
-  color: #f1f1f1;
+  color: var(--orange);
 }
 
 .vertiv-wordmark {
@@ -1027,6 +1027,26 @@ img {
     gap: 16px;
   }
 
+  .brand {
+    min-width: 0;
+    flex: 1 1 auto;
+    gap: 10px;
+  }
+
+  .vertiv-logo {
+    width: 100px;
+  }
+
+  .site-name,
+  .site-brand-text {
+    font-size: 11px;
+    letter-spacing: .8px;
+  }
+
+  .site-header .admin-open {
+    margin-left: 0;
+  }
+
   .hero-grid {
     gap: 34px;
   }
@@ -1058,15 +1078,33 @@ img {
   }
 
   .header-inner {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: center;
+    gap: 10px;
     min-height: 72px;
-    flex-wrap: wrap;
     width: calc(100% - 32px);
     padding-top: 12px;
     padding-bottom: 12px;
   }
 
   .brand {
+    grid-column: 1 / -1;
+    width: 100%;
     gap: 8px;
+  }
+
+  .menu-toggle,
+  .site-header .admin-open {
+    width: 100%;
+  }
+
+  .site-header .admin-open {
+    margin-left: 0;
+  }
+
+  .nav-links {
+    grid-column: 1 / -1;
   }
 
   .vertiv-logo {
@@ -1262,7 +1300,7 @@ img {
 
   .brand {
     min-width: 0;
-    max-width: calc(100% - 90px);
+    max-width: 100%;
     flex-shrink: 1;
   }
 

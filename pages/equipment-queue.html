@@ -75,7 +75,7 @@
     }
 
     .equipment-page-header .site-brand-text strong {
-      color: #f1f1f1;
+      color: var(--vertiv-orange);
     }
 
     .equipment-page-header .menu-toggle {
@@ -493,6 +493,33 @@
       }
     }
 
+    @media (max-width: 760px) {
+      .equipment-page-header .header-inner {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        width: calc(100% - 28px);
+        padding: 12px 0;
+        gap: 10px;
+      }
+
+      .equipment-page-header .brand {
+        grid-column: 1 / -1;
+        width: 100%;
+        flex: 0 1 auto;
+      }
+
+      .equipment-page-header .menu-toggle,
+      .equipment-page-header .admin-open {
+        width: 100%;
+        margin: 0;
+      }
+
+      .equipment-page-header .nav-links {
+        position: static;
+        grid-column: 1 / -1;
+      }
+    }
+
     @media (max-width: 600px) {
       .equipment-page .page-hero {
         padding-inline: 20px;
@@ -512,17 +539,10 @@
       }
 
       .equipment-page-header .site-brand-text {
-        max-width: 120px;
+        max-width: none;
         font-size: 10px;
         letter-spacing: 1px;
         white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-
-      .equipment-page-header .header-inner {
-        column-gap: 12px;
-        row-gap: 8px;
       }
 
       .equipment-page #inventoryGrid,
