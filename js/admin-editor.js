@@ -127,7 +127,9 @@
       </div>
       <p class="admin-status" id="admin-status" role="status" aria-live="polite"></p>
       <form id="admin-login">
-        <p class="admin-help">Sign in with the admin password to make changes. Site contents remain public.</p>
+        <p class="admin-help">Sign in with your admin username and password to make changes.</p>
+        <label for="admin-username">Admin username</label>
+        <input id="admin-username" name="username" type="text" autocomplete="username" value="diana" required>
         <label for="admin-password">Admin password</label>
         <input id="admin-password" name="password" type="password" autocomplete="current-password" required>
         <div class="admin-actions">
@@ -144,6 +146,22 @@
           <button type="button" data-action="logout">Sign out</button>
         </div>
       </div>
+      <section class="admin-account-panel" id="admin-account-panel" hidden>
+        <h3>Managed admin accounts</h3>
+        <p class="admin-help">Create and manage up to three additional admin accounts. Use a unique password for each account.</p>
+        <form id="admin-account-create">
+          <label for="admin-new-display-name">Display name</label>
+          <input id="admin-new-display-name" name="displayName" maxlength="80" required>
+          <label for="admin-new-username">Login username</label>
+          <input id="admin-new-username" name="username" pattern="[a-zA-Z0-9._-]{3,32}" autocomplete="off" required>
+          <label for="admin-new-password">Password (at least 16 characters)</label>
+          <input id="admin-new-password" name="password" type="password" minlength="16" maxlength="256" autocomplete="new-password" required>
+          <div class="admin-actions">
+            <button class="admin-primary" type="submit">Create account</button>
+          </div>
+        </form>
+        <div id="admin-user-list" aria-live="polite"></div>
+      </section>
     `;
     document.body.appendChild(panel);
     return panel;
@@ -173,7 +191,7 @@
     status.hidden = !message;
   }
 
-  function showEditor(authenticated) {
+  function showEditor(authenticated, isMaster) {
     const login = document.getElementById("admin-login");
     const tools = document.getElementById("admin-tools");
     const openButton = document.getElementById("admin-open");
@@ -182,6 +200,103 @@
     openButton.textContent = authenticated
       ? "IT admin (signed in)"
       : "IT admin sign in";
+    document.getElementById("admin-account-panel").hidden =
+      !authenticated || !isMaster;
+  }
+
+  function renderAdminUsers(users) {
+    const list = document.getElementById("admin-user-list");
+    list.replaceChildren();
+
+    if (!users.length) {
+      const empty = document.createElement("p");
+      empty.className = "admin-help";
+      empty.textContent = "No additional admin accounts have been created.";
+      list.appendChild(empty);
+    }
+
+    users.forEach(function (user) {
+      const row = document.createElement("div");
+      row.className = "admin-user";
+      const title = document.createElement("strong");
+      title.textContent = `${user.display_name} (${user.username})`;
+      row.appendChild(title);
+
+      const passwordLabel = document.createElement("label");
+      const passwordId = `admin-reset-password-${user.username}`;
+      passwordLabel.htmlFor = passwordId;
+      passwordLabel.textContent = "Set new password (16 characters minimum)";
+      const passwordInput = document.createElement("input");
+      passwordInput.id = passwordId;
+      passwordInput.type = "password";
+      passwordInput.minLength = 16;
+      passwordInput.maxLength = 256;
+      passwordInput.autocomplete = "new-password";
+      row.append(passwordLabel, passwordInput);
+
+      const actions = document.createElement("div");
+      actions.className = "admin-actions";
+      const resetButton = document.createElement("button");
+      resetButton.type = "button";
+      resetButton.textContent = "Reset password";
+      resetButton.addEventListener("click", async function () {
+        try {
+          if (passwordInput.value.length < 16) {
+            throw new Error("Enter a password with at least 16 characters.");
+          }
+          await request(
+            `/api/admin/users/${encodeURIComponent(user.username)}/password`,
+            {
+              method: "POST",
+              body: JSON.stringify({ password: passwordInput.value })
+            }
+          );
+          passwordInput.value = "";
+          setStatus(`Password reset for ${user.display_name}.`, false);
+        } catch (error) {
+          setStatus(error.message, true);
+        }
+      });
+      actions.appendChild(resetButton);
+
+      const deleteButton = document.createElement("button");
+      deleteButton.type = "button";
+      deleteButton.textContent = "Delete account";
+      deleteButton.addEventListener("click", async function () {
+        if (!window.confirm(`Delete the admin account for ${user.display_name}?`)) {
+          return;
+        }
+        try {
+          await request(`/api/admin/users/${encodeURIComponent(user.username)}`, {
+            method: "DELETE"
+          });
+          await loadAdminUsers();
+          setStatus(`Deleted the account for ${user.display_name}.`, false);
+        } catch (error) {
+          setStatus(error.message, true);
+        }
+      });
+      actions.appendChild(deleteButton);
+      row.appendChild(actions);
+      list.appendChild(row);
+    });
+
+    document.getElementById("admin-account-create").hidden =
+      users.length >= 3;
+    if (users.length >= 3) {
+      const limit = document.createElement("p");
+      limit.className = "admin-help";
+      limit.textContent = "The maximum of three additional admin accounts has been reached.";
+      list.prepend(limit);
+    }
+  }
+
+  async function loadAdminUsers() {
+    const result = await request("/api/admin/users", {
+      method: "GET",
+      headers: {}
+    });
+    renderAdminUsers(result.users);
   }
 
   function applyContent(content) {
@@ -352,6 +467,7 @@
 
     const panel = buildPanel();
     let authenticated = false;
+    let isMaster = false;
     let lastSavedContent = JSON.parse(JSON.stringify(config.initialData));
     openButton.setAttribute("aria-controls", "admin-panel");
     openButton.setAttribute("aria-expanded", "false");
@@ -399,9 +515,13 @@
         headers: {}
       });
       authenticated = session.authenticated;
-      showEditor(session.authenticated);
+      isMaster = Boolean(session.isMaster);
+      showEditor(session.authenticated, isMaster);
       if (session.authenticated) {
         prepareEditor();
+        if (isMaster) {
+          await loadAdminUsers();
+        }
       }
     } catch (error) {
       console.error("Could not check admin session:", error);
@@ -410,16 +530,24 @@
 
     document.getElementById("admin-login").addEventListener("submit", async function (event) {
       event.preventDefault();
+      const usernameInput = document.getElementById("admin-username");
       const passwordInput = document.getElementById("admin-password");
       try {
-        await request("/api/login", {
+        const result = await request("/api/login", {
           method: "POST",
-          body: JSON.stringify({ password: passwordInput.value })
+          body: JSON.stringify({
+            username: usernameInput.value,
+            password: passwordInput.value
+          })
         });
         passwordInput.value = "";
         authenticated = true;
-        showEditor(true);
+        isMaster = Boolean(result.isMaster);
+        showEditor(true, isMaster);
         prepareEditor();
+        if (isMaster) {
+          await loadAdminUsers();
+        }
         if (config.mode === "visual") {
           config.setEditing(true);
         }
@@ -428,6 +556,30 @@
         setStatus(error.message, true);
       }
     });
+
+    document.getElementById("admin-account-create").addEventListener(
+      "submit",
+      async function (event) {
+        event.preventDefault();
+        const form = event.currentTarget;
+        const formData = new FormData(form);
+        try {
+          await request("/api/admin/users", {
+            method: "POST",
+            body: JSON.stringify({
+              displayName: formData.get("displayName"),
+              username: formData.get("username"),
+              password: formData.get("password")
+            })
+          });
+          form.reset();
+          await loadAdminUsers();
+          setStatus("Admin account created. Share its password securely.", false);
+        } catch (error) {
+          setStatus(error.message, true);
+        }
+      }
+    );
 
     panel.querySelector('[data-action="save"]').addEventListener("click", async function () {
       let content;
@@ -502,7 +654,8 @@
         config.setEditing(false);
         applyContent(lastSavedContent);
         authenticated = false;
-        showEditor(false);
+        isMaster = false;
+        showEditor(false, false);
         setStatus("Signed out.", false);
       } catch (error) {
         setStatus(error.message, true);

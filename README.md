@@ -7,15 +7,20 @@ Public support website for Williamston IT users.
 The equipment inventory, laptop build queue, and IT updates are public to
 everyone. IT admins can select **IT admin sign in** on any of those pages to
 edit inventory and build entries in forms and edit the updates page in place.
-Saved changes are stored in Cloudflare D1 and are published to all visitors.
+The master admin signs in with username `diana` and the existing
+`ADMIN_PASSWORD`. The master can create, reset, and delete up to three
+additional admin accounts; those accounts can edit content but cannot manage
+other accounts. Saved changes and account records are stored in Cloudflare D1.
 
-This setup uses one shared admin password rather than individual Microsoft
-accounts. The password is checked by a Cloudflare Pages Function and is never
-included in the website files. Use a strong password, share it only with
-authorized admins, and rotate it if it is exposed. Since admins share it, the
-site cannot identify which admin made a change. After signing in, the same
-browser remains signed in across admin-enabled pages on the hosted site for up
-to eight hours.
+The master password is checked by a Cloudflare Pages Function and is never
+included in the website files. Managed admin accounts use individual
+usernames and passwords, which are stored as salted password hashes. Use a
+strong master password, and rotate it if it is exposed. After signing in, the
+same browser remains signed in across admin-enabled pages on the hosted site
+for up to eight hours. Managed accounts cannot change their own password; the
+master must reset a forgotten password. Passwords cannot be viewed or recovered
+after creation, so share and store them securely. Content edits are not yet
+recorded in an audit history.
 
 All saved content remains public. Do not add employee names, credentials,
 personal information, or confidential ticket details to the queues or updates.
@@ -37,6 +42,7 @@ current pricing and obtain your organization's approval before deployment.
 
    ```powershell
    npx wrangler d1 execute pelzer-it-content --remote --file=migrations/0001_initial.sql
+   npx wrangler d1 execute pelzer-it-content --remote --file=migrations/0002_admin_users.sql
    ```
 
 4. In the Pages project settings, add a D1 database binding:
@@ -49,10 +55,18 @@ current pricing and obtain your organization's approval before deployment.
 
    Generate and store both values with your organization's approved password
    manager. Do not put them in this repository or send them in chat.
-6. Deploy the project and verify that public pages load, the admin sign-in
-   works, edits persist after reloading, and signed-out visitors can still
-   read all content.
-7. After Cloudflare Pages is working, disable the GitHub Pages deployment
+6. Deploy the project and sign in with username `diana` and the existing
+   `ADMIN_PASSWORD`. In the admin panel, create an account with display name
+   `Jason (Manager)` and username `jason_wightman`, and an account with display
+   name `Pierros` and username `pierros_skafidas`. Set unique passwords and
+   share them through your organization's approved password manager. The
+   master admin can create one additional account, reset any managed password,
+   or delete an account. New managed passwords must be at least 16 characters.
+   Passwords are stored as salted PBKDF2 hashes, and resetting or deleting an
+   account revokes its active sessions.
+7. Verify that public pages load, admin sign-in works, edits persist after
+   reloading, and signed-out visitors can still read all content.
+8. After Cloudflare Pages is working, disable the GitHub Pages deployment
    workflow in `.github/workflows/static.yml` and update any site links or QR
    codes to use the Cloudflare Pages URL. The workflow is left in place until
    cutover so the existing GitHub Pages deployment is not interrupted.
