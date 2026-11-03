@@ -26,7 +26,8 @@
 .admin-panel {
   position: fixed;
   z-index: 1000;
-  inset: auto 20px 20px auto;
+  inset: 0;
+  margin: auto;
   width: min(540px, calc(100vw - 32px));
   max-height: min(80vh, 760px);
   overflow: auto;
@@ -40,8 +41,8 @@
   font: 14px/1.5 Arial, Helvetica, sans-serif;
 }
 
-.admin-panel[hidden] {
-  display: none;
+.admin-panel::backdrop {
+  background: #0009;
 }
 
 .admin-panel-header {
@@ -217,8 +218,8 @@
 
 @media (max-width: 600px) {
   .admin-panel {
-    inset: auto 8px 8px;
-    width: auto;
+    width: calc(100vw - 16px);
     max-height: 85vh;
+    padding: 16px;
   }
 }

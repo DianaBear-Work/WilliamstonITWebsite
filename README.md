@@ -25,6 +25,10 @@ master must reset a forgotten password. Passwords cannot be viewed or recovered
 after creation, so share and store them securely. Content edits are not yet
 recorded in an audit history.
 
+Admin sign-in and saving require the hosted Cloudflare Pages site. The GitHub
+Pages workflow deploys static files only and cannot run the admin API; opening
+an HTML file directly from the computer also cannot sign in or save changes.
+
 All saved content remains public. Do not add employee names, credentials,
 personal information, or confidential ticket details to the queues or updates.
 

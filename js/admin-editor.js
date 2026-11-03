@@ -93,6 +93,16 @@
 
   window.sanitizeAdminHtml = sanitizeAdminHtml;
 
+  function adminServiceUnavailableMessage() {
+    if (window.location.protocol === "file:") {
+      return "Admin sign-in is unavailable in a local file copy. Open the hosted Cloudflare Pages site to use admin tools.";
+    }
+    if (window.location.hostname.endsWith("github.io")) {
+      return "Admin sign-in is unavailable on GitHub Pages. This site must be deployed to Cloudflare Pages with its admin API configured.";
+    }
+    return "Admin sign-in service is unavailable. Confirm this site is deployed to Cloudflare Pages with the admin API configured. Public page content is still visible.";
+  }
+
   function request(url, options) {
     return fetch(url, {
       credentials: "same-origin",
@@ -101,13 +111,26 @@
         "Content-Type": "application/json",
         ...(options && options.headers)
       }
+    }).catch(function (error) {
+      if (error instanceof TypeError) {
+        throw new Error(adminServiceUnavailableMessage());
+      }
+      throw error;
     }).then(async function (response) {
       const result = await response.json().catch(function () {
         return {};
       });
 
       if (!response.ok) {
-        throw new Error(result.error || "The request could not be completed.");
+        const unavailableAtCurrentSite =
+          window.location.protocol === "file:" ||
+          window.location.hostname.endsWith("github.io");
+        throw new Error(
+          result.error ||
+          (unavailableAtCurrentSite || response.status === 404
+            ? adminServiceUnavailableMessage()
+            : "The request could not be completed.")
+        );
       }
 
       return result;
@@ -115,10 +138,9 @@
   }
 
   function buildPanel() {
-    const panel = document.createElement("section");
+    const panel = document.createElement("dialog");
     panel.className = "admin-panel";
     panel.id = "admin-panel";
-    panel.hidden = true;
     panel.setAttribute("aria-labelledby", "admin-panel-title");
     panel.innerHTML = `
       <div class="admin-panel-header">
@@ -139,7 +161,7 @@
       <div id="admin-tools" hidden>
         <nav class="admin-dashboard-nav" aria-label="Admin dashboard">
           <button type="button" class="is-active" data-admin-view="editor">Edit this page</button>
-          <button type="button" data-admin-view="users" hidden>User dashboard &amp; passwords</button>
+          <button type="button" data-admin-view="users" hidden>Add users &amp; passwords</button>
           <button type="button" data-action="logout">Sign out</button>
         </nav>
         <section id="admin-editor-view" data-admin-panel-view>
@@ -152,7 +174,7 @@
         </div>
         </section>
         <section class="admin-account-panel" id="admin-account-panel" data-admin-panel-view hidden>
-          <h3>User dashboard &amp; passwords</h3>
+          <h3>Add users &amp; passwords</h3>
           <p class="admin-help">Master account: diana. Change its password in the Cloudflare Pages ADMIN_PASSWORD secret. Create and manage up to three additional accounts here; each account gets a unique password.</p>
           <form id="admin-account-create">
             <label for="admin-new-display-name">Display name</label>
@@ -203,9 +225,7 @@
     const openButton = document.getElementById("admin-open");
     login.hidden = authenticated;
     tools.hidden = !authenticated;
-    openButton.textContent = authenticated
-      ? "Admin dashboard"
-      : "Admin sign in";
+    openButton.textContent = authenticated ? "Admin tools" : "Admin sign in";
     const userDashboardButton = document.querySelector(
       '#admin-panel [data-admin-view="users"]'
     );
@@ -519,9 +539,11 @@
       });
 
     openButton.addEventListener("click", function () {
-      panel.hidden = !panel.hidden;
-      openButton.setAttribute("aria-expanded", String(!panel.hidden));
-      if (!panel.hidden) {
+      if (panel.open) {
+        panel.close();
+      } else {
+        panel.showModal();
+        openButton.setAttribute("aria-expanded", "true");
         if (authenticated) {
           prepareEditor();
           if (config.mode === "visual") {
@@ -531,17 +553,19 @@
         } else {
           document.getElementById("admin-password").focus();
         }
-      } else if (config.mode === "visual") {
+      }
+    });
+
+    panel.addEventListener("close", function () {
+      openButton.setAttribute("aria-expanded", "false");
+      if (config.mode === "visual") {
         config.setEditing(false);
         applyContent(lastSavedContent);
       }
     });
 
     panel.querySelector('[data-action="close"]').addEventListener("click", function () {
-      config.setEditing(false);
-      applyContent(lastSavedContent);
-      panel.hidden = true;
-      openButton.setAttribute("aria-expanded", "false");
+      panel.close();
     });
 
     try {
@@ -571,7 +595,7 @@
       }
     } catch (error) {
       console.error("Could not check admin session:", error);
-      setStatus("Admin sign-in service is unavailable. Public page content is still visible.", true);
+      setStatus(error.message || adminServiceUnavailableMessage(), true);
     }
 
     document.getElementById("admin-login").addEventListener("submit", async function (event) {
