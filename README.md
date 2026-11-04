@@ -7,9 +7,12 @@ Public support website for Williamston IT users.
 The equipment inventory, laptop build queue, and IT updates are public to
 everyone. IT admins can select **IT admin sign in** on any of those pages to
 edit inventory and build entries in forms and edit the updates page in place.
-There is one admin account, with username `diana` and the existing
-`ADMIN_PASSWORD`. Saved changes are stored in Cloudflare D1. The header's
-**Admin sign in** tab opens the page editor.
+The master admin signs in with username `diana` and the existing
+`ADMIN_PASSWORD`. The master admin can create additional IT admin accounts and
+set or reset their passwords from **Manage admin accounts**. IT admins can edit
+site content but cannot create accounts or change passwords. Saved changes and
+admin account credentials are stored in Cloudflare D1. The header's **Admin
+sign in** tab opens the admin tools.
 
 The master password is checked by a Cloudflare Pages Function and is never
 included in the website files. Use a strong master password, and rotate it if
@@ -41,6 +44,7 @@ current pricing and obtain your organization's approval before deployment.
 
    ```powershell
    npx wrangler d1 execute pelzer-it-content --remote --file=migrations/0001_initial.sql
+   npx wrangler d1 execute pelzer-it-content --remote --file=migrations/0002_admin_users.sql
    ```
 
 4. In the Pages project settings, add a D1 database binding:
@@ -55,7 +59,8 @@ current pricing and obtain your organization's approval before deployment.
    Generate and store both values with your organization's approved password
    manager. Do not put them in this repository or send them in chat.
 6. Deploy the project and sign in with username `diana` and the existing
-   `ADMIN_PASSWORD`.
+   `ADMIN_PASSWORD`. From **Manage admin accounts**, the master admin can create
+   additional IT admin accounts with passwords of at least 12 characters.
 7. Verify that public pages load, admin sign-in works, edits persist after
    reloading, and signed-out visitors can still read all content.
 8. After Cloudflare Pages is working, disable the GitHub Pages deployment

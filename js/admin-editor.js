@@ -158,7 +158,7 @@
       <form id="admin-login">
         <p class="admin-help">Sign in with your admin username and password to make changes.</p>
         <label for="admin-username">Admin username</label>
-        <input id="admin-username" name="username" type="text" autocomplete="username" value="diana" readonly>
+        <input id="admin-username" name="username" type="text" autocomplete="username" value="diana" required>
         <label for="admin-password">Admin password</label>
         <input id="admin-password" name="password" type="password" autocomplete="current-password" required>
         <div class="admin-actions">
@@ -168,6 +168,7 @@
       <div id="admin-tools" hidden>
         <nav class="admin-dashboard-nav" aria-label="Admin dashboard">
           <button type="button" class="is-active" data-admin-view="editor">Edit this page</button>
+          <button type="button" data-admin-view="accounts" id="admin-accounts-tab" hidden>Manage admin accounts</button>
           <button type="button" data-action="logout">Sign out</button>
         </nav>
         <section id="admin-editor-view" data-admin-panel-view>
@@ -178,6 +179,22 @@
           <button class="admin-primary" type="button" data-action="save">Save changes</button>
           <button type="button" data-action="reset">Restore published version</button>
         </div>
+        </section>
+        <section id="admin-accounts-view" class="admin-account-panel" data-admin-panel-view hidden>
+          <h3>IT admin accounts</h3>
+          <p class="admin-help">Only the master admin can create accounts or set their passwords. Passwords are never displayed after saving.</p>
+          <form id="admin-create-account">
+            <label for="new-admin-username">Username</label>
+            <input id="new-admin-username" name="username" type="text" autocomplete="off" minlength="3" maxlength="32" pattern="[A-Za-z0-9._-]+" required>
+            <label for="new-admin-display-name">Display name</label>
+            <input id="new-admin-display-name" name="displayName" type="text" maxlength="80" required>
+            <label for="new-admin-password">Initial password (at least 12 characters)</label>
+            <input id="new-admin-password" name="password" type="password" autocomplete="new-password" minlength="12" maxlength="256" required>
+            <div class="admin-actions">
+              <button class="admin-primary" type="submit">Create IT admin</button>
+            </div>
+          </form>
+          <div id="admin-users" aria-live="polite"></div>
         </section>
       </div>
     `;
@@ -209,13 +226,88 @@
     status.hidden = !message;
   }
 
-  function showEditor(authenticated) {
+  function showEditor(authenticated, isMaster) {
     const login = document.getElementById("admin-login");
     const tools = document.getElementById("admin-tools");
     const openButton = document.getElementById("admin-open");
+    const accountsTab = document.getElementById("admin-accounts-tab");
+    const editorView = document.getElementById("admin-editor-view");
+    const accountsView = document.getElementById("admin-accounts-view");
     login.hidden = authenticated;
     tools.hidden = !authenticated;
+    accountsTab.hidden = !isMaster;
+    editorView.hidden = false;
+    accountsView.hidden = true;
+    accountsTab.classList.remove("is-active");
+    document.querySelector('[data-admin-view="editor"]').classList.add("is-active");
     openButton.textContent = authenticated ? "Admin tools" : "Admin sign in";
+  }
+
+  function renderAdminUsers(users) {
+    const container = document.getElementById("admin-users");
+    container.replaceChildren();
+
+    if (users.length === 0) {
+      const empty = document.createElement("p");
+      empty.className = "admin-help";
+      empty.textContent = "No additional IT admin accounts have been created.";
+      container.appendChild(empty);
+      return;
+    }
+
+    users.forEach(function (user) {
+      const card = document.createElement("section");
+      card.className = "admin-user";
+
+      const name = document.createElement("strong");
+      name.textContent = user.display_name;
+      const username = document.createElement("p");
+      username.textContent = `Username: ${user.username}`;
+
+      const label = document.createElement("label");
+      const passwordId = `admin-password-${user.username}`;
+      label.htmlFor = passwordId;
+      label.textContent = "New password (at least 12 characters)";
+
+      const password = document.createElement("input");
+      password.id = passwordId;
+      password.type = "password";
+      password.autocomplete = "new-password";
+      password.minLength = 12;
+      password.maxLength = 256;
+      password.required = true;
+
+      const update = document.createElement("button");
+      update.type = "button";
+      update.textContent = "Update password";
+      update.addEventListener("click", async function () {
+        if (!password.reportValidity()) return;
+        update.disabled = true;
+        try {
+          await request(`/api/admin-users/${encodeURIComponent(user.username)}/password`, {
+            method: "POST",
+            body: JSON.stringify({ password: password.value })
+          });
+          password.value = "";
+          setStatus(`Password updated for ${user.username}.`, false);
+        } catch (error) {
+          setStatus(error.message, true);
+        } finally {
+          update.disabled = false;
+        }
+      });
+
+      card.append(name, username, label, password, update);
+      container.appendChild(card);
+    });
+  }
+
+  async function loadAdminUsers() {
+    const result = await request("/api/admin-users", {
+      method: "GET",
+      headers: {}
+    });
+    renderAdminUsers(result.users);
   }
 
   function applyContent(content) {
@@ -387,6 +479,7 @@
 
     const panel = buildPanel();
     let authenticated = false;
+    let isMaster = false;
     let lastSavedContent = JSON.parse(JSON.stringify(config.initialData));
     openButton.setAttribute("aria-controls", "admin-panel");
     openButton.setAttribute("aria-expanded", "false");
@@ -410,6 +503,7 @@
         panel.show();
         openButton.setAttribute("aria-expanded", "true");
         if (authenticated) {
+          panel.querySelector('[data-admin-view="editor"]').click();
           prepareEditor();
           if (config.mode === "visual") {
             config.setEditing(true);
@@ -423,6 +517,27 @@
 
     panel.addEventListener("cancel", finishClosingPanel);
     panel.addEventListener("close", finishClosingPanel);
+
+    panel.querySelectorAll("[data-admin-view]").forEach(function (button) {
+      button.addEventListener("click", async function () {
+        const view = button.dataset.adminView;
+        if (view === "accounts" && !isMaster) return;
+
+        panel.querySelectorAll("[data-admin-panel-view]").forEach(function (section) {
+          section.hidden = section.id !== `admin-${view}-view`;
+        });
+        panel.querySelectorAll("[data-admin-view]").forEach(function (tab) {
+          tab.classList.toggle("is-active", tab === button);
+        });
+        if (view === "accounts") {
+          try {
+            await loadAdminUsers();
+          } catch (error) {
+            setStatus(error.message, true);
+          }
+        }
+      });
+    });
 
     panel.querySelector('[data-action="close"]').addEventListener("click", function () {
       panel.close();
@@ -446,7 +561,8 @@
         headers: {}
       });
       authenticated = session.authenticated;
-      showEditor(session.authenticated);
+      isMaster = Boolean(session.isMaster);
+      showEditor(session.authenticated, isMaster);
       if (session.authenticated) {
         prepareEditor();
       }
@@ -460,7 +576,7 @@
       const usernameInput = document.getElementById("admin-username");
       const passwordInput = document.getElementById("admin-password");
       try {
-        await request("/api/login", {
+        const result = await request("/api/login", {
           method: "POST",
           body: JSON.stringify({
             username: usernameInput.value,
@@ -469,7 +585,8 @@
         });
         passwordInput.value = "";
         authenticated = true;
-        showEditor(true);
+        isMaster = Boolean(result.isMaster);
+        showEditor(true, isMaster);
         prepareEditor();
         if (config.mode === "visual") {
           config.setEditing(true);
@@ -477,6 +594,30 @@
         setStatus("Signed in. Changes are not published until you save.", false);
       } catch (error) {
         setStatus(error.message, true);
+      }
+    });
+
+    document.getElementById("admin-create-account").addEventListener("submit", async function (event) {
+      event.preventDefault();
+      const form = event.currentTarget;
+      const submit = form.querySelector('button[type="submit"]');
+      submit.disabled = true;
+      try {
+        await request("/api/admin-users", {
+          method: "POST",
+          body: JSON.stringify({
+            username: form.elements.username.value,
+            displayName: form.elements.displayName.value,
+            password: form.elements.password.value
+          })
+        });
+        form.reset();
+        await loadAdminUsers();
+        setStatus("IT admin account created.", false);
+      } catch (error) {
+        setStatus(error.message, true);
+      } finally {
+        submit.disabled = false;
       }
     });
 
@@ -555,7 +696,8 @@
         }
         applyContent(lastSavedContent);
         authenticated = false;
-        showEditor(false);
+        isMaster = false;
+        showEditor(false, false);
         setStatus("Signed out.", false);
       } catch (error) {
         setStatus(error.message, true);
