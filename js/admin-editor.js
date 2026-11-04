@@ -495,6 +495,13 @@
       }
     }
 
+    function showRequestedAdminView() {
+      const view = window.location.hash === "#manage-user-access" && isMaster
+        ? "accounts"
+        : "editor";
+      panel.querySelector(`[data-admin-view="${view}"]`).click();
+    }
+
     openButton.addEventListener("click", function () {
       if (panel.open) {
         panel.close();
@@ -503,7 +510,7 @@
         panel.show();
         openButton.setAttribute("aria-expanded", "true");
         if (authenticated) {
-          panel.querySelector('[data-admin-view="editor"]').click();
+          showRequestedAdminView();
           prepareEditor();
           if (config.mode === "visual") {
             config.setEditing(true);
@@ -563,6 +570,9 @@
       authenticated = session.authenticated;
       isMaster = Boolean(session.isMaster);
       showEditor(session.authenticated, isMaster);
+      if (window.setMasterAdminNavVisible) {
+        window.setMasterAdminNavVisible(isMaster);
+      }
       if (session.authenticated) {
         prepareEditor();
       }
@@ -587,11 +597,19 @@
         authenticated = true;
         isMaster = Boolean(result.isMaster);
         showEditor(true, isMaster);
+        if (window.setMasterAdminNavVisible) {
+          window.setMasterAdminNavVisible(isMaster);
+        }
         prepareEditor();
         if (config.mode === "visual") {
           config.setEditing(true);
         }
-        setStatus("Signed in. Changes are not published until you save.", false);
+        if (window.location.hash === "#manage-user-access" && !isMaster) {
+          setStatus("Only the master admin can manage IT accounts.", true);
+        } else {
+          showRequestedAdminView();
+          setStatus("Signed in. Changes are not published until you save.", false);
+        }
       } catch (error) {
         setStatus(error.message, true);
       }
@@ -698,13 +716,17 @@
         authenticated = false;
         isMaster = false;
         showEditor(false, false);
+        if (window.setMasterAdminNavVisible) {
+          window.setMasterAdminNavVisible(false);
+        }
         setStatus("Signed out.", false);
       } catch (error) {
         setStatus(error.message, true);
       }
     });
 
-    if (window.location.hash === "#admin-login") {
+    if (window.location.hash === "#admin-login" ||
+        window.location.hash === "#manage-user-access") {
       openButton.click();
     }
   }

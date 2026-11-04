@@ -1,5 +1,23 @@
 
+function setMasterAdminNavVisible(isMaster) {
+  document.querySelectorAll("[data-master-admin-only]").forEach((link) => {
+    link.hidden = !isMaster;
+  });
+}
+
+window.setMasterAdminNavVisible = setMasterAdminNavVisible;
+
 document.addEventListener("DOMContentLoaded", () => {
+  const masterAdminLinks = document.querySelectorAll("[data-master-admin-only]");
+  if (masterAdminLinks.length > 0) {
+    window.masterAdminSessionCheck = window.masterAdminSessionCheck ||
+      fetch("/api/session", { credentials: "same-origin" });
+    window.masterAdminSessionCheck
+      .then((response) => response.ok ? response.json() : null)
+      .then((session) => setMasterAdminNavVisible(Boolean(session && session.authenticated && session.isMaster)))
+      .catch(() => setMasterAdminNavVisible(false));
+  }
+
   const toggle = document.querySelector(".menu-toggle");
   const nav = document.querySelector("#primary-nav");
 
