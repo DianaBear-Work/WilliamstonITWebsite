@@ -80,7 +80,7 @@ async function verifySession(request, secret, db) {
   }
 
   if (username === MASTER_USERNAME && version === "master") {
-    return { username, isMaster: true };
+    return { username, displayName: "Diana Barakat", isMaster: true };
   }
 
   if (!/^[a-z0-9._-]{3,32}$/.test(username) || !version || !db) {
@@ -88,11 +88,15 @@ async function verifySession(request, secret, db) {
   }
 
   const account = await db.prepare(
-    "SELECT session_version FROM admin_users WHERE username = ?"
+    "SELECT session_version, display_name FROM admin_users WHERE username = ?"
   ).bind(username).first();
 
   return account && account.session_version === version
-    ? { username, isMaster: false }
+    ? {
+        username,
+        displayName: account.display_name || username,
+        isMaster: false
+      }
     : null;
 }
 
@@ -466,6 +470,7 @@ async function login(request, env) {
 
   let accepted = false;
   let sessionVersion = "master";
+  let displayName = "Diana Barakat";
   if (username === MASTER_USERNAME) {
     const adminPassword = getAdminPassword(env);
     if (typeof adminPassword !== "string" || adminPassword.length === 0) {
@@ -485,10 +490,13 @@ async function login(request, env) {
     });
   } else {
     const account = await env.DB.prepare(
-      "SELECT password_salt, password_hash, session_version FROM admin_users WHERE username = ?"
+      "SELECT password_salt, password_hash, session_version, display_name FROM admin_users WHERE username = ?"
     ).bind(username).first();
     accepted = Boolean(account && await passwordMatchesAccount(body.password, account));
-    if (accepted) sessionVersion = account.session_version;
+    if (accepted) {
+      sessionVersion = account.session_version;
+      displayName = account.display_name || username;
+    }
   }
 
   if (!accepted) {
@@ -508,7 +516,12 @@ async function login(request, env) {
   const token = await createSession(username, sessionVersion, sessionSecret);
 
   return jsonResponse(
-    { authenticated: true, username, isMaster: username === MASTER_USERNAME },
+    {
+      authenticated: true,
+      username,
+      displayName,
+      isMaster: username === MASTER_USERNAME
+    },
     200,
     { "Set-Cookie": cookieHeader(token, SESSION_SECONDS) }
   );
@@ -529,6 +542,7 @@ async function handleRequest(context) {
       return jsonResponse({
         authenticated: Boolean(session),
         username: session ? session.username : null,
+        displayName: session ? session.displayName : null,
         isMaster: Boolean(session && session.isMaster)
       });
     }

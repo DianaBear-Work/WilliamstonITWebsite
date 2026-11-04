@@ -154,6 +154,7 @@
         <h2 id="admin-panel-title">IT administrator</h2>
         <button type="button" data-action="close" aria-label="Close admin panel">Close</button>
       </div>
+      <p class="admin-panel-move-help">Drag the header to move this panel. Resize from the bottom-right corner.</p>
       <p class="admin-status" id="admin-status" role="status" aria-live="polite"></p>
       <form id="admin-login">
         <p class="admin-help">Sign in with your admin username and password to make changes.</p>
@@ -166,6 +167,7 @@
         </div>
       </form>
       <div id="admin-tools" hidden>
+        <p class="admin-welcome" id="admin-welcome"></p>
         <nav class="admin-dashboard-nav" aria-label="Admin dashboard">
           <button type="button" class="is-active" data-admin-view="editor">Edit this page</button>
           <button type="button" data-admin-view="accounts" id="admin-accounts-tab" hidden>Manage admin accounts</button>
@@ -226,7 +228,7 @@
     status.hidden = !message;
   }
 
-  function showEditor(authenticated, isMaster) {
+  function showEditor(authenticated, isMaster, displayName) {
     const login = document.getElementById("admin-login");
     const tools = document.getElementById("admin-tools");
     const openButton = document.getElementById("admin-open");
@@ -236,6 +238,8 @@
     login.hidden = authenticated;
     tools.hidden = !authenticated;
     accountsTab.hidden = !isMaster;
+    document.getElementById("admin-welcome").textContent =
+      authenticated ? `Welcome, ${displayName || "admin"}` : "";
     editorView.hidden = false;
     accountsView.hidden = true;
     accountsTab.classList.remove("is-active");
@@ -380,6 +384,10 @@
             input.value = Array.isArray(record[field.key])
               ? record[field.key].join("\n")
               : "";
+          } else {
+            input.value = record[field.key] == null
+              ? ""
+              : String(record[field.key]);
           }
         } else {
           input = document.createElement("input");
@@ -478,11 +486,52 @@
     }
 
     const panel = buildPanel();
+    const panelHeader = panel.querySelector(".admin-panel-header");
+    let activePointerId = null;
+    let dragOffsetX = 0;
+    let dragOffsetY = 0;
     let authenticated = false;
     let isMaster = false;
     let lastSavedContent = JSON.parse(JSON.stringify(config.initialData));
     openButton.setAttribute("aria-controls", "admin-panel");
     openButton.setAttribute("aria-expanded", "false");
+
+    panelHeader.addEventListener("pointerdown", function (event) {
+      if (event.button !== 0 ||
+          event.target.closest("button, a, input, select, textarea")) {
+        return;
+      }
+
+      const bounds = panel.getBoundingClientRect();
+      activePointerId = event.pointerId;
+      dragOffsetX = event.clientX - bounds.left;
+      dragOffsetY = event.clientY - bounds.top;
+      panelHeader.setPointerCapture(activePointerId);
+      event.preventDefault();
+    });
+
+    panelHeader.addEventListener("pointermove", function (event) {
+      if (event.pointerId !== activePointerId) return;
+
+      const bounds = panel.getBoundingClientRect();
+      const maxLeft = Math.max(8, window.innerWidth - bounds.width - 8);
+      const maxTop = Math.max(8, window.innerHeight - bounds.height - 8);
+      panel.style.left = `${Math.min(maxLeft, Math.max(8, event.clientX - dragOffsetX))}px`;
+      panel.style.top = `${Math.min(maxTop, Math.max(8, event.clientY - dragOffsetY))}px`;
+      panel.style.right = "auto";
+      panel.style.bottom = "auto";
+    });
+
+    function finishPanelDrag(event) {
+      if (event.pointerId !== activePointerId) return;
+      activePointerId = null;
+      if (panelHeader.hasPointerCapture(event.pointerId)) {
+        panelHeader.releasePointerCapture(event.pointerId);
+      }
+    }
+
+    panelHeader.addEventListener("pointerup", finishPanelDrag);
+    panelHeader.addEventListener("pointercancel", finishPanelDrag);
 
     function finishClosingPanel() {
       if (openButton.getAttribute("aria-expanded") !== "true") {
@@ -494,6 +543,22 @@
         applyContent(lastSavedContent);
       }
     }
+
+    document.addEventListener("site-admin-session-changed", function (event) {
+      if (event.detail && event.detail.authenticated) return;
+      authenticated = false;
+      isMaster = false;
+      showEditor(false, false, "");
+      if (config.mode === "visual") {
+        config.setEditing(false);
+        applyContent(lastSavedContent);
+      }
+      if (panel.open) {
+        panel.close();
+        finishClosingPanel();
+      }
+      setStatus("Signed out.", false);
+    });
 
     function showRequestedAdminView() {
       const view = window.location.hash === "#manage-user-access" && isMaster
@@ -569,7 +634,10 @@
       });
       authenticated = session.authenticated;
       isMaster = Boolean(session.isMaster);
-      showEditor(session.authenticated, isMaster);
+      showEditor(session.authenticated, isMaster, session.displayName);
+      if (window.setAdminHeaderSession) {
+        window.setAdminHeaderSession(session);
+      }
       if (window.setMasterAdminNavVisible) {
         window.setMasterAdminNavVisible(isMaster);
       }
@@ -596,7 +664,10 @@
         passwordInput.value = "";
         authenticated = true;
         isMaster = Boolean(result.isMaster);
-        showEditor(true, isMaster);
+        showEditor(true, isMaster, result.displayName);
+        if (window.setAdminHeaderSession) {
+          window.setAdminHeaderSession(result);
+        }
         if (window.setMasterAdminNavVisible) {
           window.setMasterAdminNavVisible(isMaster);
         }
@@ -715,7 +786,10 @@
         applyContent(lastSavedContent);
         authenticated = false;
         isMaster = false;
-        showEditor(false, false);
+        showEditor(false, false, "");
+        if (window.setAdminHeaderSession) {
+          window.setAdminHeaderSession({ authenticated: false });
+        }
         if (window.setMasterAdminNavVisible) {
           window.setMasterAdminNavVisible(false);
         }

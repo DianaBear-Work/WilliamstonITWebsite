@@ -7,15 +7,69 @@ function setMasterAdminNavVisible(isMaster) {
 
 window.setMasterAdminNavVisible = setMasterAdminNavVisible;
 
+function setAdminHeaderSession(session) {
+  const authenticated = Boolean(session && session.authenticated);
+  const adminButton = document.querySelector(".admin-open");
+  setMasterAdminNavVisible(Boolean(authenticated && session.isMaster));
+
+  if (!adminButton) return;
+
+  let signOut = document.querySelector(".admin-header-signout");
+  if (!signOut) {
+    signOut = document.createElement("button");
+    signOut.className = "admin-header-signout";
+    signOut.type = "button";
+    signOut.textContent = "Sign out";
+    signOut.hidden = true;
+    adminButton.after(signOut);
+
+    const status = document.createElement("span");
+    status.className = "admin-header-status";
+    status.setAttribute("role", "status");
+    signOut.after(status);
+
+    signOut.addEventListener("click", async () => {
+      signOut.disabled = true;
+      status.textContent = "";
+      status.classList.remove("is-visible");
+      try {
+        const response = await fetch("/api/logout", {
+          method: "POST",
+          credentials: "same-origin",
+          headers: { "Content-Type": "application/json" }
+        });
+        const result = await response.json().catch(() => ({}));
+        if (!response.ok) {
+          throw new Error(result.error || `Sign out failed (HTTP ${response.status}).`);
+        }
+        setAdminHeaderSession({ authenticated: false });
+        document.dispatchEvent(new CustomEvent("site-admin-session-changed", {
+          detail: { authenticated: false }
+        }));
+      } catch (error) {
+        status.textContent = error.message || "Could not sign out. Please try again.";
+        status.classList.add("is-visible");
+      } finally {
+        signOut.disabled = false;
+      }
+    });
+  }
+  signOut.hidden = !authenticated;
+  adminButton.textContent = authenticated ? "Admin tools" : "Admin sign in";
+}
+
+window.setAdminHeaderSession = setAdminHeaderSession;
+
 document.addEventListener("DOMContentLoaded", () => {
   const masterAdminLinks = document.querySelectorAll("[data-master-admin-only]");
-  if (masterAdminLinks.length > 0) {
+  const adminButton = document.querySelector(".admin-open");
+  if (masterAdminLinks.length > 0 || adminButton) {
     window.masterAdminSessionCheck = window.masterAdminSessionCheck ||
       fetch("/api/session", { credentials: "same-origin" });
     window.masterAdminSessionCheck
       .then((response) => response.ok ? response.json() : null)
-      .then((session) => setMasterAdminNavVisible(Boolean(session && session.authenticated && session.isMaster)))
-      .catch(() => setMasterAdminNavVisible(false));
+      .then((session) => setAdminHeaderSession(session))
+      .catch(() => setAdminHeaderSession(null));
   }
 
   const toggle = document.querySelector(".menu-toggle");
