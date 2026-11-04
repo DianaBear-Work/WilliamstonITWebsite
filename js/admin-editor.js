@@ -158,7 +158,7 @@
       <form id="admin-login">
         <p class="admin-help">Sign in with your admin username and password to make changes.</p>
         <label for="admin-username">Admin username</label>
-        <input id="admin-username" name="username" type="text" autocomplete="username" value="diana" required>
+        <input id="admin-username" name="username" type="text" autocomplete="username" value="dianabear" required>
         <label for="admin-password">Admin password</label>
         <input id="admin-password" name="password" type="password" autocomplete="current-password" required>
         <div class="admin-actions">

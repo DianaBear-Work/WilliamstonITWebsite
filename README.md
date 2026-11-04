@@ -1,91 +1,91 @@
 # Williamston IT Website
 
-Public support website for Williamston IT users.
+This is the IT support website for Pelzer 2. It gives employees a place to
+find IT resources, check updates, and see the equipment and laptop build
+queues.
 
-## Admin editing
+## Admin tools
 
-The equipment inventory, laptop build queue, and IT updates are public to
-everyone. IT admins can select **IT admin sign in** on any of those pages to
-edit inventory and build entries in forms and edit the updates page in place.
-The master admin signs in with username `diana` and the existing
-`ADMIN_PASSWORD`. The master admin can create additional IT admin accounts and
-set or reset their passwords from **Manage admin accounts**. IT admins can edit
-site content but cannot create accounts or change passwords. Saved changes and
-admin account credentials are stored in Cloudflare D1. The header's **Admin
-sign in** tab opens the admin tools.
+The equipment inventory, laptop build queue, and updates are visible to
+everyone. IT admins can sign in from those pages to make content changes.
 
-The master password is checked by a Cloudflare Pages Function and is never
-included in the website files. Use a strong master password, and rotate it if
-it is exposed. After signing in, the same browser remains signed in across
-admin-enabled pages on the hosted site for up to eight hours. Content edits are
-not yet recorded in an audit history.
+The master admin signs in with username `dianabear` and the existing
+`ADMIN_PASSWORD`. Only the master admin can create IT admin accounts or set
+and reset their passwords. Other IT admins can edit site content, but they
+cannot manage accounts. Account details and saved edits are stored in
+Cloudflare D1.
 
-Admin sign-in and saving require the hosted Cloudflare Pages site. The GitHub
-Pages workflow deploys static files only and cannot run the admin API; opening
-an HTML file directly from the computer also cannot sign in or save changes.
+The master password is checked by the Cloudflare Pages Function. It is not
+stored in the website files. Use a strong password and change it if it may
+have been exposed. Admins stay signed in on the same browser for up to eight
+hours. Content edits are not currently recorded in an audit history.
 
-All saved content remains public. Do not add employee names, credentials,
-personal information, or confidential ticket details to the queues or updates.
+Admin sign-in and editing work on the hosted Cloudflare Pages site. They will
+not work from a local HTML file or the GitHub Pages site, because those do not
+run the admin API.
 
-## Cloudflare Pages setup
+Please keep confidential information out of the website. Saved content is
+public, so don't add passwords, personal information, employee names, or
+confidential ticket details to the queues or updates.
 
-Cloudflare Pages can deploy this repository directly from GitHub. The Pages
-project serves the static site and the `functions` directory supplies the
-same-origin admin API. A D1 database stores edits.
+## Setting up Cloudflare Pages
 
-Cloudflare offers free tiers for Pages and D1 with usage limits. Confirm
-current pricing and obtain your organization's approval before deployment.
+Cloudflare Pages hosts the website and runs the admin API in the `functions`
+folder. The API uses a D1 database to save edits and admin accounts.
 
-1. In Cloudflare, create a Pages project connected to this GitHub repository.
-   Use the `main` production branch, no build command, and `.` as the build
-   output directory. The site will be served at its Cloudflare Pages URL.
+Cloudflare has usage limits, even on free plans. Check the current pricing and
+get any required approval before setting it up.
+
+1. Create a Cloudflare Pages project connected to this GitHub repository. Set
+   the production branch to `main`, leave the build command empty, and use `.`
+   as the build output directory.
 2. Create a D1 database named `pelzer-it-content`.
-3. Apply the database schema from the repository root:
+3. From the repository's main folder, apply both database migrations:
 
    ```powershell
-   npx wrangler d1 execute pelzer-it-content --remote --file=migrations/0001_initial.sql
-   npx wrangler d1 execute pelzer-it-content --remote --file=migrations/0002_admin_users.sql
+   npx.cmd wrangler d1 execute pelzer-it-content --remote --file=migrations/0001_initial.sql
+   npx.cmd wrangler d1 execute pelzer-it-content --remote --file=migrations/0002_admin_users.sql
    ```
 
 4. In the Pages project settings, add a D1 database binding:
    - Variable name: `DB`
-   - D1 database: `pelzer-it-content`
+   - Database: `pelzer-it-content`
 5. Add these encrypted secrets to the Pages project's production environment:
-   - `ADMIN_PASSWORD` (or the existing `ADMINPASSWORD` binding): a randomly
-     generated password of at least 16 characters.
-   - `SESSION_SECRET` (or the existing `SESSIONSECRET` binding): a separate,
-     randomly generated secret of at least 32 characters.
+   - `ADMIN_PASSWORD` (or the existing `ADMINPASSWORD` binding): use a random
+     password with at least 16 characters.
+   - `SESSION_SECRET` (or the existing `SESSIONSECRET` binding): use a
+     different random secret with at least 32 characters.
 
-   Generate and store both values with your organization's approved password
-   manager. Do not put them in this repository or send them in chat.
-6. Deploy the project and sign in with username `diana` and the existing
-   `ADMIN_PASSWORD`. From **Manage admin accounts**, the master admin can create
-   additional IT admin accounts with passwords of at least 12 characters.
-7. Verify that public pages load, admin sign-in works, edits persist after
-   reloading, and signed-out visitors can still read all content.
-8. After Cloudflare Pages is working, disable the GitHub Pages deployment
-   workflow in `.github/workflows/static.yml` and update any site links or QR
-   codes to use the Cloudflare Pages URL. The workflow is left in place until
-   cutover so the existing GitHub Pages deployment is not interrupted.
+   Save both values in your organization's approved password manager. Don't
+   put them in the repository or send them in chat.
+6. Deploy the site. Sign in with username `dianabear` and the existing
+   `ADMIN_PASSWORD`. Use **Manage admin accounts** to create additional IT
+   admin accounts. Their passwords must be at least 12 characters.
+7. Check that the public pages load, admin sign-in works, and saved edits are
+   still there after you reload the page.
+8. Once Cloudflare Pages is working, turn off the GitHub Pages workflow in
+   `.github/workflows/static.yml`. Update any links or QR codes to use the
+   Cloudflare Pages address. Leave the workflow on until the site is ready to
+   switch over.
 
-The D1 migration is safe to run again. Future commits to `main` deploy through
-Cloudflare Pages' Git integration. The first deployment requires the D1
-binding and encrypted secrets to be configured in Cloudflare.
+You can run the D1 migrations again if needed. Future commits to `main` deploy
+through Cloudflare Pages' Git integration. Before the first deployment, make
+sure the `DB` binding and encrypted secrets are set up in Cloudflare.
 
-## Editing data
+## Editing site content
 
-- **Equipment inventory:** add, remove, or edit entries. Each item includes
-  `id`, `name`, `category`, `quantity`, `restockStatus`, `description`, and
-  `requestType` (`laptop` or `accessory`). Use Move up and Move down to set
-  their display order. Restock status can be set to `Not Yet Requested`,
-  `Requested`, `Ordered`, or `Restocked`.
-- **Laptop build queue:** add, remove, or edit entries. Each build includes `id`,
-  `laptopType`, `status` (`building`, `blocked`, `ready`, or `complete`), a
-  `stage` selected from the current-state list, `updated`, `notes`, and a
-  `blockers` array. Builds move to the viewable Archived Builds section five
-  days after completion; archived entries remain saved.
-- **Updates:** add, remove, reorder, and edit only the cards in Projects in
-  Progress, including each status label and its circle color. Helpful
-  Information and all following content are not editable from the admin panel.
-- **Restore published version:** remove saved edits for that page and return
-  to the version shipped with the website.
+- **Equipment inventory:** Add, remove, or edit items. Each item has an `id`,
+  `name`, `category`, `quantity`, `restockStatus`, `description`, and
+  `requestType` (`laptop` or `accessory`). Use **Move up** and **Move down** to
+  change the order. Restock statuses are `Not Yet Requested`, `Requested`,
+  `Ordered`, and `Restocked`.
+- **Laptop build queue:** Add, remove, or edit builds. Each build has an `id`,
+  `laptopType`, `status` (`building`, `blocked`, `ready`, or `complete`),
+  `stage`, `updated`, `notes`, and a `blockers` list. Completed builds move to
+  **Archived Builds** after five days and stay saved there.
+- **Updates:** Add, remove, reorder, and edit the cards under **Projects in
+  Progress**, including their status labels and circle colors. The **Helpful
+  Information** section and the content below it can't be edited from the
+  admin panel.
+- **Restore published version:** Remove saved edits for a page and show the
+  version included with the website again.

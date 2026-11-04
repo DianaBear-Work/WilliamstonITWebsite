@@ -1,6 +1,7 @@
 // test
 const SESSION_COOKIE = "pelzer_it_admin";
 const SESSION_SECONDS = 8 * 60 * 60;
+const MASTER_USERNAME = "dianabear";
 const MAX_CONTENT_BYTES = 200_000;
 const CONTENT_SCOPES = new Set(["equipment", "builds", "updates"]);
 const RESTOCK_STATUSES = new Set([
@@ -67,11 +68,7 @@ async function verifySession(request, secret, db) {
   const parts = token.split(".");
 
   if (parts.length === 2) {
-    const [expiry, signature] = parts;
-    if (!isValidExpiry(expiry)) return null;
-    return await verifySignature(expiry, signature, secret)
-      ? { username: "diana", isMaster: true }
-      : null;
+    return null;
   }
 
   if (parts.length !== 4) return null;
@@ -82,7 +79,7 @@ async function verifySession(request, secret, db) {
     return null;
   }
 
-  if (username === "diana" && version === "master") {
+  if (username === MASTER_USERNAME && version === "master") {
     return { username, isMaster: true };
   }
 
@@ -235,7 +232,7 @@ async function createAdminUser(request, env) {
       error: "Username must be 3 to 32 characters using letters, numbers, dots, underscores, or hyphens."
     }, 400);
   }
-  if (normalizedUsername === "diana") {
+  if (normalizedUsername === MASTER_USERNAME || normalizedUsername === "diana") {
     return jsonResponse({
       error: "The master account is managed through the Cloudflare ADMIN_PASSWORD secret."
     }, 400);
@@ -271,7 +268,7 @@ async function updateAdminPassword(request, env, username) {
   if (!authorization) {
     return jsonResponse({ error: "Only the master admin can manage account passwords." }, 403);
   }
-  if (username === "diana") {
+  if (username === MASTER_USERNAME || username === "diana") {
     return jsonResponse({
       error: "The master password is managed through the Cloudflare ADMIN_PASSWORD secret."
     }, 400);
@@ -455,7 +452,7 @@ async function login(request, env) {
 
   const username = typeof body.username === "string"
     ? body.username.trim().toLowerCase()
-    : "diana";
+    : MASTER_USERNAME;
   if (
     !/^[a-z0-9._-]{3,32}$/.test(username) ||
     typeof body.password !== "string" ||
@@ -466,7 +463,7 @@ async function login(request, env) {
 
   let accepted = false;
   let sessionVersion = "master";
-  if (username === "diana") {
+  if (username === MASTER_USERNAME) {
     const adminPassword = getAdminPassword(env);
     if (typeof adminPassword !== "string" || adminPassword.length === 0) {
       console.error("Missing ADMIN_PASSWORD runtime binding.");
@@ -508,7 +505,7 @@ async function login(request, env) {
   const token = await createSession(username, sessionVersion, sessionSecret);
 
   return jsonResponse(
-    { authenticated: true, username, isMaster: username === "diana" },
+    { authenticated: true, username, isMaster: username === MASTER_USERNAME },
     200,
     { "Set-Cookie": cookieHeader(token, SESSION_SECONDS) }
   );
