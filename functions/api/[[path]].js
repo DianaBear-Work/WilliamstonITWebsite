@@ -351,6 +351,9 @@ function isBuilds(value) {
       ["building", "blocked", "ready", "complete"].includes(build.status) &&
       isString(build.stage, 200) &&
       isString(build.updated, 100) &&
+      (build.manager === undefined || isString(build.manager, 200)) &&
+      (build.user === undefined || isString(build.user, 200)) &&
+      (build.accessories === undefined || isString(build.accessories, 2000)) &&
       isString(build.notes, 4000) &&
       (build.completedAt === undefined ||
         isString(build.completedAt, 100)) &&

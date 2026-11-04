@@ -163,6 +163,11 @@
       font-size: 16px;
     }
 
+    .hero .queue-visibility-note {
+      margin-top: 12px;
+      font-size: 13px;
+    }
+
     .hero-note {
       margin-top: 20px;
       display: inline-flex;
@@ -742,6 +747,11 @@
         View current laptop builds, their progress, and any issues
         preventing completion. Build status and notes are maintained by IT.
       </p>
+      <p class="queue-visibility-note">
+        Manager, user, and accessory details on these builds are visible to
+        anyone who can view this page. Only include information approved for
+        public display.
+      </p>
       <div class="hero-note">
         <span aria-hidden="true">●</span>
         Queue information is manually maintained
@@ -997,6 +1007,25 @@
       const blockers = Array.isArray(build.blockers)
         ? build.blockers.filter(Boolean)
         : [];
+      const buildContacts = [
+        ["Manager", build.manager],
+        ["User", build.user]
+      ].filter(function (detail) {
+        return typeof detail[1] === "string" && detail[1].trim();
+      });
+      const contactDetails = buildContacts.length
+        ? buildContacts.map(function (detail) {
+          return `
+            <div>
+              <span class="detail-label">${detail[0]}</span>
+              <span class="detail-value">${escapeHTML(detail[1])}</span>
+            </div>
+          `;
+        }).join("")
+        : "";
+      const accessoryDetails = typeof build.accessories === "string"
+        ? build.accessories.trim()
+        : "";
 
       const hasBlockers = blockers.length > 0 || status === "blocked";
 
@@ -1052,6 +1081,7 @@
                 <span class="detail-label">Last Updated</span>
                 <span class="detail-value">${escapeHTML(build.updated || "Not specified")}</span>
               </div>
+              ${contactDetails}
               ${status === "complete" && getCompletedAt(build) !== null ? `
                 <div>
                   <span class="detail-label">Completed</span>
@@ -1066,6 +1096,13 @@
               <h4>Build Notes</h4>
               <p>${escapeHTML(build.notes || "No notes added.")}</p>
             </div>
+
+            ${accessoryDetails ? `
+              <div class="build-notes">
+                <h4>Accessories</h4>
+                <p>${escapeHTML(accessoryDetails)}</p>
+              </div>
+            ` : ""}
 
             ${blockerContent}
           </div>
@@ -1149,6 +1186,9 @@
           build.laptopType,
           build.stage,
           build.notes,
+          build.manager,
+          build.user,
+          build.accessories,
           ...(Array.isArray(build.blockers) ? build.blockers : [])
         ].join(" ").toLowerCase();
 
@@ -1207,6 +1247,9 @@
           ]
         },
         { key: "updated", label: "Last updated", type: "text" },
+        { key: "manager", label: "Manager / contact", type: "text" },
+        { key: "user", label: "User / recipient", type: "text" },
+        { key: "accessories", label: "Accessories and details", type: "textarea" },
         { key: "notes", label: "Build notes", type: "textarea" },
         { key: "blockers", label: "Blockers (one per line)", type: "list" }
       ],
@@ -1242,6 +1285,9 @@
           status: "building",
           stage: "",
           updated: new Date().toISOString().slice(0, 10),
+          manager: "",
+          user: "",
+          accessories: "",
           notes: "",
           blockers: []
         };
@@ -1257,6 +1303,12 @@
             ["building", "blocked", "ready", "complete"].includes(build.status) &&
             typeof build.stage === "string" &&
             typeof build.updated === "string" &&
+            (build.manager === undefined ||
+              (typeof build.manager === "string" && build.manager.length <= 200)) &&
+            (build.user === undefined ||
+              (typeof build.user === "string" && build.user.length <= 200)) &&
+            (build.accessories === undefined ||
+              (typeof build.accessories === "string" && build.accessories.length <= 2000)) &&
             typeof build.notes === "string" &&
             (build.completedAt === undefined ||
               typeof build.completedAt === "string") &&

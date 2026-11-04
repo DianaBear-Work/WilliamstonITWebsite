@@ -81,8 +81,11 @@ sure the `DB` binding and encrypted secrets are set up in Cloudflare.
   `Ordered`, and `Restocked`.
 - **Laptop build queue:** Add, remove, or edit builds. Each build has an `id`,
   `laptopType`, `status` (`building`, `blocked`, `ready`, or `complete`),
-  `stage`, `updated`, `notes`, and a `blockers` list. Completed builds move to
-  **Archived Builds** after five days and stay saved there.
+  `stage`, `updated`, manager/contact and user/recipient details, accessory
+  information, `notes`, and a `blockers` list. Manager, user, and accessory
+  details appear publicly on the queue, so only add information approved for
+  public display. Completed builds move to **Archived Builds** after five days
+  and stay saved there.
 - **Updates:** Add, remove, reorder, and edit the cards under **Projects in
   Progress**, including their status labels and circle colors. The **Helpful
   Information** section and the content below it can't be edited from the
