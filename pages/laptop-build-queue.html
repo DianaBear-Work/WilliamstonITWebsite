@@ -1251,6 +1251,15 @@
       scope: "builds",
       mode: "json",
       initialData: JSON.parse(JSON.stringify(laptopBuilds)),
+      getArchivedRecords: function (records) {
+        const now = Date.now();
+        return records.reduce(function (archived, build, index) {
+          if (isArchived(build, now)) {
+            archived.push({ record: build, index });
+          }
+          return archived;
+        }, []);
+      },
       editorFields: [
         { key: "id", label: "Build ID", type: "text" },
         { key: "laptopType", label: "Laptop type", type: "text" },

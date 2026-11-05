@@ -186,6 +186,56 @@
   box-shadow: 0 1px 3px #00000012;
 }
 
+.admin-archive-folder {
+  margin: 0 0 14px;
+  border: 1px solid #e7e8ea;
+  border-radius: 8px;
+  background: #f8f9fa;
+}
+
+.admin-archive-folder summary {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 11px 12px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.admin-archive-count {
+  color: #656b72;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.admin-archive-folder > p {
+  margin: 0;
+  padding: 0 12px 8px;
+  color: #656b72;
+  font-size: 12px;
+}
+
+.admin-archive-links {
+  display: grid;
+  gap: 6px;
+  max-height: 220px;
+  overflow: auto;
+  padding: 0 12px 12px;
+}
+
+.admin-panel .admin-archive-links button {
+  min-height: 34px;
+  padding: 6px 9px;
+  text-align: left;
+  font-size: 12px;
+}
+
+.admin-archive-links p {
+  margin: 0;
+  color: #656b72;
+  font-size: 12px;
+}
+
 .admin-panel h2 {
   margin: 0;
   font-size: 20px;

@@ -178,6 +178,14 @@
         </nav>
         <section id="admin-editor-view" data-admin-panel-view>
         <p class="admin-help" id="admin-help"></p>
+        <details class="admin-archive-folder" id="admin-archive-folder" hidden>
+          <summary>
+            <span>Archived laptop builds</span>
+            <span class="admin-archive-count" id="admin-archive-count"></span>
+          </summary>
+          <p>Open an archived build directly in the editor.</p>
+          <div class="admin-archive-links" id="admin-archive-links"></div>
+        </details>
         <div id="admin-records"></div>
         <div class="admin-actions">
           <button type="button" data-action="add-record">Add entry</button>
@@ -254,6 +262,59 @@
     renderRecords(config.getData());
   }
 
+  function renderArchiveFolder(records) {
+    const folder = document.getElementById("admin-archive-folder");
+    if (!folder || typeof config.getArchivedRecords !== "function") {
+      return;
+    }
+
+    folder.hidden = false;
+    const archivedRecords = config.getArchivedRecords(records);
+    document.getElementById("admin-archive-count").textContent =
+      `${archivedRecords.length} ${archivedRecords.length === 1 ? "entry" : "entries"}`;
+
+    const links = document.getElementById("admin-archive-links");
+    links.replaceChildren();
+    if (archivedRecords.length === 0) {
+      const emptyMessage = document.createElement("p");
+      emptyMessage.textContent = "No archived builds yet.";
+      links.appendChild(emptyMessage);
+      return;
+    }
+
+    archivedRecords.forEach(function (item) {
+      const record = item.record;
+      const button = document.createElement("button");
+      button.type = "button";
+      const label = [record.id, record.laptopType].filter(Boolean).join(" - ");
+      const completedAt = record.completedAt
+        ? Date.parse(record.completedAt)
+        : NaN;
+      const completedLabel = Number.isNaN(completedAt)
+        ? ""
+        : ` - Completed ${new Date(completedAt).toLocaleDateString()}`;
+      button.textContent = `${label || "Laptop build"}${completedLabel}`;
+      button.setAttribute("aria-label", `Open archived build ${label || "entry"}`);
+      button.addEventListener("click", function () {
+        const panel = document.getElementById("admin-panel");
+        const fieldset = document.querySelector(
+          `#admin-records .admin-record[data-record-index="${item.index}"]`
+        );
+        if (!panel || !fieldset) {
+          return;
+        }
+
+        const panelBounds = panel.getBoundingClientRect();
+        const recordBounds = fieldset.getBoundingClientRect();
+        panel.scrollTo({
+          top: panel.scrollTop + recordBounds.top - panelBounds.top - 16,
+          behavior: "smooth"
+        });
+      });
+      links.appendChild(button);
+    });
+  }
+
   function renderRecords(records) {
     const container = document.getElementById("admin-records");
     container.replaceChildren();
@@ -261,6 +322,7 @@
     records.forEach(function (record, index) {
       const fieldset = document.createElement("fieldset");
       fieldset.className = "admin-record";
+      fieldset.dataset.recordIndex = String(index);
       const legend = document.createElement("legend");
       legend.textContent = `${config.recordLabel || "Entry"} ${index + 1}`;
       fieldset.appendChild(legend);
@@ -365,6 +427,7 @@
       fieldset.appendChild(actions);
       container.appendChild(fieldset);
     });
+    renderArchiveFolder(records);
   }
 
   function readRecords() {
