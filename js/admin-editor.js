@@ -153,8 +153,8 @@
       <div class="admin-panel-header">
         <h2 id="admin-panel-title">IT administrator</h2>
         <div class="admin-panel-header-actions">
-          <button type="button" data-action="move-to-top">Move to top</button>
-          <button type="button" data-action="move-to-bottom">Move to bottom</button>
+          <button type="button" data-action="scroll-to-top">Scroll to top</button>
+          <button type="button" data-action="scroll-to-bottom">Scroll to bottom</button>
           <button type="button" data-action="close" aria-label="Close admin panel">Close</button>
         </div>
       </div>
@@ -402,21 +402,10 @@
 
     const panel = buildPanel();
     const panelHeader = panel.querySelector(".admin-panel-header");
-    const positionPanel = function (position) {
-      panel.style.left = "auto";
-      panel.style.right = "16px";
+    const scrollPanel = function (position) {
       if (position === "bottom") {
-        panel.style.top = "auto";
-        panel.style.bottom = "16px";
-        window.scrollTo({
-          top: document.documentElement.scrollHeight,
-          behavior: "smooth"
-        });
         panel.scrollTo({ top: panel.scrollHeight, behavior: "smooth" });
       } else {
-        panel.style.top = "16px";
-        panel.style.bottom = "auto";
-        window.scrollTo({ top: 0, behavior: "smooth" });
         panel.scrollTo({ top: 0, behavior: "smooth" });
       }
     };
@@ -500,7 +489,7 @@
       } else {
         window.scrollTo(0, 0);
         panel.show();
-        positionPanel("top");
+        scrollPanel("top");
         openButton.setAttribute("aria-expanded", "true");
         if (authenticated) {
           prepareEditor();
@@ -522,12 +511,12 @@
       finishClosingPanel();
     });
 
-    panel.querySelector('[data-action="move-to-top"]').addEventListener("click", function () {
-      positionPanel("top");
+    panel.querySelector('[data-action="scroll-to-top"]').addEventListener("click", function () {
+      scrollPanel("top");
     });
 
-    panel.querySelector('[data-action="move-to-bottom"]').addEventListener("click", function () {
-      positionPanel("bottom");
+    panel.querySelector('[data-action="scroll-to-bottom"]').addEventListener("click", function () {
+      scrollPanel("bottom");
     });
 
     try {
