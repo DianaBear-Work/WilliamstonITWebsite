@@ -45,6 +45,7 @@ get any required approval before setting it up.
    ```powershell
    npx.cmd wrangler d1 execute pelzer-it-content --remote --file=migrations/0001_initial.sql
    npx.cmd wrangler d1 execute pelzer-it-content --remote --file=migrations/0002_admin_users.sql
+   npx.cmd wrangler d1 execute pelzer-it-content --remote --file=migrations/0003_admin_account_controls.sql
    ```
 
 4. In the Pages project settings, add a D1 database binding:
@@ -59,8 +60,10 @@ get any required approval before setting it up.
    Save both values in your organization's approved password manager. Don't
    put them in the repository or send them in chat.
 6. Deploy the site. Sign in with username `dianabear` and the existing
-   `ADMIN_PASSWORD`. Use **Manage admin accounts** to create additional IT
-   admin accounts. Their passwords must be at least 12 characters.
+   `ADMIN_PASSWORD`. Use **Admin Dashboard** to create accounts, reset their
+   passwords, lock or delete accounts, and review last sign-in times. Admin
+   passwords must be at least 12 characters.
+   The Admin Dashboard is available only while signed in as the master admin.
 7. Check that the public pages load, admin sign-in works, and saved edits are
    still there after you reload the page.
 8. Once Cloudflare Pages is working, turn off the GitHub Pages workflow in
@@ -68,9 +71,10 @@ get any required approval before setting it up.
    Cloudflare Pages address. Leave the workflow on until the site is ready to
    switch over.
 
-You can run the D1 migrations again if needed. Future commits to `main` deploy
-through Cloudflare Pages' Git integration. Before the first deployment, make
-sure the `DB` binding and encrypted secrets are set up in Cloudflare.
+Run each D1 migration once, in order, for each database. Future commits to
+`main` deploy through Cloudflare Pages' Git integration. Before the first
+deployment, make sure the `DB` binding and encrypted secrets are set up in
+Cloudflare.
 
 ## Editing site content
 

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#171717">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Admin Dashboard | Pelzer 2 IT</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/admin-editor.css">
+  <link rel="stylesheet" href="css/site-header.css">
+  <style>
+    .account-dashboard {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 48px 0 72px;
+    }
+
+    .account-dashboard h1 {
+      margin: 0 0 12px;
+    }
+
+    .account-dashboard-intro {
+      margin-bottom: 28px;
+      color: #555;
+    }
+
+    .account-create,
+    .account-card,
+    .access-denied {
+      padding: 24px;
+      border: 1px solid #dedede;
+      border-top: 4px solid #fe5b1b;
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+    }
+
+    .account-create {
+      margin-bottom: 24px;
+    }
+
+    .account-create h2,
+    .account-list-heading {
+      margin: 0 0 16px;
+    }
+
+    .account-form-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      align-items: end;
+    }
+
+    .account-create label,
+    .account-card label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 700;
+    }
+
+    .account-create input,
+    .account-card input {
+      width: 100%;
+      min-height: 42px;
+      padding: 8px 10px;
+      border: 1px solid #aeb3b9;
+      border-radius: 5px;
+      font: inherit;
+    }
+
+    .account-form-grid .admin-primary {
+      min-height: 42px;
+      padding: 8px 14px;
+      border: 1px solid #fe5b1b;
+      border-radius: 5px;
+      background: #fe5b1b;
+      color: #fff;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .account-form-grid .admin-primary:hover,
+    .account-form-grid .admin-primary:focus-visible {
+      border-color: #e94d12;
+      background: #e94d12;
+    }
+
+    .account-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .account-card {
+      display: grid;
+      grid-template-columns: minmax(200px, 1fr) minmax(260px, 1fr);
+      gap: 14px 24px;
+    }
+
+    .account-card-head {
+      grid-column: 1 / -1;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #e4e5e7;
+    }
+
+    .account-name {
+      display: block;
+      font-size: 18px;
+    }
+
+    .account-username,
+    .account-last-signin {
+      margin: 4px 0 0;
+      color: #555;
+      overflow-wrap: anywhere;
+    }
+
+    .account-status {
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: #e8f5eb;
+      color: #176b2c;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .account-status.is-locked {
+      background: #fff0ec;
+      color: #a93513;
+    }
+
+    .account-password {
+      align-self: end;
+    }
+
+    .account-actions {
+      grid-column: 1 / -1;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .account-actions button {
+      min-height: 38px;
+      padding: 7px 12px;
+      border: 1px solid #777;
+      border-radius: 5px;
+      background: #fff;
+      color: #222;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .account-actions button:hover,
+    .account-actions button:focus-visible {
+      border-color: #fe5b1b;
+      color: #c64012;
+    }
+
+    .account-actions .delete-account {
+      border-color: #b42318;
+      color: #b42318;
+    }
+
+    .dashboard-status {
+      min-height: 24px;
+      margin: 0 0 16px;
+      font-weight: 700;
+    }
+
+    .dashboard-status[data-error="true"] {
+      color: #b42318;
+    }
+
+    .access-denied[hidden],
+    #account-dashboard[hidden] {
+      display: none;
+    }
+
+    @media (max-width: 700px) {
+      .account-dashboard {
+        width: calc(100% - 32px);
+        padding: 32px 0 48px;
+      }
+
+      .account-form-grid,
+      .account-card {
+        grid-template-columns: 1fr;
+      }
+
+      .account-card-head,
+      .account-actions {
+        grid-column: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html" aria-label="Pelzer 2 IT home">
+        <img src="documents/vertivWhiteLogo.jpg" alt="Vertiv" class="vertiv-logo">
+        <span class="brand-divider" aria-hidden="true"></span>
+        <span class="site-brand-text">PELZER 2 <strong>IT</strong></span>
+      </a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">☰ Menu</button>
+      <nav id="primary-nav" class="nav-links" aria-label="Main navigation">
+        <a href="index.html">Home</a>
+        <a href="pages/resources.html">IT Resources</a>
+        <a href="pages/updates.html">Updates</a>
+        <a href="adminDash.html" aria-current="page" data-master-admin-only hidden>Admin Dashboard</a>
+      </nav>
+      <a class="admin-open" id="admin-open" href="pages/updates.html#admin-login">Admin sign in</a>
+    </div>
+  </header>
+
+  <main id="main" class="container">
+    <section id="account-dashboard" class="account-dashboard" hidden>
+      <p class="eyebrow">MASTER ADMIN</p>
+      <h1>IT Admin Accounts</h1>
+      <p class="account-dashboard-intro">Create accounts, reset passwords, lock access, and review sign-in activity.</p>
+      <p id="dashboard-status" class="dashboard-status" role="status" aria-live="polite"></p>
+
+      <section class="account-create" aria-labelledby="create-account-heading">
+        <h2 id="create-account-heading">Add an IT admin</h2>
+        <form id="create-account-form" class="account-form-grid">
+          <div>
+            <label for="new-username">Username</label>
+            <input id="new-username" name="username" minlength="3" maxlength="32" pattern="[A-Za-z0-9._-]+" autocomplete="off" required>
+          </div>
+          <div>
+            <label for="new-display-name">Display name</label>
+            <input id="new-display-name" name="displayName" maxlength="80" required>
+          </div>
+          <div>
+            <label for="new-password">Initial password (12+ characters)</label>
+            <input id="new-password" name="password" type="password" minlength="12" maxlength="256" autocomplete="new-password" required>
+          </div>
+          <button class="admin-primary" type="submit">Create account</button>
+        </form>
+      </section>
+
+      <h2 class="account-list-heading">Accounts</h2>
+      <div id="account-list" class="account-list" aria-live="polite"></div>
+    </section>
+
+    <section id="access-denied" class="access-denied" hidden>
+      <h1>Master admin access required</h1>
+      <p id="access-message">Sign in with the master admin account to manage IT accounts.</p>
+      <a class="button" href="pages/updates.html#admin-login">Go to admin sign in</a>
+    </section>
+  </main>
+  <script src="js/main.js" defer></script>
+  <script src="js/admin-dashboard.js" defer></script>
+</body>
+</html>

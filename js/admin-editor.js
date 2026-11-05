@@ -259,7 +259,9 @@
       return;
     }
 
-    users.forEach(function (user) {
+    users.filter(function (user) {
+      return !user.is_master;
+    }).forEach(function (user) {
       const card = document.createElement("section");
       card.className = "admin-user";
 

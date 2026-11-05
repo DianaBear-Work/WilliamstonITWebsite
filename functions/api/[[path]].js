@@ -88,10 +88,10 @@ async function verifySession(request, secret, db) {
   }
 
   const account = await db.prepare(
-    "SELECT session_version, display_name FROM admin_users WHERE username = ?"
+    "SELECT session_version, display_name, locked FROM admin_users WHERE username = ?"
   ).bind(username).first();
 
-  return account && account.session_version === version
+  return account && !account.locked && account.session_version === version
     ? {
         username,
         displayName: account.display_name || username,
@@ -205,8 +205,15 @@ async function masterSession(request, env) {
 
 async function listAdminUsers(env) {
   const result = await env.DB.prepare(
-    "SELECT username, display_name, created_at FROM admin_users ORDER BY username"
-  ).all();
+    `SELECT username, display_name, created_at, last_sign_in_at, locked,
+            0 AS is_master
+     FROM admin_users
+     UNION ALL
+     SELECT ?, ?, NULL, admin_signins.last_sign_in_at, 0, 1
+     FROM (SELECT 1) AS master_account
+     LEFT JOIN admin_signins ON admin_signins.username = ?
+     ORDER BY is_master DESC, username`
+  ).bind(MASTER_USERNAME, "Diana Barakat", MASTER_USERNAME).all();
 
   return jsonResponse({ users: result.results || [] });
 }
@@ -296,6 +303,58 @@ async function updateAdminPassword(request, env, username) {
     return jsonResponse({ error: "Admin account not found." }, 404);
   }
   return jsonResponse({ updated: true });
+}
+
+async function updateAdminLock(request, env, username) {
+  if (!requireSameOrigin(request)) {
+    return jsonResponse({ error: "Invalid request origin." }, 403);
+  }
+
+  if (!await masterSession(request, env)) {
+    return jsonResponse({ error: "Only the master admin can manage accounts." }, 403);
+  }
+  if (username === MASTER_USERNAME || username === "diana") {
+    return jsonResponse({ error: "The master account cannot be locked here." }, 400);
+  }
+
+  const parsed = await readAdminRequestBody(request);
+  if (parsed.error) return parsed.error;
+  if (typeof parsed.body.locked !== "boolean") {
+    return jsonResponse({ error: "Choose whether to lock this account." }, 400);
+  }
+
+  const result = await env.DB.prepare(
+    `UPDATE admin_users
+     SET locked = ?, session_version = ?
+     WHERE username = ?`
+  ).bind(Number(parsed.body.locked), randomHex(16), username).run();
+
+  if (!result.meta || result.meta.changes !== 1) {
+    return jsonResponse({ error: "Admin account not found." }, 404);
+  }
+  return jsonResponse({ locked: parsed.body.locked });
+}
+
+async function deleteAdminUser(request, env, username) {
+  if (!requireSameOrigin(request)) {
+    return jsonResponse({ error: "Invalid request origin." }, 403);
+  }
+
+  if (!await masterSession(request, env)) {
+    return jsonResponse({ error: "Only the master admin can manage accounts." }, 403);
+  }
+  if (username === MASTER_USERNAME || username === "diana") {
+    return jsonResponse({ error: "The master account cannot be deleted here." }, 400);
+  }
+
+  const result = await env.DB.prepare(
+    "DELETE FROM admin_users WHERE username = ?"
+  ).bind(username).run();
+
+  if (!result.meta || result.meta.changes !== 1) {
+    return jsonResponse({ error: "Admin account not found." }, 404);
+  }
+  return jsonResponse({ deleted: true });
 }
 
 async function readJsonBody(request, maxBytes = 4096) {
@@ -490,9 +549,11 @@ async function login(request, env) {
     });
   } else {
     const account = await env.DB.prepare(
-      "SELECT password_salt, password_hash, session_version, display_name FROM admin_users WHERE username = ?"
+      `SELECT password_salt, password_hash, session_version, display_name, locked
+       FROM admin_users WHERE username = ?`
     ).bind(username).first();
-    accepted = Boolean(account && await passwordMatchesAccount(body.password, account));
+    accepted = Boolean(account && !account.locked &&
+      await passwordMatchesAccount(body.password, account));
     if (accepted) {
       sessionVersion = account.session_version;
       displayName = account.display_name || username;
@@ -512,6 +573,18 @@ async function login(request, env) {
   await env.DB.prepare(
     "DELETE FROM login_attempts WHERE ip_key = ?"
   ).bind(ipKey).run();
+
+  if (username === MASTER_USERNAME) {
+    await env.DB.prepare(
+      `INSERT INTO admin_signins (username, last_sign_in_at)
+       VALUES (?, datetime('now'))
+       ON CONFLICT(username) DO UPDATE SET last_sign_in_at = excluded.last_sign_in_at`
+    ).bind(username).run();
+  } else {
+    await env.DB.prepare(
+      "UPDATE admin_users SET last_sign_in_at = datetime('now') WHERE username = ?"
+    ).bind(username).run();
+  }
 
   const token = await createSession(username, sessionVersion, sessionSecret);
 
@@ -575,6 +648,22 @@ async function handleRequest(context) {
         return jsonResponse({ error: "The DB database binding is missing." }, 503);
       }
       return await updateAdminPassword(request, env, passwordUpdate[1]);
+    }
+
+    const accountControl = path.match(
+      /^\/api\/admin-users\/([a-z0-9._-]{3,32})$/
+    );
+    if (accountControl && request.method === "PATCH") {
+      if (!env.DB) {
+        return jsonResponse({ error: "The DB database binding is missing." }, 503);
+      }
+      return await updateAdminLock(request, env, accountControl[1]);
+    }
+    if (accountControl && request.method === "DELETE") {
+      if (!env.DB) {
+        return jsonResponse({ error: "The DB database binding is missing." }, 503);
+      }
+      return await deleteAdminUser(request, env, accountControl[1]);
     }
 
     if (path === "/api/logout" && request.method === "POST") {
