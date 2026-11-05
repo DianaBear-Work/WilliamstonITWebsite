@@ -51,9 +51,9 @@
 
     .equipment-page-header .vertiv-logo {
       display: block;
-      width: 125px;
+      width: 150px;
       height: auto;
-      max-height: 55px;
+      max-height: 68px;
       object-fit: contain;
       flex-shrink: 0;
     }
@@ -68,7 +68,7 @@
 
     .equipment-page-header .site-brand-text {
       color: #f1f1f1;
-      font-size: 13px;
+      font-size: 15px;
       font-weight: 500;
       letter-spacing: 1.5px;
       white-space: nowrap;
@@ -465,22 +465,44 @@
 
     @media (max-width: 1425px) {
       .equipment-page-header .header-inner {
-        flex-wrap: wrap;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) repeat(3, max-content);
+        align-items: center;
+        gap: 10px;
+        width: calc(100% - 32px);
+        padding: 0;
       }
 
       .equipment-page-header .admin-open {
-        margin-left: auto;
+        grid-column: 3;
+        grid-row: 1;
+        width: auto;
+        margin-left: 0;
       }
 
       .equipment-page-header .menu-toggle {
         display: inline-flex;
+        grid-column: 2;
+        grid-row: 1;
       }
 
       .equipment-page-header .nav-links {
         display: none;
+        grid-column: 1 / -1;
+        grid-row: 2;
         width: 100%;
         flex-direction: column;
         align-items: stretch;
+      }
+
+      .equipment-page-header .brand {
+        grid-column: 1;
+        grid-row: 1;
+      }
+
+      .equipment-page-header .admin-header-signout {
+        grid-column: 4;
+        grid-row: 1;
       }
 
       .equipment-page-header .nav-links.is-open {
@@ -496,27 +518,47 @@
     @media (max-width: 760px) {
       .equipment-page-header .header-inner {
         display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: minmax(0, 1fr) repeat(3, max-content);
+        justify-content: stretch;
         width: calc(100% - 28px);
         padding: 12px 0;
-        gap: 10px;
+        gap: 7px;
       }
 
       .equipment-page-header .brand {
         grid-column: 1 / -1;
+        grid-row: 1;
         width: 100%;
-        flex: 0 1 auto;
+      }
+
+      .equipment-page-header .menu-toggle {
+        grid-column: 2;
+        grid-row: 2;
+      }
+
+      .equipment-page-header .admin-open {
+        grid-column: 3;
+        grid-row: 2;
+      }
+
+      .equipment-page-header .admin-header-signout {
+        grid-column: 4;
+        grid-row: 2;
       }
 
       .equipment-page-header .menu-toggle,
-      .equipment-page-header .admin-open {
-        width: 100%;
+      .equipment-page-header .admin-open,
+      .equipment-page-header .admin-header-signout {
+        width: auto;
+        min-height: 38px;
+        padding: 7px 9px;
         margin: 0;
       }
 
       .equipment-page-header .nav-links {
         position: static;
         grid-column: 1 / -1;
+        grid-row: 3;
       }
     }
 
@@ -530,8 +572,8 @@
       }
 
       .equipment-page-header .vertiv-logo {
-        width: 90px;
-        max-height: 42px;
+        width: 100px;
+        max-height: 48px;
       }
 
       .equipment-page-header .brand-divider {
@@ -540,8 +582,8 @@
 
       .equipment-page-header .site-brand-text {
         max-width: none;
-        font-size: 10px;
-        letter-spacing: 1px;
+        font-size: 12px;
+        letter-spacing: 0.8px;
         white-space: nowrap;
       }
 
@@ -569,6 +611,7 @@
       }
     }
   </style>
+  <link rel="stylesheet" href="../css/site-header.css">
 </head>
 
 <body>
@@ -598,7 +641,7 @@
         aria-expanded="false"
         aria-controls="primary-nav"
       >
-        Menu <span aria-hidden="true">☰</span>
+        ☰ Menu
       </button>
 
       <nav id="primary-nav" class="nav-links" aria-label="Main navigation">

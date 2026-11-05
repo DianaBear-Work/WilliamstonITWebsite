@@ -67,7 +67,7 @@
     .brand {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 16px;
       text-decoration: none;
       min-width: 0;
       flex-shrink: 0;
@@ -75,23 +75,29 @@
 
     .brand img {
       display: block;
-      width: 125px;
-      max-height: 55px;
+      width: 150px;
+      max-height: 68px;
       object-fit: contain;
     }
 
-    .brand-text {
-      border-left: 1px solid #555;
-      padding-left: 15px;
-      font-size: 13px;
-      color: #dddddd;
+    .brand-divider {
+      display: block;
+      width: 1px;
+      height: 32px;
+      background: #d5dbe1;
+      flex-shrink: 0;
+    }
+
+    .site-brand-text {
+      color: #f1f1f1;
+      font-size: 15px;
+      font-weight: 500;
+      letter-spacing: 1.2px;
       white-space: nowrap;
     }
 
-    .brand-text strong {
-      display: block;
-      color: var(--white);
-      font-size: 16px;
+    .site-brand-text strong {
+      color: #FE5B1B;
     }
 
     .menu-toggle {
@@ -549,32 +555,45 @@
 
     @media (max-width: 1425px) {
       .header-inner {
-        flex-wrap: wrap;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) repeat(3, max-content);
+        justify-content: stretch;
+        gap: 10px;
         width: calc(100% - 32px);
-        padding: 13px 18px;
+        padding: 13px 0;
+      }
+
+      .brand {
+        grid-column: 1 / -1;
+        grid-row: 1;
+        width: 100%;
       }
 
       .brand img {
-        width: 100px;
+        width: 125px;
       }
 
-      .brand-text {
-        font-size: 11px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+      .brand-divider {
+        height: 30px;
       }
 
-      .brand-text strong {
+      .site-brand-text {
         font-size: 14px;
       }
 
       .menu-toggle {
         display: block;
+        grid-column: 2;
+        grid-row: 2;
+        width: auto;
+        padding: 7px 10px;
+        font-size: 13px;
       }
 
       .nav-links {
         display: none;
+        grid-column: 1 / -1;
+        grid-row: 3;
         flex-direction: column;
         align-items: stretch;
         width: 100%;
@@ -592,17 +611,33 @@
       }
 
       .admin-open {
-        margin-left: auto;
+        grid-column: 3;
+        grid-row: 2;
+        width: auto;
+        min-height: 38px;
+        padding: 7px 10px;
+        font-size: 12px;
+        margin-left: 0;
+      }
+
+      .admin-header-signout {
+        grid-column: 4;
+        grid-row: 2;
+        width: auto;
+        min-height: 38px;
+        padding: 7px 10px;
+        font-size: 12px;
       }
     }
 
     @media (max-width: 760px) {
       .header-inner {
         display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: minmax(0, 1fr) repeat(3, max-content);
+        justify-content: stretch;
         width: calc(100% - 28px);
         padding: 12px 0;
-        gap: 10px;
+        gap: 8px;
       }
 
       .brand {
@@ -610,13 +645,39 @@
         width: 100%;
       }
 
+      .brand img {
+        width: 100px;
+        max-height: 48px;
+      }
+
+      .site-brand-text {
+        font-size: 12px;
+        letter-spacing: 0.8px;
+      }
+
+      .brand-divider {
+        height: 28px;
+      }
+
       .menu-toggle,
       .admin-open {
-        width: 100%;
+        width: auto;
+        min-height: 38px;
+        padding: 7px 9px;
+        font-size: 12px;
       }
 
       .admin-open {
+        grid-column: 3;
+        grid-row: 2;
         margin-left: 0;
+      }
+
+      .admin-header-signout {
+        width: auto;
+        min-height: 38px;
+        padding: 7px 9px;
+        font-size: 12px;
       }
 
       .nav-links {
@@ -668,6 +729,7 @@
       }
     }
   </style>
+  <link rel="stylesheet" href="../css/site-header.css">
 </head>
 
 <body>
@@ -678,8 +740,9 @@
           src="../documents/vertivWhiteLogo.jpg"
           alt="Vertiv"
         >
-        <span class="brand-text">
-          <strong>Pelzer 2 IT</strong>
+        <span class="brand-divider" aria-hidden="true"></span>
+        <span class="site-brand-text">
+          PELZER 2 <strong>IT</strong>
         </span>
       </a>
 
@@ -690,7 +753,7 @@
         aria-expanded="false"
         aria-controls="primary-nav"
       >
-        Menu ☰
+        ☰ Menu
       </button>
 
       <nav class="nav-links" id="primary-nav" aria-label="Main navigation">
@@ -707,37 +770,6 @@
       <button class="admin-open" id="admin-open" type="button">Admin sign in</button>
     </div>
   </header>
-
-  <script>
-    const queueMenuToggle = document.getElementById("menu-toggle");
-    const queuePrimaryNav = document.getElementById("primary-nav");
-
-    queueMenuToggle.addEventListener("click", () => {
-      const isOpen = queuePrimaryNav.classList.toggle("is-open");
-      queueMenuToggle.setAttribute("aria-expanded", String(isOpen));
-      queueMenuToggle.innerHTML = isOpen
-        ? 'Close <span aria-hidden="true">×</span>'
-        : 'Menu <span aria-hidden="true">☰</span>';
-    });
-
-    queuePrimaryNav.querySelectorAll("a").forEach((link) => {
-      link.addEventListener("click", () => {
-        queuePrimaryNav.classList.remove("is-open");
-        queueMenuToggle.setAttribute("aria-expanded", "false");
-        queueMenuToggle.innerHTML =
-          'Menu <span aria-hidden="true">☰</span>';
-      });
-    });
-
-    window.addEventListener("resize", () => {
-      if (getComputedStyle(queueMenuToggle).display === "none") {
-        queuePrimaryNav.classList.remove("is-open");
-        queueMenuToggle.setAttribute("aria-expanded", "false");
-        queueMenuToggle.innerHTML =
-          'Menu <span aria-hidden="true">☰</span>';
-      }
-    });
-  </script>
 
   <section class="hero">
     <div class="page-container">
