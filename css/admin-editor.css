@@ -215,23 +215,15 @@
   font-size: 12px;
 }
 
-.admin-archive-links {
+.admin-archive-records {
   display: grid;
-  gap: 6px;
-  max-height: 220px;
-  overflow: auto;
+  gap: 8px;
   padding: 0 12px 12px;
 }
 
-.admin-panel .admin-archive-links button {
-  min-height: 34px;
-  padding: 6px 9px;
-  text-align: left;
-  font-size: 12px;
-}
-
-.admin-archive-links p {
+.admin-archive-records > p {
   margin: 0;
+  padding: 8px 0;
   color: #656b72;
   font-size: 12px;
 }

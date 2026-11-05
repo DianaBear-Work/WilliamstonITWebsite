@@ -183,8 +183,8 @@
             <span>Archived laptop builds</span>
             <span class="admin-archive-count" id="admin-archive-count"></span>
           </summary>
-          <p>Open an archived build directly in the editor.</p>
-          <div class="admin-archive-links" id="admin-archive-links"></div>
+          <p>Edit archived builds here; they are kept out of the current entries list.</p>
+          <div class="admin-archive-records" id="admin-archive-records"></div>
         </details>
         <div id="admin-records"></div>
         <div class="admin-actions">
@@ -264,62 +264,50 @@
 
   function renderArchiveFolder(records) {
     const folder = document.getElementById("admin-archive-folder");
-    if (!folder || typeof config.getArchivedRecords !== "function") {
-      return;
+    const archiveContainer = document.getElementById("admin-archive-records");
+    if (!folder || !archiveContainer ||
+        typeof config.getArchivedRecords !== "function") {
+      return [];
     }
 
     folder.hidden = false;
     const archivedRecords = config.getArchivedRecords(records);
     document.getElementById("admin-archive-count").textContent =
       `${archivedRecords.length} ${archivedRecords.length === 1 ? "entry" : "entries"}`;
-
-    const links = document.getElementById("admin-archive-links");
-    links.replaceChildren();
     if (archivedRecords.length === 0) {
       const emptyMessage = document.createElement("p");
       emptyMessage.textContent = "No archived builds yet.";
-      links.appendChild(emptyMessage);
-      return;
+      archiveContainer.replaceChildren(emptyMessage);
+      return [];
     }
 
-    archivedRecords.forEach(function (item) {
-      const record = item.record;
-      const button = document.createElement("button");
-      button.type = "button";
-      const label = [record.id, record.laptopType].filter(Boolean).join(" - ");
-      const completedAt = record.completedAt
-        ? Date.parse(record.completedAt)
-        : NaN;
-      const completedLabel = Number.isNaN(completedAt)
-        ? ""
-        : ` - Completed ${new Date(completedAt).toLocaleDateString()}`;
-      button.textContent = `${label || "Laptop build"}${completedLabel}`;
-      button.setAttribute("aria-label", `Open archived build ${label || "entry"}`);
-      button.addEventListener("click", function () {
-        const panel = document.getElementById("admin-panel");
-        const fieldset = document.querySelector(
-          `#admin-records .admin-record[data-record-index="${item.index}"]`
-        );
-        if (!panel || !fieldset) {
-          return;
-        }
-
-        const panelBounds = panel.getBoundingClientRect();
-        const recordBounds = fieldset.getBoundingClientRect();
-        panel.scrollTo({
-          top: panel.scrollTop + recordBounds.top - panelBounds.top - 16,
-          behavior: "smooth"
-        });
-      });
-      links.appendChild(button);
+    archiveContainer.replaceChildren();
+    return archivedRecords.map(function (item) {
+      return item.index;
     });
   }
 
   function renderRecords(records) {
-    const container = document.getElementById("admin-records");
-    container.replaceChildren();
+    const currentContainer = document.getElementById("admin-records");
+    const archiveContainer = document.getElementById("admin-archive-records");
+    const archivedIndexes = renderArchiveFolder(records);
+    const archivedIndexSet = new Set(archivedIndexes);
+    const currentIndexes = records.map(function (record, index) {
+      return index;
+    }).filter(function (index) {
+      return !archivedIndexSet.has(index);
+    });
 
-    records.forEach(function (record, index) {
+    renderRecordGroup(records, currentIndexes, currentContainer);
+    if (archiveContainer && archivedIndexes.length) {
+      renderRecordGroup(records, archivedIndexes, archiveContainer);
+    }
+  }
+
+  function renderRecordGroup(records, indexes, container) {
+    container.replaceChildren();
+    indexes.forEach(function (index) {
+      const record = records[index];
       const fieldset = document.createElement("fieldset");
       fieldset.className = "admin-record";
       fieldset.dataset.recordIndex = String(index);
@@ -386,14 +374,20 @@
       moveUpButton.type = "button";
       moveUpButton.textContent = "Move up";
       moveUpButton.setAttribute("aria-label", `Move entry ${index + 1} up`);
-      moveUpButton.disabled = index === 0;
+      moveUpButton.disabled = indexes.indexOf(index) === 0;
       moveUpButton.addEventListener("click", function () {
         const updatedRecords = readRecords();
-        [updatedRecords[index - 1], updatedRecords[index]] =
-          [updatedRecords[index], updatedRecords[index - 1]];
+        const groupIndexes = Array.from(container.querySelectorAll(".admin-record"))
+          .map(function (item) {
+            return Number(item.dataset.recordIndex);
+          });
+        const groupPosition = groupIndexes.indexOf(index);
+        const adjacentIndex = groupIndexes[groupPosition - 1];
+        [updatedRecords[adjacentIndex], updatedRecords[index]] =
+          [updatedRecords[index], updatedRecords[adjacentIndex]];
         renderRecords(updatedRecords);
-        container.querySelector(
-          `.admin-record:nth-child(${index}) .admin-record-actions button:nth-child(2)`
+        document.querySelector(
+          `.admin-record[data-record-index="${adjacentIndex}"] .admin-record-actions button:nth-child(2)`
         ).focus();
       });
       actions.appendChild(moveUpButton);
@@ -402,14 +396,20 @@
       moveDownButton.type = "button";
       moveDownButton.textContent = "Move down";
       moveDownButton.setAttribute("aria-label", `Move entry ${index + 1} down`);
-      moveDownButton.disabled = index === records.length - 1;
+      moveDownButton.disabled = indexes.indexOf(index) === indexes.length - 1;
       moveDownButton.addEventListener("click", function () {
         const updatedRecords = readRecords();
-        [updatedRecords[index], updatedRecords[index + 1]] =
-          [updatedRecords[index + 1], updatedRecords[index]];
+        const groupIndexes = Array.from(container.querySelectorAll(".admin-record"))
+          .map(function (item) {
+            return Number(item.dataset.recordIndex);
+          });
+        const groupPosition = groupIndexes.indexOf(index);
+        const adjacentIndex = groupIndexes[groupPosition + 1];
+        [updatedRecords[index], updatedRecords[adjacentIndex]] =
+          [updatedRecords[adjacentIndex], updatedRecords[index]];
         renderRecords(updatedRecords);
-        container.querySelector(
-          `.admin-record:nth-child(${index + 2}) .admin-record-actions button`
+        document.querySelector(
+          `.admin-record[data-record-index="${adjacentIndex}"] .admin-record-actions button`
         ).focus();
       });
       actions.appendChild(moveDownButton);
@@ -427,23 +427,26 @@
       fieldset.appendChild(actions);
       container.appendChild(fieldset);
     });
-    renderArchiveFolder(records);
   }
 
   function readRecords() {
-    return Array.from(document.querySelectorAll("#admin-records .admin-record"))
-      .map(function (fieldset) {
-        const record = {};
-        config.editorFields.forEach(function (field) {
-          const input = fieldset.querySelector(`[data-field="${field.key}"]`);
-          record[field.key] = field.type === "list"
-            ? input.value.split(/\r?\n/).map(function (value) {
-              return value.trim();
-            }).filter(Boolean)
-            : input.value.trim();
-        });
-        return record;
+    const fieldsets = Array.from(document.querySelectorAll(
+      "#admin-records .admin-record, #admin-archive-records .admin-record"
+    ));
+    const records = new Array(fieldsets.length);
+    fieldsets.forEach(function (fieldset) {
+      const record = {};
+      config.editorFields.forEach(function (field) {
+        const input = fieldset.querySelector(`[data-field="${field.key}"]`);
+        record[field.key] = field.type === "list"
+          ? input.value.split(/\r?\n/).map(function (value) {
+            return value.trim();
+          }).filter(Boolean)
+          : input.value.trim();
       });
+      records[Number(fieldset.dataset.recordIndex)] = record;
+    });
+    return records;
   }
 
   async function loadPublicContent() {
