@@ -778,6 +778,15 @@ async function handleRequest(context) {
     return jsonResponse({ saved: true });
   } catch (error) {
     console.error("Admin API request failed:", error);
+    const databaseMessage = error instanceof Error ? error.message : "";
+    if (
+      /no such (?:table|column): (?:admin_signins|last_sign_in_at|locked)\b/i
+        .test(databaseMessage)
+    ) {
+      return jsonResponse({
+        error: "The D1 database is missing the admin account controls migration. Run `npx.cmd wrangler d1 execute pelzer-it-content --remote --file=migrations/0003_admin_account_controls.sql` once against the production database, then reload this page."
+      }, 503);
+    }
     return jsonResponse({
       error: "The admin service failed (HTTP 500). Check the Cloudflare Pages Function logs and D1 database setup; details are recorded in the server logs."
     }, 500);

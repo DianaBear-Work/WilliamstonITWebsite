@@ -64,6 +64,9 @@ get any required approval before setting it up.
    passwords, lock or delete accounts, and review last sign-in times. Admin
    passwords must be at least 12 characters.
    The Admin Dashboard is available only while signed in as the master admin.
+   If the dashboard reports that account controls are unavailable, confirm
+   that migration `0003_admin_account_controls.sql` was applied to the
+   production D1 database.
 7. Check that the public pages load, admin sign-in works, and saved edits are
    still there after you reload the page.
 8. Once Cloudflare Pages is working, turn off the GitHub Pages workflow in
