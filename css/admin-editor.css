@@ -132,9 +132,16 @@
   letter-spacing: -0.02em;
 }
 
+.admin-panel-header-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
 .admin-panel .admin-panel-header button {
   min-height: 34px;
-  padding: 5px 10px;
+  padding: 5px 8px;
   border-color: #5a5a5a;
   background: #303030;
   color: #fff;
@@ -291,29 +298,6 @@
   color: #30343a;
   font-size: 16px;
   font-weight: 700;
-}
-
-.admin-account-panel {
-  margin-top: 20px;
-  padding-top: 16px;
-  border-top: 1px solid #d5d5d5;
-}
-
-.admin-account-panel h3 {
-  margin: 0;
-  font-size: 17px;
-}
-
-.admin-user {
-  margin-top: 14px;
-  padding: 12px;
-  border: 1px solid #e0e2e5;
-  border-radius: 9px;
-  background: #fafafa;
-}
-
-.admin-user strong {
-  overflow-wrap: anywhere;
 }
 
 .admin-record {
