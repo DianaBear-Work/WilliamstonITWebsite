@@ -403,15 +403,22 @@
     const panel = buildPanel();
     const panelHeader = panel.querySelector(".admin-panel-header");
     const positionPanel = function (position) {
-      const bounds = panel.getBoundingClientRect();
-      const top = position === "bottom"
-        ? Math.max(8, window.innerHeight - bounds.height - 16)
-        : 16;
-      panel.style.top = `${top}px`;
       panel.style.left = "auto";
       panel.style.right = "16px";
-      panel.style.bottom = "auto";
-      panel.scrollTop = 0;
+      if (position === "bottom") {
+        panel.style.top = "auto";
+        panel.style.bottom = "16px";
+        window.scrollTo({
+          top: document.documentElement.scrollHeight,
+          behavior: "smooth"
+        });
+        panel.scrollTo({ top: panel.scrollHeight, behavior: "smooth" });
+      } else {
+        panel.style.top = "16px";
+        panel.style.bottom = "auto";
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        panel.scrollTo({ top: 0, behavior: "smooth" });
+      }
     };
     let activePointerId = null;
     let dragOffsetX = 0;
