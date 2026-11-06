@@ -116,6 +116,26 @@ header.site-header .admin-header-signout {
   white-space: nowrap;
 }
 
+header.site-header .admin-open {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #fe5b1b;
+  border-radius: 5px;
+  background: #fe5b1b;
+  color: #fff;
+  font: inherit;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+header.site-header .admin-open:hover,
+header.site-header .admin-open:focus-visible {
+  border-color: #ff7a47;
+  background: #ff7a47;
+  color: #fff;
+}
+
 header.site-header .admin-header-status {
   position: absolute;
   width: 1px;

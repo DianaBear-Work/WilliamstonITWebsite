@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#171717">
+  <meta name="description" content="Complete the Vertiv new employee onboarding and IT provisioning questionnaire.">
+  <title>New Hire Onboarding Form | Pelzer 2 IT</title>
+
+  <script src="../js/main.js" defer></script>
+  <script src="../js/onboarding-form.js" defer></script>
+  <link rel="stylesheet" href="../css/site-header.css">
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: Inter, Arial, Helvetica, sans-serif;
+      color: #171717;
+      background: #f5f5f5;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #f5f5f5;
+    }
+
+    .page-container {
+      width: min(1120px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    header.site-header a.admin-open {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #fe5b1b;
+      border-radius: 6px;
+      background: #fe5b1b;
+      color: #fff;
+      text-decoration: none;
+    }
+
+    header.site-header a.admin-open:hover,
+    header.site-header a.admin-open:focus-visible {
+      border-color: #df4910;
+      background: #df4910;
+    }
+
+    .page-hero {
+      border-bottom: 5px solid #fe5b1b;
+      background: #171717;
+      color: #fff;
+    }
+
+    .hero-content {
+      padding: 34px 0;
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: #ff8a59;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(30px, 5vw, 42px);
+      line-height: 1.15;
+    }
+
+    .hero-content > p:last-child {
+      max-width: 760px;
+      margin: 12px 0 0;
+      color: #e2e2e2;
+      line-height: 1.6;
+    }
+
+    main {
+      padding: 28px 0 56px;
+    }
+
+    .form-card {
+      overflow: hidden;
+      border: 1px solid #d9d9d9;
+      border-radius: 12px;
+      background: #fff;
+      box-shadow: 0 4px 16px #17171712;
+    }
+
+    .form-intro {
+      padding: 22px 24px;
+      border-bottom: 1px solid #e6e6e6;
+    }
+
+    .form-intro h2 {
+      margin: 0;
+      font-size: 21px;
+    }
+
+    .form-intro p {
+      max-width: 850px;
+      margin: 8px 0 0;
+      color: #555;
+      line-height: 1.55;
+    }
+
+    .form-intro a,
+    .form-notice a {
+      color: #a93608;
+      font-weight: 700;
+    }
+
+    .reference-links {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px 16px;
+      margin-top: 16px;
+      font-size: 13px;
+    }
+
+    .reference-links strong {
+      color: #353535;
+    }
+
+    .form-notice {
+      margin: 16px 0 0;
+      padding: 12px 14px;
+      border-left: 4px solid #fe5b1b;
+      border-radius: 4px;
+      background: #fff4ef;
+      color: #353535;
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .form-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    #download-status {
+      margin: 12px 0 0;
+      color: #355e3b;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    #download-status:empty {
+      display: none;
+    }
+
+    .wizard {
+      padding: 22px 24px 24px;
+    }
+
+    .wizard-progress {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+
+    .wizard-progress label {
+      color: #363636;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .wizard-progress progress {
+      grid-column: 1 / -1;
+      width: 100%;
+      height: 8px;
+      overflow: hidden;
+      border: 0;
+      border-radius: 99px;
+      background: #e9e9e9;
+      accent-color: #fe5b1b;
+    }
+
+    .wizard-progress progress::-webkit-progress-bar {
+      border-radius: 99px;
+      background: #e9e9e9;
+    }
+
+    .wizard-progress progress::-webkit-progress-value {
+      border-radius: 99px;
+      background: #fe5b1b;
+    }
+
+    .wizard-progress progress::-moz-progress-bar {
+      border-radius: 99px;
+      background: #fe5b1b;
+    }
+
+    .step-count {
+      color: #626262;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .wizard-step[hidden],
+    [hidden] {
+      display: none !important;
+    }
+
+    .wizard-step h3 {
+      margin: 0;
+      font-size: clamp(21px, 3vw, 25px);
+    }
+
+    .step-description {
+      margin: 7px 0 20px;
+      color: #5b5b5b;
+      line-height: 1.5;
+    }
+
+    .form-section {
+      margin: 20px 0 0;
+      padding: 18px;
+      border: 1px solid #e1e1e1;
+      border-radius: 9px;
+      background: #fff;
+    }
+
+    .form-section:first-of-type {
+      margin-top: 0;
+    }
+
+    .form-section legend {
+      padding: 0 8px;
+      color: #171717;
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    .section-help {
+      margin: 0 0 14px;
+      color: #626262;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .field-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px 18px;
+    }
+
+    .field {
+      min-width: 0;
+    }
+
+    .field.full-width {
+      grid-column: 1 / -1;
+    }
+
+    .field > label,
+    .field-label {
+      display: block;
+      margin-bottom: 6px;
+      color: #353535;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .field input,
+    .field textarea {
+      display: block;
+      width: 100%;
+      min-height: 42px;
+      padding: 9px 11px;
+      border: 1px solid #c9cdd1;
+      border-radius: 6px;
+      background: #fff;
+      color: #171717;
+      font: inherit;
+    }
+
+    .field textarea {
+      min-height: 92px;
+      resize: vertical;
+    }
+
+    .field input:focus,
+    .field textarea:focus,
+    .software-search:focus {
+      border-color: #fe5b1b;
+      outline: 3px solid #fe5b1b2b;
+      outline-offset: 1px;
+    }
+
+    .option-grid,
+    .catalog-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .option-card,
+    .catalog-card {
+      min-width: 0;
+      border: 1px solid #dedede;
+      border-radius: 7px;
+      background: #fff;
+    }
+
+    .option-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 11px 12px;
+      cursor: pointer;
+    }
+
+    .option-card:has(input:checked) {
+      border-color: #fe5b1b;
+      background: #fff7f3;
+    }
+
+    .option-card input {
+      width: 17px;
+      height: 17px;
+      flex: 0 0 auto;
+      margin: 1px 0 0;
+      accent-color: #fe5b1b;
+    }
+
+    .option-copy {
+      min-width: 0;
+      line-height: 1.4;
+    }
+
+    .option-copy strong {
+      display: block;
+      font-size: 13px;
+    }
+
+    .option-copy small {
+      display: block;
+      margin-top: 3px;
+      color: #626262;
+      font-size: 12px;
+    }
+
+    .catalog-card {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: start;
+      gap: 10px;
+      padding: 12px;
+    }
+
+    .catalog-card .option-card {
+      padding: 0;
+      border: 0;
+      background: transparent;
+    }
+
+    .catalog-card .option-card:has(input:checked) {
+      border: 0;
+      background: transparent;
+    }
+
+    .request-link {
+      align-self: center;
+      color: #a93608;
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .catalog-card[hidden] {
+      display: none !important;
+    }
+
+    .software-tools {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .software-search {
+      width: min(100%, 380px);
+      min-height: 42px;
+      padding: 9px 11px;
+      border: 1px solid #c9cdd1;
+      border-radius: 6px;
+      font: inherit;
+    }
+
+    .selection-count {
+      color: #5f5f5f;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .step-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 22px;
+      padding-top: 18px;
+      border-top: 1px solid #e7e7e7;
+    }
+
+    .button {
+      display: inline-flex;
+      min-height: 42px;
+      align-items: center;
+      justify-content: center;
+      padding: 9px 15px;
+      border: 1px solid #bfc3c7;
+      border-radius: 6px;
+      background: #fff;
+      color: #333;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 800;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .button:hover,
+    .button:focus-visible {
+      border-color: #fe5b1b;
+      outline: 2px solid #fe5b1b30;
+    }
+
+    .button-primary {
+      border-color: #fe5b1b;
+      background: #fe5b1b;
+      color: #fff;
+    }
+
+    .button-primary:hover,
+    .button-primary:focus-visible {
+      border-color: #df4910;
+      background: #df4910;
+    }
+
+    .button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .step-actions-end {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-left: auto;
+    }
+
+    .form-footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px 20px;
+      margin-top: 18px;
+      color: #555;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .form-footer p {
+      margin: 0;
+    }
+
+    .form-footer a {
+      color: #a93608;
+      font-weight: 700;
+    }
+
+    .print-summary {
+      display: none;
+    }
+
+    .site-footer {
+      padding: 18px 0;
+      border-top: 3px solid #fe5b1b;
+      background: #171717;
+      color: #fff;
+      font-size: 13px;
+    }
+
+    .footer-inner {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 8px 20px;
+    }
+
+    .footer-inner p {
+      margin: 0;
+    }
+
+    .footer-inner a {
+      color: #ff8a59;
+    }
+
+    @media (max-width: 700px) {
+      .page-container {
+        width: min(100% - 28px, 1120px);
+      }
+
+      .hero-content {
+        padding: 28px 0;
+      }
+
+      .form-intro,
+      .wizard {
+        padding: 18px;
+      }
+
+      .field-grid,
+      .option-grid,
+      .catalog-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .form-section {
+        padding: 14px;
+      }
+    }
+
+    @media print {
+      @page {
+        margin: 14mm;
+      }
+
+      body.is-printing {
+        background: #fff;
+      }
+
+      body.is-printing .site-header,
+      body.is-printing .page-hero,
+      body.is-printing .site-footer,
+      body.is-printing .form-intro,
+      body.is-printing .wizard {
+        display: none !important;
+      }
+
+      body.is-printing main {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+      body.is-printing .form-card {
+        overflow: visible;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+      }
+
+      body.is-printing .print-summary {
+        display: block !important;
+        color: #171717;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+
+      .print-summary h1 {
+        padding-bottom: 10px;
+        border-bottom: 3px solid #fe5b1b;
+        font-size: 22px;
+      }
+
+      .print-summary h2 {
+        margin: 22px 0 8px;
+        padding-bottom: 5px;
+        border-bottom: 1px solid #bbb;
+        font-size: 16px;
+        break-after: avoid;
+      }
+
+      .print-summary p {
+        line-height: 1.45;
+      }
+
+      .print-summary ul {
+        margin: 0;
+        padding-left: 20px;
+      }
+
+      .print-summary li {
+        margin: 0 0 5px;
+        white-space: pre-wrap;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="../index.html" aria-label="Pelzer 2 IT home">
+        <img src="../documents/vertivWhiteLogo.jpg" alt="Vertiv">
+        <span class="brand-divider" aria-hidden="true"></span>
+        <span class="site-brand-text">PELZER 2 <strong>IT</strong></span>
+      </a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">
+        ☰ Menu
+      </button>
+      <nav class="nav-links" id="primary-nav" aria-label="Main navigation">
+        <a href="../index.html">Home</a>
+        <a href="resources.html">IT Resources</a>
+        <a href="troubleshooting.html">Troubleshooting</a>
+        <a href="appointments.html">Appointments</a>
+        <a href="updates.html">Updates</a>
+        <a href="Cybersecurity.html">Cybersecurity</a>
+        <a href="equipment-queue.html">Equipment Inventory</a>
+        <a href="laptop-build-queue.html">Laptop Build Queue</a>
+        <a href="onboarding-form.html" aria-current="page">Onboarding Form</a>
+        <a href="../adminDash.html" data-master-admin-only hidden>Admin Dashboard</a>
+      </nav>
+      <a class="admin-open" href="updates.html#admin-login">Admin sign in</a>
+    </div>
+  </header>
+
+  <section class="page-hero">
+    <div class="page-container hero-content">
+      <p class="eyebrow">IT Operations</p>
+      <h1>New Hire Onboarding Form</h1>
+      <p>Share equipment, software, and access requirements so IT can prepare for an incoming employee.</p>
+    </div>
+  </section>
+
+  <main class="page-container">
+    <section class="form-card" aria-labelledby="form-heading">
+      <div class="form-intro">
+        <h2 id="form-heading">Vertiv New Employee Onboarding &amp; IT Provisioning Questionnaire</h2>
+        <p>Complete the eight short steps below. Answers stay in this browser and are not submitted to or stored by this website. On a phone, use <strong>Download completed form</strong> to save a copy; use Print / Save if you need a PDF.</p>
+        <p class="form-notice">
+          A laptop request is created automatically as part of onboarding. Allow up to 10 business days.
+          After completing the form, download a copy or use <strong>Print / Save completed form</strong> to save a PDF. Attach the PDF to an email to
+          <a href="mailto:jason.wightman@vertiv.com">Jason Wightman</a>.
+          Catalog requests must be opened and submitted separately using their Request links below.
+        </p>
+      </div>
+
+      <form class="wizard" id="onboarding-form" autocomplete="off" novalidate>
+        <div class="wizard-progress">
+          <label id="current-step-label" for="step-progress">Step 1: Employee information</label>
+          <span class="step-count" id="step-count">1 of 8</span>
+          <progress id="step-progress" max="8" value="1">1 of 8</progress>
+        </div>
+
+        <section class="wizard-step" data-step-panel="1" aria-labelledby="step-heading-1">
+          <h3 id="step-heading-1">Employee information</h3>
+          <p class="step-description">Complete the employee and start-date details first.</p>
+
+          <fieldset class="form-section">
+            <legend>Employee information</legend>
+            <div class="field-grid">
+              <div class="field">
+                <label for="start-date">Start date</label>
+                <input id="start-date" name="start_date" type="date" data-print-label="Start date">
+              </div>
+              <div class="field">
+                <label for="employee-name">Employee name</label>
+                <input id="employee-name" name="employee_name" type="text" data-print-label="Employee name">
+              </div>
+              <div class="field">
+                <label for="job-title">Job title</label>
+                <input id="job-title" name="job_title" type="text" data-print-label="Job title">
+              </div>
+              <div class="field">
+                <label for="department">Department</label>
+                <input id="department" name="department" type="text" data-print-label="Department">
+              </div>
+              <div class="field">
+                <label for="manager">Manager</label>
+                <input id="manager" name="manager" type="text" data-print-label="Manager">
+              </div>
+              <div class="field">
+                <label for="facility-location">Facility / location</label>
+                <input id="facility-location" name="facility_location" type="text" data-print-label="Facility / location">
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset class="form-section">
+            <legend>Employment type and shift</legend>
+            <p class="section-help">Choose the employee type and intended shift.</p>
+            <div class="option-grid">
+              <label class="option-card"><input type="radio" name="employee_type" value="Full-time Vertiv employee" data-print-label="Employee type"><span class="option-copy"><strong>Full-time Vertiv employee</strong></span></label>
+              <label class="option-card"><input type="radio" name="employee_type" value="Contract employee" data-print-label="Employee type"><span class="option-copy"><strong>Contract employee</strong></span></label>
+              <label class="option-card"><input type="radio" name="employee_type" value="Promotion / Returning Employee" data-print-label="Employee type"><span class="option-copy"><strong>Promotion / Returning Employee</strong></span></label>
+            </div>
+            <p class="field-label" style="margin-top:16px">Intended shift</p>
+            <div class="option-grid">
+              <label class="option-card"><input type="radio" name="shift" value="1st Shift" data-print-label="Intended shift"><span class="option-copy"><strong>1st Shift</strong></span></label>
+              <label class="option-card"><input type="radio" name="shift" value="2nd Shift" data-print-label="Intended shift"><span class="option-copy"><strong>2nd Shift</strong></span></label>
+              <label class="option-card"><input type="radio" name="shift" value="3rd Shift" data-print-label="Intended shift"><span class="option-copy"><strong>3rd Shift</strong></span></label>
+              <label class="option-card"><input type="radio" name="shift" value="Weekend" data-print-label="Intended shift"><span class="option-copy"><strong>Weekend</strong></span></label>
+            </div>
+          </fieldset>
+
+          <fieldset class="form-section">
+            <legend>Shipping information</legend>
+            <p class="section-help">Complete the address only if equipment must be shipped.</p>
+            <div class="option-grid">
+              <label class="option-card"><input type="radio" name="shipping_required" value="Yes" data-shipping-choice="yes" data-print-label="Shipping required"><span class="option-copy"><strong>Yes, shipping is required</strong></span></label>
+              <label class="option-card"><input type="radio" name="shipping_required" value="No" data-shipping-choice="no" data-print-label="Shipping required"><span class="option-copy"><strong>No shipping required</strong></span></label>
+            </div>
+            <div class="field-grid" id="shipping-fields" hidden style="margin-top:14px">
+              <div class="field full-width">
+                <label for="shipping-street">Street</label>
+                <input id="shipping-street" name="shipping_street" type="text" data-print-label="Shipping street">
+              </div>
+              <div class="field">
+                <label for="shipping-city">City</label>
+                <input id="shipping-city" name="shipping_city" type="text" data-print-label="Shipping city">
+              </div>
+              <div class="field">
+                <label for="shipping-state">State</label>
+                <input id="shipping-state" name="shipping_state" type="text" data-print-label="Shipping state">
+              </div>
+              <div class="field">
+                <label for="shipping-zip">ZIP code</label>
+                <input id="shipping-zip" name="shipping_zip" type="text" inputmode="numeric" data-print-label="Shipping ZIP code">
+              </div>
+            </div>
+          </fieldset>
+
+          <div class="reference-links" aria-label="Onboarding reference requests">
+            <strong>Reference requests:</strong>
+            <a href="https://vertiv.service-now.com/esc?id=sc_cat_item_guide&sys_id=d25ba4d6db504300b1af38ff9d961927" target="_blank" rel="noopener noreferrer">New Hire Order Guide</a>
+            <a href="https://vertiv.service-now.com/esc?id=sc_cat_item&sys_id=9a0f3f5a1b7638d0364e6535624bcb9b" target="_blank" rel="noopener noreferrer">Contractor Onboarding</a>
+            <a href="https://vertiv.service-now.com/esc?id=sc_cat_item&sys_id=ad20ca24fb2cfe101655ff977befdc2d" target="_blank" rel="noopener noreferrer">Microsoft Office 365</a>
+          </div>
+        </section>
+
+        <section class="wizard-step" data-step-panel="2" aria-labelledby="step-heading-2" hidden>
+          <h3 id="step-heading-2">Computer configuration</h3>
+          <p class="step-description">Select the required standard computer configuration. Choose all configurations that apply.</p>
+          <fieldset class="form-section">
+            <legend>Standard computer configuration</legend>
+            <div class="option-grid" id="computer-configurations"></div>
+            <p class="form-notice">Monitor mounts or arms are typically provided by Maintenance. Submit those requests through your site's maintenance work-order system.</p>
+          </fieldset>
+          <div class="form-section">
+            <p class="section-help">The standard new-hire kit includes a laptop, travel charger, docking station, keyboard and mouse, two monitors, headset, and backpack.</p>
+            <div class="form-actions">
+              <a class="button" href="../documents/Vertiv-New-Hire-Onboarding-Form-Rev-2026-10-28.pdf" target="_blank" rel="noopener">View the original PDF</a>
+            </div>
+          </div>
+        </section>
+
+        <section class="wizard-step" data-step-panel="3" aria-labelledby="step-heading-3" hidden>
+          <h3 id="step-heading-3">Hardware, printing, and system access</h3>
+          <p class="step-description">Select applicable requirements and add details. Selections document needs; use the Request links to submit catalog requests.</p>
+
+          <fieldset class="form-section">
+            <legend>Additional hardware</legend>
+            <div class="option-grid">
+              <label class="option-card"><input type="checkbox" name="additional_hardware_required" value="Yes" data-print-label="Additional hardware required"><span class="option-copy"><strong>Additional hardware required</strong></span></label>
+            </div>
+            <div class="field-grid" style="margin-top:14px">
+              <div class="field">
+                <label for="hardware-cost-center">Cost center</label>
+                <input id="hardware-cost-center" name="hardware_cost_center" type="text" data-print-label="Hardware cost center">
+              </div>
+              <div class="field">
+                <label for="hardware-details">Hardware requested / details</label>
+                <textarea id="hardware-details" name="hardware_details" data-print-label="Hardware requested / details"></textarea>
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset class="form-section">
+            <legend>Printing</legend>
+            <div class="option-grid" id="printing-options"></div>
+            <div class="field" style="margin-top:14px">
+              <label for="printer-details">Printer / location details</label>
+              <input id="printer-details" name="printer_details" type="text" data-print-label="Printer / location details">
+            </div>
+          </fieldset>
+
+          <fieldset class="form-section">
+            <legend>PowerDB, FieldDB, and IFS</legend>
+            <div class="option-grid">
+              <label class="option-card"><input type="checkbox" name="powerdb_access" value="PowerDB" data-print-label="PowerDB"><span class="option-copy"><strong>PowerDB</strong></span></label>
+              <label class="option-card"><input type="checkbox" name="fielddb_access" value="FieldDB" data-print-label="FieldDB"><span class="option-copy"><strong>FieldDB</strong></span></label>
+              <label class="option-card"><input type="checkbox" name="ifs_access" value="IFS access" data-print-label="IFS access"><span class="option-copy"><strong>IFS access</strong></span></label>
+            </div>
+            <div class="field-grid" style="margin-top:14px">
+              <div class="field">
+                <label for="powerdb-details">Application / database details</label>
+                <input id="powerdb-details" name="powerdb_fielddb_details" type="text" data-print-label="PowerDB / FieldDB application and database details">
+              </div>
+              <div class="field">
+                <label for="ifs-profile-user">Existing user whose IFS profile can be copied</label>
+                <input id="ifs-profile-user" name="ifs_profile_user" type="text" data-print-label="Existing IFS profile user">
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset class="form-section">
+            <legend>Additional system access</legend>
+            <p class="section-help">Choose access needed and open its Request link to submit the corresponding ServiceNow request.</p>
+            <div class="option-grid" id="system-access-options"></div>
+            <div class="field" style="margin-top:14px">
+              <label for="other-access">Other access / service</label>
+              <textarea id="other-access" name="other_access_service" data-print-label="Other access / service"></textarea>
+            </div>
+          </fieldset>
+
+          <fieldset class="form-section">
+            <legend>Standard software request</legend>
+            <p class="section-help">Use this request if the required standard software is not listed in the Software steps.</p>
+            <a class="request-link" href="https://vertiv.service-now.com/esc?id=sc_cat_item&sys_id=89307c6e3bf6f290d605a7ac24e45a15" target="_blank" rel="noopener">Open standard software request</a>
+          </fieldset>
+        </section>
+
+        <section class="wizard-step" data-step-panel="4" aria-labelledby="step-heading-4" hidden>
+          <h3 id="step-heading-4">Computer accessories</h3>
+          <p class="step-description">Select every accessory that must be provided or confirmed for the employee.</p>
+          <fieldset class="form-section">
+            <legend>Requested accessories</legend>
+            <div class="option-grid" id="accessory-options"></div>
+            <div class="field" style="margin-top:14px">
+              <label for="accessory-other">Other computer accessory / details</label>
+              <textarea id="accessory-other" name="accessory_other" data-print-label="Other computer accessory / details"></textarea>
+            </div>
+            <p class="form-notice">The standard kit normally includes a docking station, keyboard and mouse, two monitors, headset, and backpack. Use selections to identify what should be supplied or confirmed.</p>
+          </fieldset>
+        </section>
+
+        <section class="wizard-step" data-step-panel="5" aria-labelledby="step-heading-5" hidden>
+          <h3 id="step-heading-5">Software selection · 1 of 3</h3>
+          <p class="step-description">Check every software package needed. Use Request to open its ServiceNow catalog item; selections do not submit requests automatically.</p>
+          <div class="software-tools">
+            <label class="field-label" for="software-search-1">Find software</label>
+            <input class="software-search" id="software-search-1" type="search" data-software-search="software-list-1" placeholder="Search these software options">
+            <span class="selection-count" id="software-count-1"></span>
+          </div>
+          <div class="catalog-grid" id="software-list-1"></div>
+        </section>
+
+        <section class="wizard-step" data-step-panel="6" aria-labelledby="step-heading-6" hidden>
+          <h3 id="step-heading-6">Software selection · 2 of 3</h3>
+          <p class="step-description">Continue selecting software and open Request for each catalog item you need.</p>
+          <div class="software-tools">
+            <label class="field-label" for="software-search-2">Find software</label>
+            <input class="software-search" id="software-search-2" type="search" data-software-search="software-list-2" placeholder="Search these software options">
+            <span class="selection-count" id="software-count-2"></span>
+          </div>
+          <div class="catalog-grid" id="software-list-2"></div>
+        </section>
+
+        <section class="wizard-step" data-step-panel="7" aria-labelledby="step-heading-7" hidden>
+          <h3 id="step-heading-7">Software selection · 3 of 3</h3>
+          <p class="step-description">Finish the catalog selections. Search the catalog before choosing Software Not Found in Catalog.</p>
+          <div class="software-tools">
+            <label class="field-label" for="software-search-3">Find software</label>
+            <input class="software-search" id="software-search-3" type="search" data-software-search="software-list-3" placeholder="Search these software options">
+            <span class="selection-count" id="software-count-3"></span>
+          </div>
+          <div class="catalog-grid" id="software-list-3"></div>
+        </section>
+
+        <section class="wizard-step" data-step-panel="8" aria-labelledby="step-heading-8" hidden>
+          <h3 id="step-heading-8">Notes and completion</h3>
+          <p class="step-description">Add installation details, special requirements, and approval information. Download a copy or print/save a PDF.</p>
+
+          <fieldset class="form-section">
+            <legend>Software / installation details</legend>
+            <p class="section-help">Specify versions, license needs, PDM modules, plug-ins, special configurations, or other installation requirements.</p>
+            <div class="field">
+              <label for="software-details">Software / installation details</label>
+              <textarea id="software-details" name="software_installation_details" data-print-label="Software / installation details"></textarea>
+            </div>
+          </fieldset>
+
+          <fieldset class="form-section">
+            <legend>Notes / special requirements</legend>
+            <div class="field">
+              <label for="special-requirements">Additional onboarding instructions, exceptions, access details, or other requirements</label>
+              <textarea id="special-requirements" name="notes_special_requirements" data-print-label="Notes / special requirements"></textarea>
+            </div>
+          </fieldset>
+
+          <fieldset class="form-section">
+            <legend>Requested by / approval</legend>
+            <div class="field-grid">
+              <div class="field">
+                <label for="requested-by">Requested by</label>
+                <input id="requested-by" name="requested_by" type="text" data-print-label="Requested by">
+              </div>
+              <div class="field">
+                <label for="request-date">Request date</label>
+                <input id="request-date" name="request_date" type="date" data-print-label="Request date">
+              </div>
+              <div class="field">
+                <label for="manager-approval">Manager approval / name</label>
+                <input id="manager-approval" name="manager_approval" type="text" data-print-label="Manager approval / name">
+              </div>
+              <div class="field">
+                <label for="manager-approval-date">Manager approval date</label>
+                <input id="manager-approval-date" name="manager_approval_date" type="date" data-print-label="Manager approval date">
+              </div>
+            </div>
+          </fieldset>
+
+          <p class="form-notice">The download is a standalone HTML copy you can open on your phone or computer. To email Jason a PDF, choose Print / Save completed form and save it as a PDF. Catalog requests must be submitted separately using the Request links.</p>
+          <div class="form-actions">
+            <button class="button button-primary" type="button" data-action="download">Download completed form</button>
+            <button class="button" type="button" data-action="print">Print / Save completed form</button>
+            <a class="button" href="mailto:jason.wightman@vertiv.com?subject=Completed%20New%20Hire%20Onboarding%20Form&body=Please%20attach%20the%20completed%20onboarding%20PDF%20to%20this%20email.">Open email to Jason</a>
+            <a class="button" href="../documents/Vertiv-New-Hire-Onboarding-Form-Rev-2026-10-28.pdf" target="_blank" rel="noopener">Original fillable PDF</a>
+          </div>
+          <p id="download-status" role="status" aria-live="polite"></p>
+        </section>
+
+        <div class="step-actions">
+          <button class="button" type="button" data-action="back" disabled>Back</button>
+          <div class="step-actions-end">
+            <button class="button" type="button" data-action="next">Continue</button>
+          </div>
+        </div>
+      </form>
+
+      <section class="print-summary page-container" id="print-summary" aria-live="polite"></section>
+    </section>
+
+    <div class="form-footer">
+      <p>Answers are not saved to the website. Closing or refreshing this page clears the form.</p>
+      <p><a href="../documents/Vertiv-New-Hire-Onboarding-Form-Rev-2026-10-28.pdf" download>Download the original fillable PDF</a></p>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="page-container footer-inner">
+      <p>© <span id="current-year"></span> Pelzer 2 IT</p>
+      <p><a href="laptop-build-queue.html">Return to Laptop Build Queue</a></p>
+    </div>
+  </footer>
+  <script>
+    document.getElementById("current-year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
